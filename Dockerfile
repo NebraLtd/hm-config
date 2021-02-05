@@ -11,22 +11,22 @@ ARG override=202101171357
 
 RUN apt-get update && \
 apt-get -y install \
-python3-minimal \
-python3-networkmanager \
-bluez \
-libdbus-1-3 \
-dbus \
-git \
-ca-certificates \
-net-tools \
-python3-dbus \
-python3-gi \
-python3-protobuf \
-python3-rpi.gpio \
-cmake \
-openssl \
-libssl-dev \
-curl \
+python3-minimal=3.7.3-1 \
+python3-networkmanager=2.1-1 \
+bluez=5.50-1.2~deb10u1 \
+libdbus-1-3=1.12.20-0+deb10u1 \
+dbus=1.12.20-0+deb10u1 \
+git=1:2.20.1-2+deb10u3 \
+ca-certificates=20200601~deb10u2 \
+net-tools=1.60+git20180626.aebd88e-1 \
+python3-dbus=1.2.8-3 \
+python3-gi=3.30.4-1 \
+python3-protobuf=3.6.1.3-2 \
+python3-rpi.gpio=0.6.5-1 \
+cmake=3.13.4-1 \
+openssl=1.1.1d-0+deb10u4 \
+libssl-dev=1.1.1d-0+deb10u4 \
+curl=7.64.0-4+deb10u1 \
 --no-install-recommends \
 && apt-get install python3-pip -y \
 apt-get clean && \
