@@ -9,7 +9,10 @@ WORKDIR /opt/
 
 ARG override=202101171357
 
-RUN apt-get update && \
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND="noninteractive" \
+TZ="Europe/London" \
 apt-get -y install \
 python3-minimal=3.8.2-0ubuntu2 \
 python3-networkmanager=2.1-2 \
