@@ -30,6 +30,7 @@ openssl=1.1.1f-1ubuntu2.1 \
 libssl-dev=1.1.1f-1ubuntu2.1 \
 curl=7.68.0-1ubuntu2.4 \
 python3-pip=20.0.2-5ubuntu1.1 \
+python3-dev=3.8.2-0ubuntu2 \
 build-essential=12.8ubuntu1.1 \
 python3-setuptools=45.2.0-1 \
 gcc=4:9.3.0-1ubuntu2 \
