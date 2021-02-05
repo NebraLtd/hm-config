@@ -32,6 +32,8 @@ build-essential=12.6 \
 python3-setuptools=40.8.0-1 \
 gcc=4:8.3.0-1 \
 libtool=2.4.6-9 \
+python3-wheel=0.32.3-2 \
+cython3=0.29.2-2 \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
