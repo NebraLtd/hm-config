@@ -30,6 +30,8 @@ curl=7.64.0-4+deb10u1 \
 python3-pip=18.1-5 \
 build-essential=12.6 \
 python3-setuptools=40.8.0-1 \
+gcc=4:8.3.0-1 \
+libtool=4:8.3.0-1 \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
