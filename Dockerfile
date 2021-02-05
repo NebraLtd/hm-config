@@ -38,7 +38,7 @@ cython3=0.29.2-2 \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install h3==3.7.1 --no-cache-dir -v --no-binary :all:
+RUN pip3 install h3==3.7.1 --no-cache-dir --no-binary :all:
 
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
