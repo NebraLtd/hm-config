@@ -32,7 +32,7 @@ curl=7.64.0-4+deb10u1 \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install h3=3.7.1 --no-cache-dir
+RUN pip3 install h3==3.7.1 --no-cache-dir
 
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
