@@ -27,8 +27,8 @@ cmake=3.13.4-1 \
 openssl=1.1.1d-0+deb10u4 \
 libssl-dev=1.1.1d-0+deb10u4 \
 curl=7.64.0-4+deb10u1 \
---no-install-recommends \
-&& apt-get install python3-pip=18.1-5 -y \
+python3-pip=18.1-5 \
+--no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
