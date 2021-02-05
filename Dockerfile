@@ -27,13 +27,12 @@ cmake \
 openssl \
 libssl-dev \
 curl \
---no-install-recommends
-RUN apt install python3-pip -y
-RUN pip3 install h3 --no-cache-dir
+--no-install-recommends \
+&& apt-get install python3-pip -y \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
 
-#Re enable for production.
-# apt-get clean && \
-# rm -rf /var/lib/apt/lists/*
+RUN pip3 install h3 --no-cache-dir
 
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
