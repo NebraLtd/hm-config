@@ -3,7 +3,7 @@
 #(C) Pi Supply 2019
 #Licensed under the GNU GPL V3 License.
 
-FROM arm64v8/debian:buster-slim
+FROM arm64v8/ubuntu:20.04
 
 WORKDIR /opt/
 
@@ -38,7 +38,7 @@ cython3=0.29.2-2 \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-# RUN pip3 install h3==3.7.1 --no-cache-dir --no-binary :all:
+RUN pip3 install h3==3.7.1 --no-cache-dir --no-binary :all:
 
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
