@@ -28,7 +28,7 @@ openssl=1.1.1d-0+deb10u4 \
 libssl-dev=1.1.1d-0+deb10u4 \
 curl=7.64.0-4+deb10u1 \
 --no-install-recommends \
-&& apt-get install python3-pip -y \
+&& apt-get install python3-pip=18.1-5 -y \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
