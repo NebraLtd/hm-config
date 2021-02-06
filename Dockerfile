@@ -42,6 +42,8 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install RPi.GPIO==0.7.0 --no-cache-dir --no-binary :all:
+COPY h3-3.7.1-cp38-cp38-linux_aarch64.whl h3-3.7.1-cp38-cp38-linux_aarch64.whl
+RUN pip3 install h3-3.7.1-cp38-cp38-linux_aarch64.whl
 
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
