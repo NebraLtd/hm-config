@@ -1,13 +1,10 @@
-#Yeet
-#Packet Forwarder Docker File
-#(C) Pi Supply 2019
-#Licensed under the GNU GPL V3 License.
+#Nebra Helium Hotspot - BTLE Configuration Software Container
+#(C) Nebra LTD. 2021
+#Licensed under the MIT License.
 
 FROM arm64v8/ubuntu:20.04
 
 WORKDIR /opt/
-
-ARG override=202101171357
 
 RUN \
 apt-get update && \
@@ -25,33 +22,23 @@ net-tools=1.60+git20180626.aebd88e-1ubuntu1 \
 python3-dbus=1.2.16-1build1 \
 python3-gi=3.36.0-1 \
 python3-protobuf=3.6.1.3-2ubuntu5 \
-cmake=3.16.3-1ubuntu1 \
 openssl=1.1.1f-1ubuntu2.1 \
 libssl-dev=1.1.1f-1ubuntu2.1 \
 curl=7.68.0-1ubuntu2.4 \
 python3-pip=20.0.2-5ubuntu1.1 \
-python3-dev=3.8.2-0ubuntu2 \
-build-essential=12.8ubuntu1.1 \
-python3-setuptools=45.2.0-1 \
-gcc=4:9.3.0-1ubuntu2 \
-libtool=2.4.6-14 \
 python3-wheel=0.34.2-1 \
-cython3=0.29.14-0.1ubuntu3 \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install RPi.GPIO==0.7.0 --no-cache-dir --no-binary :all:
-
 COPY h3-3.7.1-cp38-cp38-linux_aarch64.whl h3-3.7.1-cp38-cp38-linux_aarch64.whl
+COPY RPi.GPIO-0.7.0-cp38-cp38-linux_aarch64.whl RPi.GPIO-0.7.0-cp38-cp38-linux_aarch64.whl
 
 # hadolint ignore=DL3013
-RUN pip3 install h3-3.7.1-cp38-cp38-linux_aarch64.whl
+RUN pip3 install h3-3.7.1-cp38-cp38-linux_aarch64.whl RPi.GPIO-0.7.0-cp38-cp38-linux_aarch64.whl
 
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
-
-ARG override=202101171530
 
 RUN git clone https://github.com/NebraLtd/helium-miner-config.git
 
