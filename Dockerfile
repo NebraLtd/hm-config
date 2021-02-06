@@ -7,8 +7,6 @@ FROM arm64v8/ubuntu:20.04
 
 WORKDIR /opt/
 
-ARG override=202101171357
-
 RUN \
 apt-get update && \
 DEBIAN_FRONTEND="noninteractive" \
@@ -43,8 +41,6 @@ RUN pip3 install h3-3.7.1-cp38-cp38-linux_aarch64.whl
 
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
-
-ARG override=202101171530
 
 RUN git clone https://github.com/NebraLtd/helium-miner-config.git
 
