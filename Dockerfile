@@ -1,7 +1,6 @@
-#Yeet
-#Packet Forwarder Docker File
-#(C) Pi Supply 2019
-#Licensed under the GNU GPL V3 License.
+#Nebra Helium Hotspot - BTLE Configuration Software Container
+#(C) Nebra LTD. 2021
+#Licensed under the MIT License.
 
 FROM arm64v8/ubuntu:20.04
 
