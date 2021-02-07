@@ -36,7 +36,7 @@ RUN chmod +x start-gateway-config.sh
 
 RUN git clone https://github.com/NebraLtd/helium-miner-config.git
 
-ADD piwheels /opt/piwheels
+COPY piwheels /opt/piwheels
 
 # hadolint ignore=DL3013
 RUN pip3 install \
