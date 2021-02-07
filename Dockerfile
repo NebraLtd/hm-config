@@ -45,7 +45,6 @@ RPi.GPIO-0.7.0-cp38-cp38-linux_aarch64.whl \
 colorzero-1.1-py2.py3-none-any.whl \
 gpiozero-1.5.1-py2.py3-none-any.whl
 
-
 WORKDIR /opt/helium-miner-config/
 
 ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
