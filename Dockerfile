@@ -38,6 +38,8 @@ RUN git clone https://github.com/NebraLtd/helium-miner-config.git
 
 COPY piwheels /opt/piwheels
 
+WORKDIR /opt/piwheels/
+
 # hadolint ignore=DL3013
 RUN pip3 install \
 h3-3.7.1-cp38-cp38-linux_aarch64.whl \
