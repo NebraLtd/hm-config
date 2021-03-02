@@ -4,8 +4,10 @@
 
 FROM arm64v8/ubuntu:20.04
 
-WORKDIR /opt/
 
+COPY piwheels /opt/piwheels
+
+WORKDIR /opt/piwheels/
 RUN \
 apt-get update && \
 DEBIAN_FRONTEND="noninteractive" \
@@ -24,24 +26,27 @@ python3-gi=3.36.0-1 \
 python3-protobuf=3.6.1.3-2ubuntu5 \
 python3-pip=20.0.2-5ubuntu1.1 \
 --no-install-recommends &&\
-apt-get clean && \
-rm -rf /var/lib/apt/lists/*
-
-COPY start-gateway-config.sh start-gateway-config.sh
-RUN chmod +x start-gateway-config.sh
-
-RUN git clone https://github.com/NebraLtd/helium-miner-config.git
-
-COPY piwheels /opt/piwheels
-
-WORKDIR /opt/piwheels/
-
-# hadolint ignore=DL3013
-RUN pip3 install \
+pip3 install \
 h3-3.7.1-cp38-cp38-linux_aarch64.whl \
 RPi.GPIO-0.7.0-cp38-cp38-linux_aarch64.whl \
 colorzero-1.1-py2.py3-none-any.whl \
-gpiozero-1.5.1-py2.py3-none-any.whl
+gpiozero-1.5.1-py2.py3-none-any.whl &&
+apt remove python3-pip &&
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
+# hadolint ignore=DL3013
+
+RUN
+COPY start-gateway-config.sh start-gateway-config.sh
+RUN chmod +x start-gateway-config.sh
+
+WORKDIR /opt/
+
+RUN git clone https://github.com/NebraLtd/helium-miner-config.git
+
+
+
+
 
 WORKDIR /opt/helium-miner-config/
 
