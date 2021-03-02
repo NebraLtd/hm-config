@@ -22,11 +22,7 @@ net-tools=1.60+git20180626.aebd88e-1ubuntu1 \
 python3-dbus=1.2.16-1build1 \
 python3-gi=3.36.0-1 \
 python3-protobuf=3.6.1.3-2ubuntu5 \
-openssl=1.1.1f-1ubuntu2.1 \
-libssl-dev=1.1.1f-1ubuntu2.1 \
-curl=7.68.0-1ubuntu2.4 \
 python3-pip=20.0.2-5ubuntu1.1 \
-python3-wheel=0.34.2-1 \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
