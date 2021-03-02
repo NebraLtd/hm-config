@@ -30,8 +30,8 @@ pip3 install \
 h3-3.7.1-cp38-cp38-linux_aarch64.whl \
 RPi.GPIO-0.7.0-cp38-cp38-linux_aarch64.whl \
 colorzero-1.1-py2.py3-none-any.whl \
-gpiozero-1.5.1-py2.py3-none-any.whl &&
-apt-get -y remove python3-pip &&
+gpiozero-1.5.1-py2.py3-none-any.whl && \
+apt-get -y remove python3-pip && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 # hadolint ignore=DL3013
