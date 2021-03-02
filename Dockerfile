@@ -17,9 +17,6 @@ python3-minimal=3.8.2-0ubuntu2 \
 python3-networkmanager=2.1-2 \
 bluez=5.53-0ubuntu3 \
 libdbus-1-3=1.12.16-2ubuntu2.1 \
-dbus=1.12.16-2ubuntu2.1 \
-git=1:2.25.1-1ubuntu3 \
-ca-certificates=20210119~20.04.1 \
 net-tools=1.60+git20180626.aebd88e-1ubuntu1 \
 python3-dbus=1.2.16-1build1 \
 python3-gi=3.36.0-1 \
@@ -42,12 +39,12 @@ RUN chmod +x start-gateway-config.sh
 
 WORKDIR /opt/
 
-RUN git clone https://github.com/NebraLtd/helium-miner-config.git
+#RUN git clone https://github.com/NebraLtd/helium-miner-config.git
 
 
 
 
 
-WORKDIR /opt/helium-miner-config/
+#WORKDIR /opt/helium-miner-config/
 
 ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
