@@ -12,13 +12,8 @@ DEBIAN_FRONTEND="noninteractive" \
 TZ="Europe/London" \
 apt-get -y install \
 python3-minimal \
-python3-networkmanager \
 bluez \
 libdbus-1-3 \
-dbus \
-git \
-ca-certificates \
-net-tools \
 python3-dbus \
 python3-gi \
 python3-protobuf \
@@ -30,7 +25,10 @@ rm -rf /var/lib/apt/lists/*
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
 
-RUN git clone https://github.com/NebraLtd/helium-miner-config.git
+RUN wget https://github.com/NebraLtd/helium-miner-config/archive/main.tar.gz \
+&& tar -zvxf main.tar.gz \
+&& mv helium-miner-config-main helium-miner-config \
+&& rm main.tar.gz
 
 COPY piwheels /opt/piwheels
 
