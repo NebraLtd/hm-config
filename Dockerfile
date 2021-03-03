@@ -21,8 +21,7 @@ python3-dbus \
 python3-gi \
 python3-protobuf \
 python3-pip \
-tar \
-wget \
+git \
 network-manager \
 --no-install-recommends &&\
 pip3 install \
@@ -43,11 +42,12 @@ RUN chmod +x start-gateway-config.sh
 
 ARG UPDATE=2021-03-03-1933
 
-RUN wget https://github.com/NebraLtd/helium-miner-config/archive/main.tar.gz \
-&& tar -zvxf main.tar.gz \
-&& mv helium-miner-config-main helium-miner-config \
-&& rm main.tar.gz
+#RUN wget https://github.com/NebraLtd/helium-miner-config/archive/main.tar.gz \
+#&& tar -zvxf main.tar.gz \
+#&& mv helium-miner-config-main helium-miner-config \
+#&& rm main.tar.gz
 
+RUN git clone https://github.com/NebraLtd/helium-miner-config.git
 
 WORKDIR /opt/helium-miner-config/
 
