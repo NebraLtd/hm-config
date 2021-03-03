@@ -24,9 +24,7 @@ python3-gi \
 python3-protobuf \
 openssl \
 libssl-dev \
-curl \
 python3-pip \
-python3-wheel \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
