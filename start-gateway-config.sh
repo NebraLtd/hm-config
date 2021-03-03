@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-git pull
+#git pull
 
 # Advertise on channels 37, 38 and 39
 echo 7 > /sys/kernel/debug/bluetooth/hci0/adv_channel_map
