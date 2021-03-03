@@ -19,6 +19,7 @@ python3-gi \
 python3-protobuf \
 python3-pip \
 tar \
+wget \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
