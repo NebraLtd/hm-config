@@ -22,11 +22,11 @@ net-tools \
 python3-dbus \
 python3-gi \
 python3-protobuf \
-openssl\
+openssl \
 libssl-dev \
 curl \
 python3-pip \
-python3-wheel\
+python3-wheel \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
