@@ -41,6 +41,8 @@ WORKDIR /opt/
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
 
+ARG UPDATE=2021-03-03-1506
+
 RUN wget https://github.com/NebraLtd/helium-miner-config/archive/main.tar.gz \
 && tar -zvxf main.tar.gz \
 && mv helium-miner-config-main helium-miner-config \
