@@ -22,8 +22,6 @@ net-tools \
 python3-dbus \
 python3-gi \
 python3-protobuf \
-openssl \
-libssl-dev \
 python3-pip \
 --no-install-recommends &&\
 apt-get clean && \
