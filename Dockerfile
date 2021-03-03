@@ -20,6 +20,7 @@ python3-protobuf \
 python3-pip \
 tar \
 wget \
+network-manager \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
