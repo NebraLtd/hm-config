@@ -18,6 +18,7 @@ python3-dbus \
 python3-gi \
 python3-protobuf \
 python3-pip \
+tar \
 --no-install-recommends &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
