@@ -7,7 +7,7 @@ sleep 1
 
 # Start BluetoothD in container
 
-bluetoothd -E -C &
+bluetoothd --experimental -C &
 
 sleep 1
 
