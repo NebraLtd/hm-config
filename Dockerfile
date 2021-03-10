@@ -26,8 +26,8 @@ wget \
 network-manager \
 --no-install-recommends &&\
 pip3 install \
-h3-3.7.1-cp38-cp38-linux_aarch64.whl \
-RPi.GPIO-0.7.0-cp38-cp38-linux_aarch64.whl \
+h3-3.7.1-cp37-cp37m-linux_aarch64.whl \
+RPi.GPIO-0.7.0-cp37-cp37m-linux_aarch64.whl \
 colorzero-1.1-py2.py3-none-any.whl \
 gpiozero-1.5.1-py2.py3-none-any.whl &&\
 apt-get purge python3-pip -y &&\
