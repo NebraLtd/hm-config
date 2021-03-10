@@ -2,7 +2,7 @@
 #(C) Nebra LTD. 2021
 #Licensed under the MIT License.
 
-FROM arm64v8/ubuntu:20.04
+FROM arm64v8/debian:buster-slim
 
 COPY piwheels /opt/piwheels
 
