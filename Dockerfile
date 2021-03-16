@@ -25,7 +25,7 @@ tar \
 wget \
 network-manager \
 --no-install-recommends &&\
-pip3 install \
+pip3 --extra-index-url=https://www.piwheels.org/simple install \
 h3 \
 RPi.GPIO \
 colorzero \
