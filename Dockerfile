@@ -14,16 +14,16 @@ apt-get update && \
 DEBIAN_FRONTEND="noninteractive" \
 TZ="Europe/London" \
 apt-get -y install \
-python3-minimal \
-bluez \
-libdbus-1-3 \
-python3-dbus \
-python3-gi \
-python3-protobuf \
-python3-pip \
-tar \
-wget \
-network-manager \
+python3-minimal=3.7.3-1 \
+bluez=5.50-1.2~deb10u1 \
+libdbus-1-3=1.12.20-0+deb10u1 \
+python3-dbus=1.2.8-3 \
+python3-gi=3.30.4-1 \
+python3-protobuf=3.6.1.3-2 \
+python3-pip=18.1-5 \
+tar=1.30+dfsg-6 \
+wget=1.20.1-1.1 \
+network-manager=1.14.6-2+deb10u1 \
 --no-install-recommends &&\
 pip3 install --extra-index-url=https://www.piwheels.org/simple \
 h3 \
