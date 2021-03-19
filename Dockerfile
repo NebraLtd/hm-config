@@ -24,12 +24,12 @@ python3-pip=18.1-5 \
 tar=1.30+dfsg-6 \
 wget=1.20.1-1.1 \
 network-manager=1.14.6-2+deb10u1 \
---no-install-recommends &&\
+--no-install-recommends && d\
 pip3 install --extra-index-url=https://www.piwheels.org/simple \
-h3=3.7.2 \
-RPi.GPIO=0.7.0 \
-colorzero=2.0 \
-gpiozero=1.6.2 &&\
+h3==3.7.2 \
+RPi.GPIO==0.7.0 \
+colorzero==2.0 \
+gpiozero==1.6.2 &&\
 apt-get purge python3-pip -y &&\
 apt-get autoremove -y &&\
 apt-get clean && \
