@@ -2,7 +2,7 @@
 #(C) Nebra LTD. 2021
 #Licensed under the MIT License.
 
-FROM arm32v5/debian:buster-slim
+FROM arm64v8/debian:buster-slim
 
 COPY piwheels /opt/piwheels
 
@@ -25,11 +25,11 @@ tar=1.30+dfsg-6 \
 wget=1.20.1-1.1 \
 network-manager=1.14.6-2+deb10u1 \
 --no-install-recommends && \
-pip3 install --extra-index-url=https://www.piwheels.org/simple \
-RPi.GPIO==0.7.0 \
-colorzero==2.0 \
-gpiozero==1.6.2 &&\
-pip3 install h3 &&\
+pip3 install \
+h3-3.7.2-cp37-cp37m-linux_aarch64.whl \
+RPi.GPIO-0.7.0-cp37-cp37m-linux_aarch64.whl \
+colorzero-1.1-py2.py3-none-any.whl \
+gpiozero-1.5.1-py2.py3-none-any.whl &&\
 apt-get purge python3-pip -y &&\
 apt-get autoremove -y &&\
 apt-get clean && \
