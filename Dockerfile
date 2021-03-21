@@ -29,7 +29,7 @@ pip3 install --extra-index-url=https://www.piwheels.org/simple \
 RPi.GPIO==0.7.0 \
 colorzero==2.0 \
 gpiozero==1.6.2 &&\
-pip3 install h3-3.7.2-cp37-cp37m-linux_armv6l.whl &&\
+pip3 install h3 &&\
 apt-get purge python3-pip -y &&\
 apt-get autoremove -y &&\
 apt-get clean && \
