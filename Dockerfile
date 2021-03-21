@@ -2,7 +2,7 @@
 #(C) Nebra LTD. 2021
 #Licensed under the MIT License.
 
-FROM arm64v8/debian:buster-slim
+FROM balenalib/raspberry-pi-debian:buster-run
 
 COPY piwheels /opt/piwheels
 
@@ -19,17 +19,17 @@ bluez=5.50-1.2~deb10u1 \
 libdbus-1-3=1.12.20-0+deb10u1 \
 python3-dbus=1.2.8-3 \
 python3-gi=3.30.4-1 \
-python3-protobuf=3.6.1.3-2 \
-python3-pip=18.1-5 \
+python3-protobuf=3.6.1.3-2+rpi1 \
+python3-pip=18.1-5+rpt1 \
 tar=1.30+dfsg-6 \
 wget=1.20.1-1.1 \
 network-manager=1.14.6-2+deb10u1 \
 --no-install-recommends && \
 pip3 install \
-h3-3.7.2-cp37-cp37m-linux_aarch64.whl \
-RPi.GPIO-0.7.0-cp37-cp37m-linux_aarch64.whl \
-colorzero-1.1-py2.py3-none-any.whl \
-gpiozero-1.5.1-py2.py3-none-any.whl &&\
+h3 \
+RPi.GPIO \
+colorzero \
+gpiozero &&\
 apt-get purge python3-pip -y &&\
 apt-get autoremove -y &&\
 apt-get clean && \
