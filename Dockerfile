@@ -27,7 +27,7 @@ network-manager=1.14.6-2+deb10u1 \
 --no-install-recommends && \
 pip3 install \
 h3 \
-RPi.GPIOl \
+RPi.GPIO \
 colorzero \
 gpiozero &&\
 apt-get purge python3-pip -y &&\
