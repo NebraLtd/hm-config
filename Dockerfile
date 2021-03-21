@@ -2,7 +2,7 @@
 #(C) Nebra LTD. 2021
 #Licensed under the MIT License.
 
-FROM balenalib/raspberry-pi-debian-buster-build as build
+FROM balenalib/raspberry-pi-debian:buster-run
 
 COPY piwheels /opt/piwheels
 
