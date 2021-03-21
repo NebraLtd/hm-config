@@ -26,10 +26,10 @@ wget=1.20.1-1.1 \
 network-manager=1.14.6-2+deb10u1 \
 --no-install-recommends && \
 pip3 install --extra-index-url=https://www.piwheels.org/simple \
-h3==3.7.2 \
 RPi.GPIO==0.7.0 \
 colorzero==2.0 \
 gpiozero==1.6.2 &&\
+pip3 install h3-3.7.2-cp37-cp37m-linux_armv6l.whl &&\
 apt-get purge python3-pip -y &&\
 apt-get autoremove -y &&\
 apt-get clean && \
