@@ -8,7 +8,6 @@ COPY piwheels /opt/piwheels
 
 WORKDIR /opt/piwheels/
 
-# hadolint ignore=DL3013
 RUN \
 apt-get update && \
 DEBIAN_FRONTEND="noninteractive" \
