@@ -25,11 +25,7 @@ tar=1.30+dfsg-6 \
 wget=1.20.1-1.1 \
 network-manager=1.14.6-2+deb10u1 \
 --no-install-recommends && \
-pip3 install \
-h3 \
-RPi.GPIO \
-colorzero \
-gpiozero &&\
+pip3 install -r requirements.txt &&\
 apt-get purge python3-pip -y &&\
 apt-get autoremove -y &&\
 apt-get clean && \
