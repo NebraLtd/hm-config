@@ -40,8 +40,6 @@ RUN wget https://github.com/NebraLtd/helium-miner-config/archive/main.tar.gz \
 && mv helium-miner-config-main helium-miner-config \
 && rm main.tar.gz
 
-#RUN git clone https://github.com/NebraLtd/helium-miner-config.git
-
 WORKDIR /opt/helium-miner-config/
 
 ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
