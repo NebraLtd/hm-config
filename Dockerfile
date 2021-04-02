@@ -18,7 +18,7 @@ python3-pip=18.1-5+rpt1 \
 tar=1.30+dfsg-6 \
 wget=1.20.1-1.1 \
 network-manager=1.14.6-2+deb10u1 \
-python3-gi=3.14.0-1 \
+python3-gi=3.30.4-1 \
 --no-install-recommends && \
 pip3 install -r requirements.txt &&\
 apt-get purge python3-pip -y &&\
