@@ -4,9 +4,7 @@
 
 FROM balenalib/raspberry-pi-debian:buster-run
 
-COPY piwheels /opt/piwheels
-
-WORKDIR /opt/piwheels/
+COPY requirements.txt requirements.txt
 
 RUN \
 apt-get update && \
