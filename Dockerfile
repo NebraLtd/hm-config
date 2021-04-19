@@ -32,7 +32,11 @@ WORKDIR /opt/
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
 
+<<<<<<< HEAD
 ARG UPDATE=2021-04-19-0946
+=======
+ARG UPDATE=2021-04-06-0917
+>>>>>>> fa17e64f38619bcb24ab93b3307ded3006dc9cef
 
 RUN wget https://github.com/NebraLtd/helium-miner-config/archive/main.tar.gz \
 && tar -zvxf main.tar.gz \
