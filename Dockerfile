@@ -30,8 +30,8 @@ WORKDIR /opt/
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
 
-COPY helium-miner-config/ .
+COPY config-python/ .
 
-WORKDIR /opt/helium-miner-config/
+WORKDIR /opt/config-python/
 
 ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
