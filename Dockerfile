@@ -30,7 +30,7 @@ WORKDIR /opt/
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
 
-COPY config-python/ .
+COPY config-python .
 
 RUN ls
 
