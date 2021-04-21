@@ -32,6 +32,10 @@ RUN chmod +x start-gateway-config.sh
 
 COPY config-python/ .
 
+RUN ls
+
 WORKDIR /opt/config-python/
+
+RUN ls
 
 #ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
