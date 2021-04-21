@@ -49,7 +49,15 @@ GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
 # Public Onboarding Keys
-public_keys_file = open("/var/data/public_keys").readline().split('"')
+while True:
+    try:
+        public_keys_file = open("/var/data/public_keys").readline().split('"')
+        break
+    except FileNotFoundError:
+        logging.debug('Waiting for keyfile')
+    sleep(60)
+
+# Keyfile exists, now running.
 pubKey = str(public_keys_file[1])
 onboardingKey = str(public_keys_file[3])
 animalName = str(public_keys_file[5])
