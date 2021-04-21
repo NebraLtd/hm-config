@@ -38,4 +38,4 @@ WORKDIR /opt/config-python/
 
 RUN ls
 
-#ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
+ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
