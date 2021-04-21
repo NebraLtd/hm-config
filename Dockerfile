@@ -34,4 +34,4 @@ COPY config-python/ .
 
 WORKDIR /opt/config-python/
 
-ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
+#ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
