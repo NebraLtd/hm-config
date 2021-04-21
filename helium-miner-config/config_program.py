@@ -56,6 +56,8 @@ while True:
     except FileNotFoundError:
         logging.debug('Waiting for keyfile')
     sleep(60)
+
+# Keyfile exists, now running.
 pubKey = str(public_keys_file[1])
 onboardingKey = str(public_keys_file[3])
 animalName = str(public_keys_file[5])
