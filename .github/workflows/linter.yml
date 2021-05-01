@@ -49,6 +49,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: true
           # VALIDATE_PYTHON: true
+          VALIDATE_BASH: true
           VALIDATE_JSON: true
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
