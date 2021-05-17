@@ -950,7 +950,7 @@ adv = ConfigAdvertisement(0)
 
 # Setup GPIO Devices
 variant = os.getenv('VARIANT')
-if(variant == "NEBHNT-IN1"):
+if (variant == "NEBHNT-IN1") or (variant == "Indoor"):
     buttonGPIO = 26
     statusGPIO = 25
 else:
