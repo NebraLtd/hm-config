@@ -39,7 +39,7 @@ sentry_sdk.init(sentry_key, environment=balena_app)
 sentry_sdk.set_user({"id": balena_id})
 sentry_sdk.set_context("variant", {variant})
 
-variantDetails = variant_definitions['variant']
+variantDetails = variant_definitions[variant]
 
 # Disable sudo for nmcli
 nmcli.disable_use_sudo()
