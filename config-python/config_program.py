@@ -971,10 +971,14 @@ def diagnosticsThreadCode():
                 diagnosticsStatus = True
             else:
                 diagnosticsStatus = False
+
         except FileNotFoundError:
             diagnosticsStatus = False
 
         except json.JSONDecodeError:
+            diagnosticsStatus = False
+
+        except ValueError:
             diagnosticsStatus = False
         sleep(60)
 
