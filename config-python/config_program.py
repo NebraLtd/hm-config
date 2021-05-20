@@ -2,22 +2,19 @@
 
 import os
 import sentry_sdk
-
-# Main imports
 import dbus
 import logging
 import sys
 import json
 import nmcli
 import uuids
-
 import h3
-import threading
 
+import threading
 # From imports
-# from pprint import pprint
 from time import sleep
 from RPi import GPIO
+from variant_definitions import variant_definitions
 
 # BLE Library
 from advertisement import Advertisement
