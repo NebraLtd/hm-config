@@ -356,13 +356,21 @@ class DiagnosticsCharacteristic(Characteristic):
         logging.debug('Creating proto')
         diagnosticsProto = diagnostics_pb2.diagnostics_v1()
         diagnosticsProto.diagnostics['connected'] = str(self.p2pstatus[0][1])
+        logging.debug('proto-connected')
         diagnosticsProto.diagnostics['dialable'] = str(self.p2pstatus[1][1])
+        logging.debug('dialable')
         diagnosticsProto.diagnostics['height'] = str(self.p2pstatus[3][1])
+        logging.debug('height')
         diagnosticsProto.diagnostics['nat_type'] = str(self.p2pstatus[2][1])
+        logging.debug('nat_type')
         diagnosticsProto.diagnostics['eth'] = "true"
-        diagnosticsProto.diagnostics['fw'] = FIRMWARE_VERSION
+        logging.debug('eth')
+        diagnosticsProto.diagnostics['fw'] = uuids.FIRMWARE_VERSION
+        logging.debug('firm')
         diagnosticsProto.diagnostics['ip'] = "192.168.42.69"
+        logging.debug('IP')
         diagnosticsProto.diagnostics['wifi'] = "RTK"
+        logging.debug('wifi')
         logging.debug('items added to proto')
         value = []
         val = diagnosticsProto.SerializeToString()
