@@ -829,7 +829,7 @@ class WiFiRemoveCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logging.debug('Write WiFi Remove')
-        # logging.debug(value)
+        logging.debug(value)
 
     def ReadValue(self, options):
 
