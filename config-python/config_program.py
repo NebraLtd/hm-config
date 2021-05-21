@@ -1031,7 +1031,7 @@ def advertisementThreadCode():
             scanWifi = True
             adv.register()
             advertisementLED = True
-            sleep(600)
+            sleep(300)
             adv.unregister()
             advertisementLED = False
             scanWifi = False
