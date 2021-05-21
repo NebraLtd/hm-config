@@ -353,7 +353,7 @@ class DiagnosticsCharacteristic(Characteristic):
         except dbus.exceptions.DBusException:
             self.p2pstatus = ""
             logging.debug('DBUS P2P FAIL')
-
+        logging.debug('Creating proto')
         diagnosticsProto = diagnostics_pb2.diagnostics_v1()
         diagnosticsProto.diagnostics['connected'] = str(self.p2pstatus[0][1])
         diagnosticsProto.diagnostics['dialable'] = str(self.p2pstatus[1][1])
@@ -363,9 +363,10 @@ class DiagnosticsCharacteristic(Characteristic):
         diagnosticsProto.diagnostics['fw'] = FIRMWARE_VERSION
         diagnosticsProto.diagnostics['ip'] = "192.168.42.69"
         diagnosticsProto.diagnostics['wifi'] = "RTK"
+        logging.debug('items added to proto')
         value = []
         val = diagnosticsProto.SerializeToString()
-        logging.debug(diagnosticsProto.SerializeToString())
+        logging.debug(val)
         for c in val:
             value.append(dbus.Byte(c))
         return value
