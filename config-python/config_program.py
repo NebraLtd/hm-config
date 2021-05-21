@@ -353,6 +353,23 @@ class DiagnosticsCharacteristic(Characteristic):
         except dbus.exceptions.DBusException:
             self.p2pstatus = ""
             logging.debug('DBUS P2P FAIL')
+
+        try:
+            ethIP = nmcli.device.show('eth0')['IP4.ADDRESS[1]'][:-3]
+        except KeyError:
+            pass
+        try:
+            wlanIP = nmcli.device.show('wlan0')['IP4.ADDRESS[1]'][:-3]
+        except KeyError:
+            pass
+
+        ipAddress = "0.0.0.0"
+        if(ethIP):
+            ipAddress = str(ethIP)
+        elif(wlanIP):
+            ipAddress = str(wlanIP)
+        
+
         diagnosticsProto = diagnostics_pb2.diagnostics_v1()
         diagnosticsProto.diagnostics['connected'] = str(self.p2pstatus[0][1])
         diagnosticsProto.diagnostics['dialable'] = str(self.p2pstatus[1][1])
@@ -360,7 +377,7 @@ class DiagnosticsCharacteristic(Characteristic):
         diagnosticsProto.diagnostics['nat_type'] = str(self.p2pstatus[2][1])
         diagnosticsProto.diagnostics['eth'] = open("/sys/class/net/eth0/address").readline().strip().replace(":", "")
         diagnosticsProto.diagnostics['fw'] = uuids.FIRMWARE_VERSION
-        diagnosticsProto.diagnostics['ip'] = "192.168.42.69"
+        diagnosticsProto.diagnostics['ip'] = ipAddress
         diagnosticsProto.diagnostics['wifi'] = open("/sys/class/net/wlan0/address").readline().strip().replace(":", "")
         logging.debug('items added to proto')
         value = []
