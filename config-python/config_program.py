@@ -353,11 +353,11 @@ class DiagnosticsCharacteristic(Characteristic):
         except dbus.exceptions.DBusException:
             self.p2pstatus = ""
             logging.debug('DBUS P2P FAIL')
-        value = []
-        val = "Debug"
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        # value = []
+        # val = "Debug"
+        # for c in val:
+        #     value.append(dbus.Byte(c.encode()))
+        return self.p2pstatus
 
 
 class DiagnosticsDescriptor(Descriptor):
