@@ -23,7 +23,7 @@ from service import Application, Service, Characteristic, Descriptor
 # Protobuf Imports
 import add_gateway_pb2
 import assert_location_pb2
-# import diagnostics_pb2
+import diagnostics_pb2
 import wifi_connect_pb2
 # import wifi_remove_pb2
 import wifi_services_pb2
@@ -353,11 +353,22 @@ class DiagnosticsCharacteristic(Characteristic):
         except dbus.exceptions.DBusException:
             self.p2pstatus = ""
             logging.debug('DBUS P2P FAIL')
-        # value = []
-        # val = "Debug"
-        # for c in val:
-        #     value.append(dbus.Byte(c.encode()))
-        return self.p2pstatus
+
+        diagnosticsProto = diagnostics_pb2.diagnostics_v1()
+        diagnosticsProto.diagnostics['connected'] = str(self.p2pstatus[0][1])
+        diagnosticsProto.diagnostics['dialable'] = str(self.p2pstatus[1][1])
+        diagnosticsProto.diagnostics['height'] = str(self.p2pstatus[3][1])
+        diagnosticsProto.diagnostics['nat_type'] = str(self.p2pstatus[2][1])
+        diagnosticsProto.diagnostics['eth'] = "true"
+        diagnosticsProto.diagnostics['fw'] = FIRMWARE_VERSION
+        diagnosticsProto.diagnostics['ip'] = "192.168.42.69"
+        diagnosticsProto.diagnostics['wifi'] = "RTK"
+        value = []
+        val = diagnosticsProto.SerializeToString()
+
+        for c in val:
+            value.append(dbus.Byte(c))
+        return value
 
 
 class DiagnosticsDescriptor(Descriptor):
