@@ -365,7 +365,7 @@ class DiagnosticsCharacteristic(Characteristic):
         diagnosticsProto.diagnostics['wifi'] = "RTK"
         value = []
         val = diagnosticsProto.SerializeToString()
-
+        logging.debug(diagnosticsProto.SerializeToString())
         for c in val:
             value.append(dbus.Byte(c))
         return value
