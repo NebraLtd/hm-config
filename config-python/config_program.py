@@ -165,6 +165,7 @@ class HeliumService(Service):
         self.add_characteristic(WiFiConnectCharacteristic(self))
         self.add_characteristic(EthernetOnlineCharacteristic(self))
         self.add_characteristic(SoftwareVersionCharacteristic(self))
+        self.add_characteristic(WiFiRemoveCharacteristic(self))
 
 
 class OnboardingKeyCharacteristic(Characteristic):
