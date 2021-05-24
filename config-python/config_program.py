@@ -25,7 +25,7 @@ import add_gateway_pb2
 import assert_location_pb2
 import diagnostics_pb2
 import wifi_connect_pb2
-# import wifi_remove_pb2
+import wifi_remove_pb2
 import wifi_services_pb2
 
 from gpiozero import Button, LED
@@ -805,12 +805,13 @@ class WiFiRemoveCharacteristic(Characteristic):
                 ["read", "write", "notify"], service)
         self.add_descriptor(WiFiRemoveDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
+        self.wifistatus = "False"
 
     def WiFiRemoveCallback(self):
         if self.notifying:
             logging.debug('Callback WiFi Remove')
             value = []
-            val = "False"
+            val = self.wifistatus
 
             for c in val:
                 value.append(dbus.Byte(c.encode()))
@@ -838,14 +839,17 @@ class WiFiRemoveCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logging.debug('Write WiFi Remove')
-        logging.debug(value)
+        wifiRemoveSSID = wifi_remove_pb2.wifi_remove_v1()
+        wifiRemoveSSID.ParseFromString(bytes(value))
+        nmcli.connection.delete(wifiRemoveSSID.service)
+
 
     def ReadValue(self, options):
 
         logging.debug('Read WiFi Renove')
 
         value = []
-        val = "False"
+        val = self.wifistatus
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
