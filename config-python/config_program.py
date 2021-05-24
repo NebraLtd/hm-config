@@ -364,11 +364,10 @@ class DiagnosticsCharacteristic(Characteristic):
             pass
 
         ipAddress = "0.0.0.0"
-        if(ethIP):
+        if('ethIP' in locals()):
             ipAddress = str(ethIP)
-        elif(wlanIP):
+        elif('wlanIP' in locals()):
             ipAddress = str(wlanIP)
-        
 
         diagnosticsProto = diagnostics_pb2.diagnostics_v1()
         diagnosticsProto.diagnostics['connected'] = str(self.p2pstatus[0][1])
