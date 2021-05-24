@@ -1070,7 +1070,7 @@ def wifiThreadCode():
             logging.debug("Wi-Fi Scanning")
             wifiCache = nmcli.device.wifi()
             logging.debug("Wi-Fi Complete")
-            sleep(10)
+            sleep(15)
         else:
             sleep(5)
 
