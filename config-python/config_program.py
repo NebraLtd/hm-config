@@ -842,6 +842,7 @@ class WiFiRemoveCharacteristic(Characteristic):
         wifiRemoveSSID = wifi_remove_pb2.wifi_remove_v1()
         wifiRemoveSSID.ParseFromString(bytes(value))
         nmcli.connection.delete(wifiRemoveSSID.service)
+        logging.debug('Connection %s should be deleted' % wifiRemoveSSID.service)
 
 
     def ReadValue(self, options):
