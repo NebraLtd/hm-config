@@ -991,7 +991,7 @@ if (variant == "NEBHNT-IN1") or (variant == "Indoor"):
 else:
     buttonGPIO = 24
     statusGPIO = 25
-userButton = Button(buttonGPIO, hold_time=5)
+userButton = Button(buttonGPIO, hold_time=2)
 statusLed = LED(statusGPIO)
 
 
