@@ -30,6 +30,7 @@ except ImportError:
 BLUEZ_SERVICE_NAME = "org.bluez"
 LE_ADVERTISING_MANAGER_IFACE = "org.bluez.LEAdvertisingManager1"
 DBUS_OM_IFACE = "org.freedesktop.DBus.ObjectManager"
+DBUS_DEV_IFACE = "org.bluez.Device1"
 
 class BleTools(object):
     @classmethod
@@ -49,6 +50,18 @@ class BleTools(object):
                 return o
 
         return None
+    @classmethod
+
+    def find_connection(self, bus):
+        remote_om = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, "/"),
+                               DBUS_OM_IFACE)
+        objects = remote_om.GetManagedObjects()
+
+        for o, props in objects.items():
+            if DBUS_DEV_IFACE in props:
+                return o
+
+        return None
 
     @classmethod
     def power_adapter(self):
@@ -57,3 +70,11 @@ class BleTools(object):
         adapter_props = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
                 "org.freedesktop.DBus.Properties");
         adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
+
+    @classmethod
+    def disconnect_connections(self):
+        bus = self.get_bus()
+        connection = self.find_connection(bus)
+        connections = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, connection),
+                DBUS_DEV_IFACE);
+        connections.Disconnect()
