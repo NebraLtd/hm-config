@@ -19,7 +19,7 @@ from variant_definitions import variant_definitions
 # BLE Library
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
-from bluetools import BleTools
+from bletools import BleTools
 
 # Protobuf Imports
 import add_gateway_pb2
