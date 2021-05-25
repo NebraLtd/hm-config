@@ -4,6 +4,8 @@
 
 FROM balenalib/raspberry-pi-debian:buster-run
 
+WORKDIR /opt/
+
 COPY requirements.txt requirements.txt
 
 RUN \
@@ -19,7 +21,7 @@ network-manager=1.14.6-2+deb10u1 \
 python3-gi=3.30.4-1 \
 wget=1.20.1-1.1 \
 --no-install-recommends && \
-pip3 install -r requirements.txt &&\
+pip3 install --no-cache-dir -r requirements.txt &&\
 apt-get purge python3-pip -y &&\
 apt-get autoremove -y &&\
 apt-get clean && \
@@ -35,6 +37,6 @@ COPY config-python/ config-python/
 
 WORKDIR /opt/config-python/
 
-RUN wget "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/master/variant_definitions.py"
+RUN wget -q "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/master/variant_definitions.py"
 
 ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
