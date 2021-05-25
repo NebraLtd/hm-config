@@ -51,5 +51,6 @@ jobs:
           VALIDATE_PYTHON_FLAKE8: true
           VALIDATE_BASH: true
           VALIDATE_JSON: true
+          VALIDATE_DOCKERFILE_HADOLINT: true
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
