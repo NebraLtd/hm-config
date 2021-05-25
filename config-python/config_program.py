@@ -1051,15 +1051,15 @@ def advertisementThreadCode():
         if(advertise is True):
             advertise = False
             scanWifi = True
-            adv.register()
-            advertisementLED = True
-            sleep(300)
-            adv.unregister()
             try:
                 BleTools.disconnect_connections()
             except TypeError:
                 # Most Likely Already Disconnected
                 pass
+            adv.register()
+            advertisementLED = True
+            sleep(300)
+            adv.unregister()
             advertisementLED = False
             scanWifi = False
         else:
