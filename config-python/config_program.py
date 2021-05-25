@@ -19,6 +19,7 @@ from variant_definitions import variant_definitions
 # BLE Library
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
+from bluetools import BleTools
 
 # Protobuf Imports
 import add_gateway_pb2
@@ -1055,6 +1056,7 @@ def advertisementThreadCode():
             advertisementLED = True
             sleep(300)
             adv.unregister()
+            BleTools.disconnect_connections()
             advertisementLED = False
             scanWifi = False
         else:
