@@ -256,7 +256,7 @@ class WiFiServicesCharacteristic(Characteristic):
 
         for network in wifiCache:
             ssidStr = str(network.ssid)
-            if(ssidStr != "--"):
+            if(ssidStr != "--" and ssidStr != ""):
                 if(ssidStr not in wifiSsids.services):
                     wifiSsids.services.append(ssidStr)
                     logging.debug(ssidStr)
