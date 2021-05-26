@@ -265,7 +265,11 @@ class WiFiServicesCharacteristic(Characteristic):
 
         for c in val:
             value.append(dbus.Byte(c))
-        return value
+        if("offset" in options):
+            cutDownArray = value[int(options["offset"]):]
+            return cutDownArray
+        else:
+            return value
 
 
 class WiFiServicesDescriptor(Descriptor):
@@ -312,11 +316,7 @@ class WiFiConfiguredServicesCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c))
 
-        if("offset" in options):
-            cutDownArray = value[int(options["offset"]):]
-            return cutDownArray
-        else:
-            return value
+        return value
 
 
 class WiFiConfiguredServicesDescriptor(Descriptor):
