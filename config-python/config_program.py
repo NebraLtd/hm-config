@@ -255,9 +255,11 @@ class WiFiServicesCharacteristic(Characteristic):
         wifiSsids = wifi_services_pb2.wifi_services_v1()
 
         for network in wifiCache:
-            if(network.ssid != "--"):
-                wifiSsids.services.append(str(network.ssid))
-                logging.debug(str(network.ssid))
+            ssidStr = str(network.ssid)
+            if(ssidStr != "--"):
+                if(ssidStr not in wifiSsids.services):
+                    wifiSsids.services.append(ssidStr)
+                    logging.debug(ssidStr)
         value = []
         val = wifiSsids.SerializeToString()
 
