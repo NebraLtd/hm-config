@@ -384,10 +384,16 @@ class DiagnosticsCharacteristic(Characteristic):
         diagnosticsProto.diagnostics['dialable'] = str(self.p2pstatus[1][1])
         diagnosticsProto.diagnostics['height'] = str(self.p2pstatus[3][1])
         diagnosticsProto.diagnostics['nat_type'] = str(self.p2pstatus[2][1])
-        diagnosticsProto.diagnostics['eth'] = open("/sys/class/net/eth0/address").readline().strip().replace(":", "")
+        try:
+            diagnosticsProto.diagnostics['eth'] = open("/sys/class/net/eth0/address").readline().strip().replace(":", "")
+        except FileNotFoundError:
+            diagnosticsProto.diagnostics['eth'] = "FF:FF:FF:FF:FF:FF"
         diagnosticsProto.diagnostics['fw'] = uuids.FIRMWARE_VERSION
         diagnosticsProto.diagnostics['ip'] = ipAddress
-        diagnosticsProto.diagnostics['wifi'] = open("/sys/class/net/wlan0/address").readline().strip().replace(":", "")
+        try:
+            diagnosticsProto.diagnostics['wifi'] = open("/sys/class/net/wlan0/address").readline().strip().replace(":", "")
+        except FileNotFoundError:
+            diagnosticsProto.diagnostics['wifi'] = "FF:FF:FF:FF:FF:FF"
         logging.debug('items added to proto')
         value = []
         val = diagnosticsProto.SerializeToString()
