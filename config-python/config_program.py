@@ -120,7 +120,7 @@ class FirmwareRevisionCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Firmware')
 
-        val = uuids.FIRMWARE_VERSION
+        val = os.getenv('FIRMWARE_VERSION')
         value = []
 
         for c in val:
@@ -388,7 +388,7 @@ class DiagnosticsCharacteristic(Characteristic):
             diagnosticsProto.diagnostics['eth'] = open("/sys/class/net/eth0/address").readline().strip().replace(":", "")
         except FileNotFoundError:
             diagnosticsProto.diagnostics['eth'] = "FF:FF:FF:FF:FF:FF"
-        diagnosticsProto.diagnostics['fw'] = uuids.FIRMWARE_VERSION
+        diagnosticsProto.diagnostics['fw'] = os.getenv('FIRMWARE_VERSION')
         diagnosticsProto.diagnostics['ip'] = ipAddress
         try:
             diagnosticsProto.diagnostics['wifi'] = open("/sys/class/net/wlan0/address").readline().strip().replace(":", "")
@@ -937,7 +937,7 @@ class SoftwareVersionCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Firmware')
 
-        val = uuids.FIRMWARE_VERSION
+        val = os.getenv('FIRMWARE_VERSION')
 
         value = []
 
