@@ -375,7 +375,7 @@ class DiagnosticsCharacteristic(Characteristic):
         except KeyError:
             pass
 
-        ipAddress = "0.0.0.0"
+        ipAddress = "0.0.0.0"  # nosec
         if('ethIP' in locals()):
             ipAddress = str(ethIP)
         elif('wlanIP' in locals()):
