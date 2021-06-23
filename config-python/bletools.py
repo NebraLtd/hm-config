@@ -34,8 +34,7 @@ DBUS_DEV_IFACE = "org.bluez.Device1"
 class BleTools(object):
     @classmethod
     def get_bus(self):
-        bus = dbus.SystemBus()
-        return bus
+        return dbus.SystemBus()
 
     @classmethod
     def find_adapter(self, bus):
