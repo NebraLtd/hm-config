@@ -31,7 +31,8 @@ WIFI_SERVICES_CHARACTERISTIC_UUID = "d7515033-7e7b-45be-803f-c8737b171a29"
 WIFI_SERVICES_VALUE = "WiFi Services"
 
 # WiFiConfiguredServices
-WIFI_CONFIGURED_SERVICES_CHARACTERISTIC_UUID = "e125bda4-6fb8-11ea-bc55-0242ac130003"
+WIFI_CONFIGURED_SERVICES_CHARACTERISTIC_UUID = \
+    "e125bda4-6fb8-11ea-bc55-0242ac130003"
 WIFI_CONFIGURED_SERVICES_VALUE = "WiFi Configured Services"
 
 # WiFiRemove
@@ -75,8 +76,8 @@ ETHERNET_ONLINE_VALUE = "Ethernet Online"
 
 # WiFi Codes
 wifiStatus = {
-    "100":"connected", # connected
-    "50": "already", # Already Connecting
-    "60": "invalid", # Invalid Key
-    "30": "failed"  # Connection Failed
+    "100": "connected",  # connected
+    "50": "already",  # Already Connecting
+    "60": "invalid",  # Invalid Key
+    "30": "failed"   # Connection Failed
 }
