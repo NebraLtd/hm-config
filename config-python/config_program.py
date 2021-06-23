@@ -347,7 +347,9 @@ class DiagnosticsCharacteristic(Characteristic):
         self.add_descriptor(opaqueStructure(self))
         self.p2pstatus = ""
 
-    def ReadValue(self, options):
+    def ReadValue(self, options):  # noqa: C901
+        # TODO (Rob): come back and make this method less complex for
+        # C901 complexity rules.
         logging.debug('Read diagnostics')
         logging.debug('Diagnostics miner_bus')
         miner_bus = dbus.SystemBus()
