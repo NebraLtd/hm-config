@@ -24,6 +24,7 @@ SOFTWARE.
 import dbus
 import dbus.mainloop.glib
 import dbus.exceptions
+
 try:
   from gi.repository import GObject
 except ImportError:
