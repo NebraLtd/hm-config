@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import os
 import sentry_sdk
 import dbus
@@ -7,10 +6,10 @@ import logging
 import sys
 import json
 import nmcli
-import uuids
 import h3
-
 import threading
+import uuids
+
 # From imports
 from time import sleep
 from RPi import GPIO
@@ -18,7 +17,10 @@ from variant_definitions import variant_definitions
 
 # BLE Library
 from advertisement import Advertisement
-from service import Application, Service, Characteristic, Descriptor
+from service import Application
+from service import Service
+from service import Characteristic
+from service import Descriptor
 from bletools import BleTools
 
 # Protobuf Imports
@@ -32,16 +34,16 @@ import wifi_services_pb2
 from gpiozero import Button, LED
 
 # ET Phone Home
-variant = os.getenv('VARIANT')
-sentry_key = os.getenv('SENTRY_CONFIG')
-balena_id = os.getenv('BALENA_DEVICE_UUID')
-balena_app = os.getenv('BALENA_APP_NAME')
+VARIANT = os.getenv('VARIANT')
+SENTRY_KEY = os.getenv('SENTRY_CONFIG')
+BALENA_ID = os.getenv('BALENA_DEVICE_UUID')
+BALENA_APP = os.getenv('BALENA_APP_NAME')
 uuids.FIRMWARE_VERSION = os.getenv('FIRMWARE_VERSION')
-sentry_sdk.init(sentry_key, environment=balena_app)
-sentry_sdk.set_user({"id": balena_id})
-sentry_sdk.set_context("variant", {variant})
+sentry_sdk.init(SENTRY_KEY, environment=BALENA_APP)
+sentry_sdk.set_user({"id": BALENA_ID})
+sentry_sdk.set_context("variant", {VARIANT})
 
-variantDetails = variant_definitions[variant]
+VARIANT_DETAILS = variant_definitions[VARIANT]
 
 # Disable sudo for nmcli
 nmcli.disable_use_sudo()
@@ -60,15 +62,17 @@ while True:
     sleep(60)
 
 # Keyfile exists, now running.
-pubKey = str(public_keys_file[1])
-onboardingKey = str(public_keys_file[3])
-animalName = str(public_keys_file[5])
+PUBLIC_KEY = str(public_keys_file[1])
+ONBOARDING_KEY = str(public_keys_file[3])
+# The animal name isn't used anywhere, why do we even declare it?
+# ANIMAL_NAME = str(public_keys_file[5])
+
 
 # Setup Thread Variables
-advertisementLED = False
-diagnosticsStatus = False
-scanWifi = False
-wifiCache = []
+advertisement_led = False
+diagnostics_status = False
+scan_wifi = False
+wifi_cache = []
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
@@ -76,9 +80,9 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 class ConfigAdvertisement(Advertisement):
     # BLE advertisement
     def __init__(self, index):
-        global variantDetails
+        global VARIANT_DETAILS
         Advertisement.__init__(self, index, "peripheral")
-        variant = variantDetails['APPNAME']
+        variant = VARIANT_DETAILS['APPNAME']
         macAddr = open("/sys/class/net/eth0/address").readline()\
             .strip().replace(":", "")[-6:].upper()
         localName = "Nebra %s Hotspot %s" % (variant, macAddr)
@@ -180,7 +184,7 @@ class OnboardingKeyCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Onboarding Key')
         value = []
-        val = onboardingKey
+        val = ONBOARDING_KEY
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -216,7 +220,7 @@ class PublicKeyCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Public Key')
         value = []
-        val = pubKey
+        val = PUBLIC_KEY
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
@@ -241,33 +245,33 @@ class PublicKeyDescriptor(Descriptor):
 
 class WiFiServicesCharacteristic(Characteristic):
 
-    global wifiCache
+    global wifi_cache
 
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_SERVICES_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(WiFiServicesDescriptor(self))
-        self.add_descriptor(opaqueStructure(self))
+        self.add_descriptor(OpaqueStructure(self))
 
     def ReadValue(self, options):
         logging.debug('Read WiFi Services')
-        wifiSsids = wifi_services_pb2.wifi_services_v1()
+        wifi_ssids = wifi_services_pb2.wifi_services_v1()
 
-        for network in wifiCache:
-            ssidStr = str(network.ssid)
-            if(ssidStr != "--" and ssidStr != ""):
-                if(ssidStr not in wifiSsids.services):
-                    wifiSsids.services.append(ssidStr)
-                    logging.debug(ssidStr)
+        for network in wifi_cache:
+            ssid = str(network.ssid)
+            if(ssid != "--" and ssid != ""):
+                if(ssid not in wifi_ssids.services):
+                    wifi_ssids.services.append(ssid)
+                    logging.debug(ssid)
         value = []
-        val = wifiSsids.SerializeToString()
+        val = wifi_ssids.SerializeToString()
 
         for c in val:
             value.append(dbus.Byte(c))
         if("offset" in options):
-            cutDownArray = value[int(options["offset"]):]
-            return cutDownArray
+            reduced_list = value[int(options["offset"]):]
+            return reduced_list
         else:
             return value
 
@@ -276,9 +280,10 @@ class WiFiServicesDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.USER_DESC_DESCRIPTOR_UUID,
-                ["read"],
-                characteristic)
+            self, uuids.USER_DESC_DESCRIPTOR_UUID,
+            ["read"],
+            characteristic
+        )
 
     def ReadValue(self, options):
         value = []
@@ -291,27 +296,28 @@ class WiFiServicesDescriptor(Descriptor):
 
 class WiFiConfiguredServicesCharacteristic(Characteristic):
 
-    global wifiCache
+    global wifi_cache
 
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_CONFIGURED_SERVICES_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(WiFiConfiguredServicesDescriptor(self))
-        self.add_descriptor(opaqueStructure(self))
+        self.add_descriptor(OpaqueStructure(self))
 
     def ReadValue(self, options):
         logging.debug('Read WiFi CONFIGURED Services')
-        wifiConfigured = wifi_services_pb2.wifi_services_v1()
+        wifi_configured = wifi_services_pb2.wifi_services_v1()
 
-        for network in wifiCache:
+        for network in wifi_cache:
             if(network.ssid != "--"):
                 if(network.in_use):
-                    activeConnection = str(network.ssid)
-                    wifiConfigured.services.append(activeConnection)
-                    print(activeConnection)
+                    active_connection = str(network.ssid)
+                    wifi_configured.services.append(active_connection)
+                    logging.info('Active WiFi Connection: %s'
+                                 % active_connection)
         value = []
-        val = wifiConfigured.SerializeToString()
+        val = wifi_configured.SerializeToString()
 
         for c in val:
             value.append(dbus.Byte(c))
@@ -344,7 +350,7 @@ class DiagnosticsCharacteristic(Characteristic):
                 self, uuids.DIAGNOSTICS_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(DiagnosticsDescriptor(self))
-        self.add_descriptor(opaqueStructure(self))
+        self.add_descriptor(OpaqueStructure(self))
         self.p2pstatus = ""
 
     def ReadValue(self, options):  # noqa: C901
@@ -367,42 +373,42 @@ class DiagnosticsCharacteristic(Characteristic):
             logging.debug('DBUS P2P FAIL')
 
         try:
-            ethIP = nmcli.device.show('eth0')['IP4.ADDRESS[1]'][:-3]
+            eth_ip = nmcli.device.show('eth0')['IP4.ADDRESS[1]'][:-3]
         except KeyError:
             pass
         try:
-            wlanIP = nmcli.device.show('wlan0')['IP4.ADDRESS[1]'][:-3]
+            wlan_ip = nmcli.device.show('wlan0')['IP4.ADDRESS[1]'][:-3]
         except KeyError:
             pass
 
-        ipAddress = "0.0.0.0"  # nosec
+        ip_address = "0.0.0.0"  # nosec
         if('ethIP' in locals()):
-            ipAddress = str(ethIP)
+            ip_address = str(eth_ip)
         elif('wlanIP' in locals()):
-            ipAddress = str(wlanIP)
+            ip_address = str(wlan_ip)
 
-        diagnosticsProto = diagnostics_pb2.diagnostics_v1()
-        diagnosticsProto.diagnostics['connected'] = str(self.p2pstatus[0][1])
-        diagnosticsProto.diagnostics['dialable'] = str(self.p2pstatus[1][1])
-        diagnosticsProto.diagnostics['height'] = str(self.p2pstatus[3][1])
-        diagnosticsProto.diagnostics['nat_type'] = str(self.p2pstatus[2][1])
+        diagnostics_proto = diagnostics_pb2.diagnostics_v1()
+        diagnostics_proto.diagnostics['connected'] = str(self.p2pstatus[0][1])
+        diagnostics_proto.diagnostics['dialable'] = str(self.p2pstatus[1][1])
+        diagnostics_proto.diagnostics['height'] = str(self.p2pstatus[3][1])
+        diagnostics_proto.diagnostics['nat_type'] = str(self.p2pstatus[2][1])
         try:
-            diagnosticsProto.diagnostics['eth'] = \
+            diagnostics_proto.diagnostics['eth'] = \
                 open("/sys/class/net/eth0/address").readline(). \
                 strip().replace(":", "")
         except FileNotFoundError:
-            diagnosticsProto.diagnostics['eth'] = "FF:FF:FF:FF:FF:FF"
-        diagnosticsProto.diagnostics['fw'] = os.getenv('FIRMWARE_VERSION')
-        diagnosticsProto.diagnostics['ip'] = ipAddress
+            diagnostics_proto.diagnostics['eth'] = "FF:FF:FF:FF:FF:FF"
+        diagnostics_proto.diagnostics['fw'] = os.getenv('FIRMWARE_VERSION')
+        diagnostics_proto.diagnostics['ip'] = ip_address
         try:
             wifi_diag = open("/sys/class/net/wlan0/address").readline(). \
                 strip().replace(":", "")
-            diagnosticsProto.diagnostics['wifi'] = wifi_diag
+            diagnostics_proto.diagnostics['wifi'] = wifi_diag
         except FileNotFoundError:
-            diagnosticsProto.diagnostics['wifi'] = "FF:FF:FF:FF:FF:FF"
+            diagnostics_proto.diagnostics['wifi'] = "FF:FF:FF:FF:FF:FF"
         logging.debug('items added to proto')
         value = []
-        val = diagnosticsProto.SerializeToString()
+        val = diagnostics_proto.SerializeToString()
         logging.debug(val)
         for c in val:
             value.append(dbus.Byte(c))
@@ -500,7 +506,7 @@ class LightsDescriptor(Descriptor):
 
 class WiFiSSIDCharacteristic(Characteristic):
 
-    global wifiCache
+    global wifi_cache
 
     def __init__(self, service):
         Characteristic.__init__(
@@ -512,15 +518,15 @@ class WiFiSSIDCharacteristic(Characteristic):
     def ReadValue(self, options):
 
         logging.debug('Read WiFi SSID')
-        activeConnection = ""
-        for network in wifiCache:
+        active_connection = ""
+        for network in wifi_cache:
             if(network.ssid != "--"):
                 if(network.in_use):
-                    activeConnection = str(network.ssid)
-                    print(activeConnection)
+                    active_connection = str(network.ssid)
+                    logging.info('Active Connection: %s' % active_connection)
         value = []
 
-        for c in activeConnection:
+        for c in active_connection:
             value.append(dbus.Byte(c.encode()))
         return value
 
@@ -550,7 +556,7 @@ class AssertLocationCharacteristic(Characteristic):
                 self, uuids.ASSERT_LOCATION_CHARACTERISTIC_UUID,
                 ["read", "write", "notify"], service)
         self.add_descriptor(AssertLocationDescriptor(self))
-        self.add_descriptor(opaqueStructure(self))
+        self.add_descriptor(OpaqueStructure(self))
         self.notifyValue = []
         for c in "init":
             self.notifyValue.append(dbus.Byte(c.encode()))
@@ -596,20 +602,20 @@ class AssertLocationCharacteristic(Characteristic):
         h3String = h3.geo_to_h3(assLocDet.lat, assLocDet.lon, 12)
         # logging.debug(h3String)
         # H3String, Owner, Nonce, Amount, Fee, Paye
-        minerAssertRequest = \
+        miner_assertion_request = \
             miner_interface. \
             AssertLocation(h3String,
                            assLocDet.owner, assLocDet.nonce, assLocDet.amount,
                            assLocDet.fee, assLocDet.payer)
         # logging.debug(assLocDet)
-        self.notifyValue = minerAssertRequest
+        self.notifyValue = miner_assertion_request
 
     def ReadValue(self, options):
         logging.debug('Read Assert Location')
         # logging.debug(options)
         if("offset" in options):
-            cutDownArray = self.notifyValue[int(options["offset"]):]
-            return cutDownArray
+            reduced_list = self.notifyValue[int(options["offset"]):]
+            return reduced_list
         else:
             return self.notifyValue
 
@@ -638,7 +644,7 @@ class AddGatewayCharacteristic(Characteristic):
                 self, uuids.ADD_GATEWAY_CHARACTERISTIC_UUID,
                 ["read", "write", "notify"], service)
         self.add_descriptor(AddGatewayDescriptor(self))
-        self.add_descriptor(opaqueStructure(self))
+        self.add_descriptor(OpaqueStructure(self))
         self.notifyValue = []
         for c in "init":
             self.notifyValue.append(dbus.Byte(c.encode()))
@@ -677,9 +683,9 @@ class AddGatewayCharacteristic(Characteristic):
         self.notifyValue = waitVal
 
         # logging.debug(value)
-        addGatewayDetails = add_gateway_pb2.add_gateway_v1()
+        add_gw_details = add_gateway_pb2.add_gateway_v1()
         # logging.debug('PB2C')
-        addGatewayDetails.ParseFromString(bytes(value))
+        add_gw_details.ParseFromString(bytes(value))
         # logging.debug('PB2P')
         # logging.debug(str(addGatewayDetails))
         miner_bus = dbus.SystemBus()
@@ -687,19 +693,19 @@ class AddGatewayCharacteristic(Characteristic):
         sleep(0.05)
         miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
         sleep(0.05)
-        addMinerRequest = \
+        add_miner_request = \
             miner_interface. \
-            AddGateway(addGatewayDetails.owner, addGatewayDetails.fee,
-                       addGatewayDetails.amount, addGatewayDetails.payer)
+            AddGateway(add_gw_details.owner, add_gw_details.fee,
+                       add_gw_details.amount, add_gw_details.payer)
         # logging.debug(addMinerRequest)
         logging.debug("Adding Response")
-        self.notifyValue = addMinerRequest
+        self.notifyValue = add_miner_request
 
     def ReadValue(self, options):
         logging.debug('Read Add Gateway')
         if("offset" in options):
-            cutDownArray = self.notifyValue[int(options["offset"]):]
-            return cutDownArray
+            reduced_list = self.notifyValue[int(options["offset"]):]
+            return reduced_list
         else:
             return self.notifyValue
         # logging.debug(self.notifyValue)
@@ -730,7 +736,7 @@ class WiFiConnectCharacteristic(Characteristic):
                 self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
                 ["read", "write", "notify"], service)
         self.add_descriptor(WiFiConnectDescriptor(self))
-        self.add_descriptor(opaqueStructure(self))
+        self.add_descriptor(OpaqueStructure(self))
         self.WiFiStatus = ""
 
     def WiFiConnectCallback(self):
@@ -769,15 +775,15 @@ class WiFiConnectCharacteristic(Characteristic):
             nmcli.device.disconnect('wlan0')
             logging.debug('Disconnected From Wifi')
         # logging.debug(value)
-        wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
+        wifi_details = wifi_connect_pb2.wifi_connect_v1()
         # logging.debug('PB2C')
-        wiFiDetails.ParseFromString(bytes(value))
+        wifi_details.ParseFromString(bytes(value))
         # logging.debug('PB2P')
         self.WiFiStatus = "already"
-        logging.debug(str(wiFiDetails.service))
+        logging.debug(str(wifi_details.service))
 
-        nmcli.device.wifi_connect(str(wiFiDetails.service),
-                                  str(wiFiDetails.password))
+        nmcli.device.wifi_connect(str(wifi_details.service),
+                                  str(wifi_details.password))
         self.WiFiStatus = self.checkWiFIStatus()
 
     def checkWiFIStatus(self):
@@ -823,7 +829,7 @@ class WiFiRemoveCharacteristic(Characteristic):
                 self, uuids.WIFI_REMOVE_CHARACTERISTIC_UUID,
                 ["read", "write", "notify"], service)
         self.add_descriptor(WiFiRemoveDescriptor(self))
-        self.add_descriptor(opaqueStructure(self))
+        self.add_descriptor(OpaqueStructure(self))
         self.wifistatus = "False"
 
     def WiFiRemoveCallback(self):
@@ -858,11 +864,11 @@ class WiFiRemoveCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logging.debug('Write WiFi Remove')
-        wifiRemoveSSID = wifi_remove_pb2.wifi_remove_v1()
-        wifiRemoveSSID.ParseFromString(bytes(value))
-        nmcli.connection.delete(wifiRemoveSSID.service)
+        wifi_remove_ssid = wifi_remove_pb2.wifi_remove_v1()
+        wifi_remove_ssid.ParseFromString(bytes(value))
+        nmcli.connection.delete(wifi_remove_ssid.service)
         logging.debug('Connection %s should be deleted'
-                      % wifiRemoveSSID.service)
+                      % wifi_remove_ssid.service)
 
     def ReadValue(self, options):
         logging.debug('Read WiFi Renove')
@@ -973,7 +979,7 @@ class utf8Format(Descriptor):
         return value
 
 
-class opaqueStructure(Descriptor):
+class OpaqueStructure(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -1004,50 +1010,50 @@ adv = ConfigAdvertisement(0)
 # Setup GPIO Devices
 variant = os.getenv('VARIANT')
 if (variant == "NEBHNT-IN1") or (variant == "Indoor"):
-    buttonGPIO = 26
-    statusGPIO = 25
+    button_gpio = 26
+    status_gpio = 25
 else:
-    buttonGPIO = 24
-    statusGPIO = 25
-userButton = Button(buttonGPIO, hold_time=2)
-statusLed = LED(statusGPIO)
+    button_gpio = 24
+    status_gpio = 25
+user_button = Button(button_gpio, hold_time=2)
+status_led = LED(status_gpio)
 
 
 def diagnosticsThreadCode():
     logging.debug("Diagnostics Thread Started")
-    global diagnosticsStatus
+    global diagnostics_status
     while True:
         try:
             diagnosticsJsonFile = open("/var/data/nebraDiagnostics.json")
             diagnosticsJsonFile = json.load(diagnosticsJsonFile)
             if(diagnosticsJsonFile['PF'] is True):
-                diagnosticsStatus = True
+                diagnostics_status = True
             else:
-                diagnosticsStatus = False
+                diagnostics_status = False
 
         except FileNotFoundError:
-            diagnosticsStatus = False
+            diagnostics_status = False
 
         except json.JSONDecodeError:
-            diagnosticsStatus = False
+            diagnostics_status = False
 
         except ValueError:
-            diagnosticsStatus = False
+            diagnostics_status = False
         sleep(60)
 
 
 def ledThreadCode():
     logging.debug("LED Thread Started")
-    global diagnosticsStatus
-    global advertisementLED
+    global diagnostics_status
+    global advertisement_led
 
     while True:
-        if(diagnosticsStatus is False):
-            statusLed.blink(0.1, 0.1, 10, False)
-        elif(advertisementLED is True):
-            statusLed.blink(1, 1, 1, False)
+        if(diagnostics_status is False):
+            status_led.blink(0.1, 0.1, 10, False)
+        elif(advertisement_led is True):
+            status_led.blink(1, 1, 1, False)
         else:
-            statusLed.on()
+            status_led.on()
             sleep(2)
 
 
@@ -1062,36 +1068,36 @@ def startAdvert():
 
 def advertisementThreadCode():
     global advertise
-    global advertisementLED
-    global scanWifi
+    global advertisement_led
+    global scan_wifi
     logging.debug("Advertising Thread Started")
     while True:
         if(advertise is True):
             advertise = False
-            scanWifi = True
+            scan_wifi = True
             try:
                 BleTools.disconnect_connections()
             except TypeError:
                 # Most Likely Already Disconnected
                 pass
             adv.register()
-            advertisementLED = True
+            advertisement_led = True
             sleep(300)
             adv.unregister()
-            advertisementLED = False
-            scanWifi = False
+            advertisement_led = False
+            scan_wifi = False
         else:
             sleep(5)
 
 
 def wifiThreadCode():
-    global scanWifi
-    global wifiCache
+    global scan_wifi
+    global wifi_cache
     logging.debug("WiFi Thread Started")
     while True:
-        if(scanWifi is True):
+        if(scan_wifi is True):
             logging.debug("Wi-Fi Scanning")
-            wifiCache = nmcli.device.wifi()
+            wifi_cache = nmcli.device.wifi()
             logging.debug("Wi-Fi Complete")
             sleep(15)
         else:
@@ -1106,7 +1112,7 @@ diagnosticsThread = threading.Thread(target=diagnosticsThreadCode)
 advertisementThread = threading.Thread(target=advertisementThreadCode)
 wifiThread = threading.Thread(target=wifiThreadCode)
 
-userButton.when_held = startAdvert
+user_button.when_held = startAdvert
 
 
 # Main Loop Starts Here
