@@ -1,4 +1,4 @@
-name: Python Flake8
+name: Python Unit Tests
 
 on: [push, pull_request]
 
@@ -15,7 +15,11 @@ jobs:
         python-version: 3.8
     - name: Setup flake8 annotations
       uses: rbialon/flake8-annotations@v1
-    - name: Lint with flake8
+    - name: Run PyTest
       run: |
-        pip install flake8
-        flake8 . --count --max-complexity=10 --statistics
+        sudo apt-get update
+        sudo apt-get install dbus libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev libgirepository1.0-dev python3-cairo-dev libcairo2 libcairo2-dev -y
+        pip install -r test-requirements.txt
+        pip install -r requirements.txt
+        export PYTHONPATH=`pwd`
+        pytest --cov=config_python --cov-fail-under=75
