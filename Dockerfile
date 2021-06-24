@@ -33,9 +33,9 @@ WORKDIR /opt/
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
 
-COPY config-python/ config-python/
+COPY config_python/ config_python/
 
-WORKDIR /opt/config-python/
+WORKDIR /opt/config_python/
 
 RUN wget -q "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/master/variant_definitions.py"
 
