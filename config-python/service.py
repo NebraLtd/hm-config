@@ -1,5 +1,3 @@
-# flake8: noqa
-
 """Copyright (c) 2019, Douglas Otwell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,28 +22,34 @@ SOFTWARE.
 import dbus
 import dbus.mainloop.glib
 import dbus.exceptions
+
 try:
-  from gi.repository import GObject
+    from gi.repository import GObject
 except ImportError:
-    import gobject as GObject
+    import gobject as GObject  # noqa: F401
+
 from bletools import BleTools
 
 BLUEZ_SERVICE_NAME = "org.bluez"
 GATT_MANAGER_IFACE = "org.bluez.GattManager1"
-DBUS_OM_IFACE =      "org.freedesktop.DBus.ObjectManager"
-DBUS_PROP_IFACE =    "org.freedesktop.DBus.Properties"
+DBUS_OM_IFACE = "org.freedesktop.DBus.ObjectManager"
+DBUS_PROP_IFACE = "org.freedesktop.DBus.Properties"
 GATT_SERVICE_IFACE = "org.bluez.GattService1"
-GATT_CHRC_IFACE =    "org.bluez.GattCharacteristic1"
-GATT_DESC_IFACE =    "org.bluez.GattDescriptor1"
+GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
+GATT_DESC_IFACE = "org.bluez.GattDescriptor1"
+
 
 class InvalidArgsException(dbus.exceptions.DBusException):
     _dbus_error_name = "org.freedesktop.DBus.Error.InvalidArgs"
 
+
 class NotSupportedException(dbus.exceptions.DBusException):
     _dbus_error_name = "org.bluez.Error.NotSupported"
 
+
 class NotPermittedException(dbus.exceptions.DBusException):
     _dbus_error_name = "org.bluez.Error.NotPermitted"
+
 
 class Application(dbus.service.Object):
     def __init__(self):
@@ -63,7 +67,7 @@ class Application(dbus.service.Object):
     def add_service(self, service):
         self.services.append(service)
 
-    @dbus.service.method(DBUS_OM_IFACE, out_signature = "a{oa{sa{sv}}}")
+    @dbus.service.method(DBUS_OM_IFACE, out_signature="a{oa{sa{sv}}}")
     def GetManagedObjects(self):
         response = {}
 
@@ -91,9 +95,12 @@ class Application(dbus.service.Object):
                 self.bus.get_object(BLUEZ_SERVICE_NAME, adapter),
                 GATT_MANAGER_IFACE)
 
-        service_manager.RegisterApplication(self.get_path(), {},
-                reply_handler=self.register_app_callback,
-                error_handler=self.register_app_error_callback)
+        service_manager.RegisterApplication(
+            self.get_path(),
+            {},
+            reply_handler=self.register_app_callback,
+            error_handler=self.register_app_error_callback
+        )
 
     def run(self):
         self.mainloop.run()
@@ -101,6 +108,7 @@ class Application(dbus.service.Object):
     def quit(self):
         print("\nGATT application terminated")
         self.mainloop.quit()
+
 
 class Service(dbus.service.Object):
     PATH_BASE = "/org/bluez/example/service"
@@ -158,6 +166,7 @@ class Service(dbus.service.Object):
 
         return self.get_properties()[GATT_SERVICE_IFACE]
 
+
 class Characteristic(dbus.service.Object):
     """
     org.bluez.GattCharacteristic1 interface implementation
@@ -210,8 +219,8 @@ class Characteristic(dbus.service.Object):
         return self.get_properties()[GATT_CHRC_IFACE]
 
     @dbus.service.method(GATT_CHRC_IFACE,
-                        in_signature='a{sv}',
-                        out_signature='ay')
+                         in_signature='a{sv}',
+                         out_signature='ay')
     def ReadValue(self, options):
         print('Default ReadValue called, returning error')
         raise NotSupportedException()
@@ -283,10 +292,10 @@ class Descriptor(dbus.service.Object):
         return self.get_properties()[GATT_DESC_IFACE]
 
     @dbus.service.method(GATT_DESC_IFACE,
-                        in_signature='a{sv}',
-                        out_signature='ay')
+                         in_signature='a{sv}',
+                         out_signature='ay')
     def ReadValue(self, options):
-        print ('Default ReadValue called, returning error')
+        print('Default ReadValue called, returning error')
         raise NotSupportedException()
 
     @dbus.service.method(GATT_DESC_IFACE, in_signature='aya{sv}')
@@ -300,7 +309,10 @@ class CharacteristicUserDescriptionDescriptor(Descriptor):
 
     def __init__(self, bus, index, characteristic):
         self.writable = 'writable-auxiliaries' in characteristic.flags
-        self.value = array.array('B', b'This is a characteristic for testing')
+        self.value = array.array(  # noqa: F821
+            'B',
+            b'This is a characteristic for testing'
+        )
         self.value = self.value.tolist()
         Descriptor.__init__(
                 self, bus, index,

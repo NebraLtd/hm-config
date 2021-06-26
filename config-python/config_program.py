@@ -347,7 +347,9 @@ class DiagnosticsCharacteristic(Characteristic):
         self.add_descriptor(opaqueStructure(self))
         self.p2pstatus = ""
 
-    def ReadValue(self, options):
+    def ReadValue(self, options):  # noqa: C901
+        # TODO (Rob): come back and make this method less complex for
+        # C901 complexity rules.
         logging.debug('Read diagnostics')
         logging.debug('Diagnostics miner_bus')
         miner_bus = dbus.SystemBus()
@@ -373,7 +375,7 @@ class DiagnosticsCharacteristic(Characteristic):
         except KeyError:
             pass
 
-        ipAddress = "0.0.0.0"
+        ipAddress = "0.0.0.0"  # nosec
         if('ethIP' in locals()):
             ipAddress = str(ethIP)
         elif('wlanIP' in locals()):
@@ -385,13 +387,17 @@ class DiagnosticsCharacteristic(Characteristic):
         diagnosticsProto.diagnostics['height'] = str(self.p2pstatus[3][1])
         diagnosticsProto.diagnostics['nat_type'] = str(self.p2pstatus[2][1])
         try:
-            diagnosticsProto.diagnostics['eth'] = open("/sys/class/net/eth0/address").readline().strip().replace(":", "")
+            diagnosticsProto.diagnostics['eth'] = \
+                open("/sys/class/net/eth0/address").readline(). \
+                strip().replace(":", "")
         except FileNotFoundError:
             diagnosticsProto.diagnostics['eth'] = "FF:FF:FF:FF:FF:FF"
         diagnosticsProto.diagnostics['fw'] = os.getenv('FIRMWARE_VERSION')
         diagnosticsProto.diagnostics['ip'] = ipAddress
         try:
-            diagnosticsProto.diagnostics['wifi'] = open("/sys/class/net/wlan0/address").readline().strip().replace(":", "")
+            wifi_diag = open("/sys/class/net/wlan0/address").readline(). \
+                strip().replace(":", "")
+            diagnosticsProto.diagnostics['wifi'] = wifi_diag
         except FileNotFoundError:
             diagnosticsProto.diagnostics['wifi'] = "FF:FF:FF:FF:FF:FF"
         logging.debug('items added to proto')
@@ -855,11 +861,10 @@ class WiFiRemoveCharacteristic(Characteristic):
         wifiRemoveSSID = wifi_remove_pb2.wifi_remove_v1()
         wifiRemoveSSID.ParseFromString(bytes(value))
         nmcli.connection.delete(wifiRemoveSSID.service)
-        logging.debug('Connection %s should be deleted' % wifiRemoveSSID.service)
-
+        logging.debug('Connection %s should be deleted'
+                      % wifiRemoveSSID.service)
 
     def ReadValue(self, options):
-
         logging.debug('Read WiFi Renove')
 
         value = []

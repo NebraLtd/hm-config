@@ -1,5 +1,3 @@
-# flake8: noqa
-
 """Copyright (c) 2019, Douglas Otwell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,26 +21,28 @@ SOFTWARE.
 
 import dbus
 try:
-  from gi.repository import GObject
+    from gi.repository import GObject
 except ImportError:
-    import gobject as GObject
+    import gobject as GObject  # noqa: F401
 
 BLUEZ_SERVICE_NAME = "org.bluez"
 LE_ADVERTISING_MANAGER_IFACE = "org.bluez.LEAdvertisingManager1"
 DBUS_OM_IFACE = "org.freedesktop.DBus.ObjectManager"
 DBUS_DEV_IFACE = "org.bluez.Device1"
 
+
 class BleTools(object):
     @classmethod
     def get_bus(self):
-         bus = dbus.SystemBus()
-
-         return bus
+        return dbus.SystemBus()
 
     @classmethod
     def find_adapter(self, bus):
-        remote_om = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, "/"),
-                               DBUS_OM_IFACE)
+        remote_om = dbus.Interface(
+            bus.get_object(
+                BLUEZ_SERVICE_NAME,
+                "/"),
+            DBUS_OM_IFACE)
         objects = remote_om.GetManagedObjects()
 
         for o, props in objects.items():
@@ -50,11 +50,14 @@ class BleTools(object):
                 return o
 
         return None
-    @classmethod
 
+    @classmethod
     def find_connection(self, bus):
-        remote_om = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, "/"),
-                               DBUS_OM_IFACE)
+        remote_om = dbus.Interface(
+            bus.get_object(
+                BLUEZ_SERVICE_NAME,
+                "/"),
+            DBUS_OM_IFACE)
         objects = remote_om.GetManagedObjects()
 
         for o, props in objects.items():
@@ -64,17 +67,23 @@ class BleTools(object):
         return None
 
     @classmethod
-    def power_adapter(self):
+    def power_adapter(self, bus):
         adapter = self.get_adapter()
 
-        adapter_props = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
-                "org.freedesktop.DBus.Properties");
+        adapter_props = dbus.Interface(
+            bus.get_object(
+                BLUEZ_SERVICE_NAME,
+                adapter),
+            "org.freedesktop.DBus.Properties")
         adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
 
     @classmethod
     def disconnect_connections(self):
         bus = self.get_bus()
         connection = self.find_connection(bus)
-        connections = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, connection),
-                DBUS_DEV_IFACE);
+        connections = dbus.Interface(
+            bus.get_object(
+                BLUEZ_SERVICE_NAME,
+                connection),
+            DBUS_DEV_IFACE)
         connections.Disconnect()

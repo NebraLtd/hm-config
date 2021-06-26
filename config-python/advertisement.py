@@ -1,5 +1,3 @@
-# flake8: noqa
-
 """Copyright (c) 2019, Douglas Otwell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -110,7 +108,11 @@ class Advertisement(dbus.service.Object):
                          out_signature="a{sv}")
     def GetAll(self, interface):
         if interface != LE_ADVERTISEMENT_IFACE:
-            raise InvalidArgsException()
+            # raise InvalidArgsException()
+            # TODO (rob): exception InvalidArgsException does not exist
+            # does it need to be imported from somewhere? For now just
+            # raise bare exception.
+            raise Exception()
 
         return self.get_properties()[LE_ADVERTISEMENT_IFACE]
 
@@ -118,7 +120,7 @@ class Advertisement(dbus.service.Object):
                          in_signature='',
                          out_signature='')
     def Release(self):
-        print ('%s: Released!' % self.path)
+        print('%s: Released!' % self.path)
 
     def register_ad_callback(self):
         print("GATT advertisement registered")
@@ -130,16 +132,26 @@ class Advertisement(dbus.service.Object):
         bus = BleTools.get_bus()
         adapter = BleTools.find_adapter(bus)
 
-        ad_manager = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
-                                LE_ADVERTISING_MANAGER_IFACE)
-        ad_manager.RegisterAdvertisement(self.get_path(), {},
-                                     reply_handler=self.register_ad_callback,
-                                     error_handler=self.register_ad_error_callback)
+        ad_manager = dbus.Interface(
+            bus.get_object(
+                BLUEZ_SERVICE_NAME,
+                adapter),
+            LE_ADVERTISING_MANAGER_IFACE)
+        ad_manager.RegisterAdvertisement(
+            self.get_path(),
+            {},
+            reply_handler=self.register_ad_callback,
+            error_handler=self.register_ad_error_callback
+        )
+
     def unregister(self):
         bus = BleTools.get_bus()
         adapter = BleTools.find_adapter(bus)
 
-        ad_manager = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
-                                LE_ADVERTISING_MANAGER_IFACE)
+        ad_manager = dbus.Interface(
+            bus.get_object(
+                BLUEZ_SERVICE_NAME,
+                adapter),
+            LE_ADVERTISING_MANAGER_IFACE)
         ad_manager.UnregisterAdvertisement(self.get_path())
         print("GATT advertisement UNregistered")
