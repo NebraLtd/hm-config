@@ -1,7 +1,6 @@
 version: '2'
 
 services:
-
   gateway-config:
     build: .
     environment:
@@ -19,3 +18,5 @@ services:
       io.balena.features.kernel-modules: '1'
       io.balena.features.supervisor-api: '1'
     stop_signal: SIGINT
+volumes:
+  miner-storage:
