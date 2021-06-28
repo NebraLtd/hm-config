@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export LANG=C
+
 # Disable BluetoothD on the host
 # dbus-send --system --dest=org.freedesktop.systemd1 --type=method_call --print-reply /org/freedesktop/systemd1   org.freedesktop.systemd1.Manager.StopUnit string:"bluetooth.service" string:"replace"
 
