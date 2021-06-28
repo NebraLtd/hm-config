@@ -6,7 +6,7 @@ import dbus
 import logging
 import sys
 import json
-import nmcli
+import nmcli_custom as nmcli
 import uuids
 import h3
 
