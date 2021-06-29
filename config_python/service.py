@@ -20,6 +20,7 @@ SOFTWARE.
 """
 
 import dbus
+import dbus.service
 import dbus.mainloop.glib
 import dbus.exceptions
 
@@ -304,6 +305,10 @@ class Descriptor(dbus.service.Object):
         raise NotSupportedException()
 
 
+# TODO: (Rob) I think this code is boiler plate stuff copied in from
+# upstream implementation, we should check this out and strip as
+# necessary.
+'''
 class CharacteristicUserDescriptionDescriptor(Descriptor):
     CUD_UUID = '2901'
 
@@ -327,3 +332,4 @@ class CharacteristicUserDescriptionDescriptor(Descriptor):
         if not self.writable:
             raise NotPermittedException()
         self.value = value
+'''

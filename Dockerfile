@@ -12,7 +12,8 @@ RUN \
 apt-get update && \
 DEBIAN_FRONTEND="noninteractive" \
 TZ="Europe/London" \
-apt-get -y install \
+apt-get install -y \
+pkg-config=0.29-6 \
 python3-minimal=3.7.3-1 \
 bluez=5.50-1.2~deb10u1 \
 libdbus-1-3=1.12.20-0+deb10u1 \
@@ -20,6 +21,10 @@ python3-pip=18.1-5+rpt1 \
 network-manager=1.14.6-2+deb10u1 \
 python3-gi=3.30.4-1 \
 wget=1.20.1-1.1 \
+libglib2.0-dev=2.58.3-2+deb10u2 \
+libgirepository1.0-dev=1.58.3-2 \
+libcairo2-dev=1.16.0-4+rpt1 \
+python3-dev=3.7.3-1 \
 --no-install-recommends && \
 pip3 install --no-cache-dir -r requirements.txt &&\
 apt-get purge python3-pip -y &&\
@@ -27,15 +32,14 @@ apt-get autoremove -y &&\
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-
 WORKDIR /opt/
 
 COPY start-gateway-config.sh start-gateway-config.sh
 RUN chmod +x start-gateway-config.sh
 
-COPY config-python/ config-python/
+COPY config_python/ config_python/
 
-WORKDIR /opt/config-python/
+WORKDIR /opt/config_python/
 
 RUN wget -q "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/master/variant_definitions.py"
 

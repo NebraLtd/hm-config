@@ -28,6 +28,10 @@ class CustomSystemCommand(SystemCommand):
 
     @staticmethod
     def _handle_error(e):
+        # TODO: (Rob) this was lifted directly out of the nmcli previous
+        # code, in reality this would be cleaner with a hashmap rather than
+        # all these if statements. Not urgent or critical, but potential
+        # for refactor.
         rc = e.returncode
         stderr = e.stderr.decode('utf-8')
         if rc == 2:

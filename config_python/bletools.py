@@ -66,6 +66,10 @@ class BleTools(object):
 
         return None
 
+    # TODO: (Rob) I don't think we ever call this, and in any  case
+    # self.get_adapter isn't defined so it won't work anyway, candidate
+    # for removal...
+    '''
     @classmethod
     def power_adapter(self, bus):
         adapter = self.get_adapter()
@@ -76,6 +80,7 @@ class BleTools(object):
                 adapter),
             "org.freedesktop.DBus.Properties")
         adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
+    '''
 
     @classmethod
     def disconnect_connections(self):
