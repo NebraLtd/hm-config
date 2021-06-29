@@ -5,7 +5,7 @@ import dbus
 import logging
 import sys
 import json
-import nmcli
+import nmcli_custom as nmcli
 import h3
 import threading
 import uuids
