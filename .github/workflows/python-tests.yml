@@ -13,13 +13,13 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
-    - name: Setup flake8 annotations
-      uses: rbialon/flake8-annotations@v1
     - name: Run PyTest
       run: |
         sudo apt-get update
-        sudo apt-get install dbus libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev libgirepository1.0-dev python3-cairo-dev libcairo2 libcairo2-dev -y
+        sudo apt-get install wget dbus libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev libgirepository1.0-dev python3-cairo-dev libcairo2 libcairo2-dev -y
         pip install -r test-requirements.txt
         pip install -r requirements.txt
         export PYTHONPATH=`pwd`
-        pytest --cov=config_python --cov-fail-under=75
+        wget -q "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/master/variant_definitions.py"
+        cp variant_definitions.py config_python/.
+        pytest --cov=config_python --cov-fail-under=50

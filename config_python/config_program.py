@@ -12,7 +12,13 @@ import uuids
 
 # From imports
 from time import sleep
-from RPi import GPIO
+
+# This is here to allow tests to run on a non Pi device.
+try:
+    from RPi import GPIO
+except RuntimeError:
+    pass
+
 from variant_definitions import variant_definitions
 
 # BLE Library
@@ -52,6 +58,7 @@ nmcli.disable_use_sudo()
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
+
 # Public Onboarding Keys
 while True:
     try:
@@ -59,7 +66,7 @@ while True:
         break
     except FileNotFoundError:
         logging.debug('Waiting for keyfile')
-    sleep(60)
+        sleep(60)
 
 # Keyfile exists, now running.
 PUBLIC_KEY = str(public_keys_file[1])
@@ -1104,31 +1111,33 @@ def wifiThreadCode():
             sleep(5)
 
 
-count = 0
+if __name__ == '__main__':
+    # Only run the main loop if we are the main entry point.
 
-appThread = threading.Thread(target=app.run)
-ledThread = threading.Thread(target=ledThreadCode)
-diagnosticsThread = threading.Thread(target=diagnosticsThreadCode)
-advertisementThread = threading.Thread(target=advertisementThreadCode)
-wifiThread = threading.Thread(target=wifiThreadCode)
+    count = 0
 
-user_button.when_held = startAdvert
+    appThread = threading.Thread(target=app.run)
+    ledThread = threading.Thread(target=ledThreadCode)
+    diagnosticsThread = threading.Thread(target=diagnosticsThreadCode)
+    advertisementThread = threading.Thread(target=advertisementThreadCode)
+    wifiThread = threading.Thread(target=wifiThreadCode)
 
+    user_button.when_held = startAdvert
 
-# Main Loop Starts Here
-try:
-    print("Starting %s" % (count))
-    # app.run()
-    appThread.daemon = True
-    appThread.start()
-    ledThread.start()
-    diagnosticsThread.start()
-    wifiThread.start()
-    advertisementThread.start()
+    # Main Loop Starts Here
+    try:
+        print("Starting %s" % (count))
+        # app.run()
+        appThread.daemon = True
+        appThread.start()
+        ledThread.start()
+        diagnosticsThread.start()
+        wifiThread.start()
+        advertisementThread.start()
 
-except KeyboardInterrupt:
-    app.quit()
-    GPIO.cleanup()
-except Exception as e:
-    print(e)
-    GPIO.cleanup()
+    except KeyboardInterrupt:
+        app.quit()
+        GPIO.cleanup()
+    except Exception as e:
+        print(e)
+        GPIO.cleanup()
