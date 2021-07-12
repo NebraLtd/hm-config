@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  gateway-config:
+    build: .
+    environment:
+      - 'FIRMWARE_VERSION=2021.06.26.4'
+      - 'DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket'
+    privileged: true
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - 'miner-storage:/var/data'
+    labels:
+      io.balena.features.dbus: '1'
+      io.balena.features.sysfs: '1'
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.supervisor-api: '1'
+    stop_signal: SIGINT
+volumes:
+  miner-storage:
