@@ -9,29 +9,27 @@ WORKDIR /opt/
 COPY requirements.txt requirements.txt
 
 RUN \
-apt-get update && \
-DEBIAN_FRONTEND="noninteractive" \
-TZ="Europe/London" \
-apt-get -y install \
-python3-minimal=3.7.3-1 \
-bluez=5.50-1.2~deb10u1 \
-libdbus-1-3=1.12.20-0+deb10u1 \
-python3-pip=18.1-5+rpt1 \
-network-manager=1.14.6-2+deb10u1 \
-python3-gi=3.30.4-1 \
-wget=1.20.1-1.1 \
---no-install-recommends && \
-pip3 install --no-cache-dir -r requirements.txt &&\
-apt-get purge python3-pip -y &&\
-apt-get autoremove -y &&\
-apt-get clean && \
-rm -rf /var/lib/apt/lists/*
-
+    apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" \
+    TZ="Europe/London" \
+        apt-get -y install \
+            python3-minimal=3.7.3-1 \
+            bluez=5.50-1.2~deb10u1 \
+            libdbus-1-3=1.12.20-0+deb10u1 \
+            python3-pip=18.1-5+rpt1 \
+            network-manager=1.14.6-2+deb10u1 \
+            python3-gi=3.30.4-1 \
+            wget=1.20.1-1.1 \
+            --no-install-recommends && \
+        pip3 install --no-cache-dir -r requirements.txt &&\
+        apt-get purge python3-pip -y &&\
+        apt-get autoremove -y &&\
+        apt-get clean && \
+        rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/
 
 COPY start-gateway-config.sh start-gateway-config.sh
-RUN chmod +x start-gateway-config.sh
 
 COPY config-python/ config-python/
 
