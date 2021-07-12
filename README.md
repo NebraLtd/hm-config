@@ -12,6 +12,8 @@ To resolve arm64 compiling with pip for now the repository includes arm64 wheels
 
 ## Local development environment
 
+**Note:** Right now the build process fails due to missing wheels.
+
 Because the stack is tightly intertwined with Balena, the easiest way to test the code base on your own Raspberry Pi in your own Balena project.
 
 * Create a new Balena project for Raspberry Pi 3 (64 Bit)
