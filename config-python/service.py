@@ -23,10 +23,12 @@ import dbus
 import dbus.mainloop.glib
 import dbus.exceptions
 
+import array
+
 try:
     from gi.repository import GObject
 except ImportError:
-    import gobject as GObject  # noqa: F401
+    import gobject as GObject
 
 from bletools import BleTools
 
@@ -309,7 +311,7 @@ class CharacteristicUserDescriptionDescriptor(Descriptor):
 
     def __init__(self, bus, index, characteristic):
         self.writable = 'writable-auxiliaries' in characteristic.flags
-        self.value = array.array(  # noqa: F821
+        self.value = array.array(
             'B',
             b'This is a characteristic for testing'
         )
