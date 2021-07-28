@@ -17,17 +17,17 @@ from RPi import GPIO
 from variant_definitions import variant_definitions
 
 # BLE Library
-from advertisement import Advertisement
-from service import Application, Service, Characteristic, Descriptor
-from bletools import BleTools
+from lib.advertisement import Advertisement
+from lib.service import Application, Service, Characteristic, Descriptor
+from lib.bletools import BleTools
 
 # Protobuf Imports
-import add_gateway_pb2
-import assert_location_pb2
-import diagnostics_pb2
-import wifi_connect_pb2
-import wifi_remove_pb2
-import wifi_services_pb2
+import protobuf.generated.add_gateway_pb2
+import protobuf.generated.assert_location_pb2
+import protobuf.generated.diagnostics_pb2
+import protobuf.generated.wifi_connect_pb2
+import protobuf.generated.wifi_remove_pb2
+import protobuf.generated.wifi_services_pb2
 
 from gpiozero import Button, LED
 
