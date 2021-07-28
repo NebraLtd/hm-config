@@ -25,3 +25,8 @@ You can now push your changes using the following command:
 ```
 $ git push balena YourLocalBranch:master
 ```
+
+
+## Generating protobufs
+
+Install protobuf, eg `sudo snap install protobuf` then run `genProtos.sh` from `src/protobuf`, eg: `cd src/protobuf && sh genProtos.sh`.
