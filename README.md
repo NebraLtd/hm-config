@@ -26,6 +26,23 @@ You can now push your changes using the following command:
 $ git push balena YourLocalBranch:master
 ```
 
+### Setting up Python on Ubuntu
+
+These are optional instructions to have an Ubuntu environment closely mimic production.
+
+1. Install pyenv: `curl https://pyenv.run | bash`
+2. Install Python 3.7.3 dependency: 
+
+```
+sudo apt-get install -y libffi-dev libssl-dev make build-essential libssl-dev zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+    xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
+     libdbus-glib-1-dev libgirepository1.0-dev python3-gi bluez
+```
+3. Install Python 3.7.3: `pyenv install 3.7.3 && pyenv local 3.7.3`
+4. Check correctly installed: `python -V`
+5. Setup virtualenv: `python3 -m venv .venv && source .venv/bin/activate`
+6. Install dependencies: `pip install -r requirements.txt`
 
 ## Generating protobufs
 

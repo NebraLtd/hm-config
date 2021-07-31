@@ -14,7 +14,7 @@ import threading
 # From imports
 from time import sleep
 from RPi import GPIO
-from variant_definitions import variant_definitions
+from lib.variant_definitions import variant_definitions
 
 # BLE Library
 from lib.advertisement import Advertisement
