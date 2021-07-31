@@ -17,7 +17,7 @@ WORKDIR /opt/
 COPY requirements.txt requirements.txt
 
 # Download the variant_definitions in the builder so that runner doesn't need wget
-RUN wget -q "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/master/variant_definitions.py"
+RUN wget -q "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/d84ee2af049b9c033c07788bea577a459aeb3aaa/variant_definitions.py"
 
 # This will be the path that venv uses for installation below
 ENV PATH="/opt/venv/bin:$PATH"
