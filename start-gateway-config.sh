@@ -21,4 +21,6 @@ echo 153 > /sys/kernel/debug/bluetooth/hci0/adv_max_interval
 
 printf "pairable off\nquit" | /usr/bin/bluetoothctl
 
+# Assuming this is being run within virtualenv, 
+# `python` will refer to the correct variant
 python config_program.py
