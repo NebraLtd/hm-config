@@ -46,4 +46,8 @@ sudo apt-get install -y libffi-dev libssl-dev make build-essential libssl-dev zl
 
 ## Generating protobufs
 
-Install protobuf, eg `sudo snap install protobuf` then run `genProtos.sh` from `src/protobuf`, eg: `cd src/protobuf && sh genProtos.sh`.
+- Install protobuf
+    - Ubuntu: `sudo snap install protobuf` 
+    - Mac: `brew install protobuf`
+- Run `generate-protos.sh`
+    - `cd src/protobuf && sh generate-protos.sh`
