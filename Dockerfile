@@ -14,7 +14,7 @@ RUN \
     TZ="Europe/London" \
         apt-get -y install \
             python3-minimal=3.7.3-1 \
-            bluez=5.50-1.2~deb10u1 \
+            bluez=5.50-1.2~deb10u1+rpt2 \
             libdbus-1-3=1.12.20-0+deb10u1 \
             python3-pip=18.1-5+rpt1 \
             network-manager=1.14.6-2+deb10u1 \
