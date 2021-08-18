@@ -35,6 +35,6 @@ COPY config-python/ config-python/
 
 WORKDIR /opt/config-python/
 
-RUN wget -q "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/master/variant_definitions.py"
+RUN wget -q "https://raw.githubusercontent.com/NebraLtd/helium-hardware-definitions/577ce0ebca4349398480e01842aee4ad2662d2d4/variant_definitions.py"
 
 ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
