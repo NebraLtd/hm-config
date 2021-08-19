@@ -73,4 +73,4 @@ PYTHONPATH=./ pytest --cov=minerconfig --cov=lib
     - Ubuntu: `sudo snap install protobuf` 
     - Mac: `brew install protobuf`
 - Run `generate-protos.sh`
-    - `cd src/protobuf && sh generate-protos.sh`
+    - `cd protos && sh generate-protos.sh`
