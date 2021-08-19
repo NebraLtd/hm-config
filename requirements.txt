@@ -6,3 +6,5 @@ protobuf==3.15.6
 dbus-python==1.2.16
 nmcli==0.5.0
 sentry-sdk==1.1.0
+pycairo
+PyGObject
