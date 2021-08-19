@@ -1,14 +1,19 @@
 from lib.cputemp.advertisement import Advertisement
 
+ADVERTISEMENT_SERVICE_UUID = "0fda92b2-44a2-4af2-84f5-fa682baa2b8d"
+UNKNOWN_MAC_ADDRESS_VAL = "XXXXXX"
+
+# BLE advertisement
 class BluetoothConnectionAdvertisement(Advertisement):
-    # BLE advertisement
-    def __init__(self, index):
-        global variantDetails
-        Advertisement.__init__(self, index, "peripheral")
-        variant = variantDetails['APPNAME']
-        macAddr = open("/sys/class/net/eth0/address").readline()\
-            .strip().replace(":", "")[-6:].upper()
-        localName = "Nebra %s Hotspot %s" % (variant, macAddr)
-        self.add_local_name(localName)
+    def __init__(self, index, eth0_mac_address, advertisement_type, variant):
+        Advertisement.__init__(self, index, advertisement_type)
+        try:
+            mac_address_last6 = eth0_mac_address.replace(":", "")[-6:] 
+
+        except FileNotFoundError:
+            mac_address_last6 = UNKNOWN_MAC_ADDRESS_VAL
+
+        advertisement_name = "Nebra %s Hotspot (%s)" % (mac_address_last6, variant)
+        self.add_local_name(advertisement_name)
         self.include_tx_power = True
-        self.service_uuids = ["0fda92b2-44a2-4af2-84f5-fa682baa2b8d"]
+        self.service_uuids = [ADVERTISEMENT_SERVICE_UUID]

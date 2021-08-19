@@ -1,6 +1,7 @@
-import dbus
 from lib.cputemp.service import Descriptor
+from gatewayconfig.helpers import string_to_dbus_byte_array
 import gatewayconfig.constants as constants
+
 
 class EthernetOnlineDescriptor(Descriptor):
 
@@ -11,9 +12,4 @@ class EthernetOnlineDescriptor(Descriptor):
                 characteristic)
 
     def ReadValue(self, options):
-        value = []
-        desc = constants.ETHERNET_ONLINE_VALUE
-
-        for c in desc:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        return string_to_dbus_byte_array(constants.ETHERNET_ONLINE_LABEL)

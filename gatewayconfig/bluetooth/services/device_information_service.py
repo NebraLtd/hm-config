@@ -6,8 +6,8 @@ import gatewayconfig.constants as constants
 
 class DeviceInformationService(Service):
     # Service that provides basic information
-    def __init__(self, index):
+    def __init__(self, index, eth0_mac_address):
         Service.__init__(self, index, constants.DEVINFO_SVC_UUID, True)
         self.add_characteristic(ManufacturerNameCharacteristic(self))
         self.add_characteristic(FirmwareRevisionCharacteristic(self))
-        self.add_characteristic(SerialNumberCharacteristic(self))
+        self.add_characteristic(SerialNumberCharacteristic(self, eth0_mac_address))

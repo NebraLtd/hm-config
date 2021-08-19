@@ -1,20 +1,17 @@
-import logging
-import dbus
-
 from lib.cputemp.service import Characteristic
 
+from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.logger import logger
 import gatewayconfig.constants as constants
+
+MANUFACTURER_NAME = "Nebra LTD."
 
 class ManufacturerNameCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
-                self, constants.MANUFACTURE_NAME_CHARACTERISTIC_UUID,
+                self, constants.MANUFACTURER_NAME_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
-        logging.debug('Read Manufacturer')
-        value = []
-        val = "Nebra LTD."
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        logger.debug('Read Manufacturer')
+        return string_to_dbus_byte_array(MANUFACTURER_NAME)

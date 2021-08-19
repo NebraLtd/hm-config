@@ -1,5 +1,5 @@
-import dbus
 from lib.cputemp.service import Descriptor
+from gatewayconfig.helpers import string_to_dbus_byte_array
 import gatewayconfig.constants as constants
 
 class AssertLocationDescriptor(Descriptor):
@@ -11,9 +11,5 @@ class AssertLocationDescriptor(Descriptor):
                 characteristic)
 
     def ReadValue(self, options):
-        value = []
-        desc = constants.ASSERT_LOCATION_VALUE
+        return string_to_dbus_byte_array(constants.ASSERT_LOCATION_LABEL)
 
-        for c in desc:
-            value.append(dbus.Byte(c.encode()))
-        return value

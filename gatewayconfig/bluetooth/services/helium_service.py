@@ -14,24 +14,24 @@ from gatewayconfig.bluetooth.characteristics.wifi_connect_characteristic import 
 from gatewayconfig.bluetooth.characteristics.ethernet_online_characteristic import EthernetOnlineCharacteristic
 from gatewayconfig.bluetooth.characteristics.software_version_characteristic import SoftwareVersionCharacteristic
 from gatewayconfig.bluetooth.characteristics.wifi_remove_characteristic import WifiRemoveCharacteristic
+import gatewayconfig.constants as constants
 
 class HeliumService(Service):
-    DEVINFO_SVC_UUID = "0fda92b2-44a2-4af2-84f5-fa682baa2b8d"
 
-    def __init__(self, index):
+    def __init__(self, index, eth0_mac_address, onboarding_key, pub_key, firmware_version, ethernet_is_online_filepath, shared_state):
 
-        Service.__init__(self, index, self.DEVINFO_SVC_UUID, True)
-        self.add_characteristic(OnboardingKeyCharacteristic(self))
-        self.add_characteristic(PublicKeyCharacteristic(self))
-        self.add_characteristic(WifiServicesCharacteristic(self))
-        self.add_characteristic(WifiConfiguredServicesCharacteristic(self))
+        Service.__init__(self, index, constants.HELIUM_SERVICE_UUID, True)
+        self.add_characteristic(OnboardingKeyCharacteristic(self, onboarding_key))
+        self.add_characteristic(PublicKeyCharacteristic(self, pub_key))
+        self.add_characteristic(WifiServicesCharacteristic(self, shared_state))
+        self.add_characteristic(WifiConfiguredServicesCharacteristic(self, shared_state))
         self.add_characteristic(DiagnosticsCharacteristic(self))
-        self.add_characteristic(MacAddressCharacteristic(self))
+        self.add_characteristic(MacAddressCharacteristic(self, eth0_mac_address))
         self.add_characteristic(LightsCharacteristic(self))
-        self.add_characteristic(WifiSSIDCharacteristic(self))
+        self.add_characteristic(WifiSSIDCharacteristic(self, shared_state))
         self.add_characteristic(AssertLocationCharacteristic(self))
         self.add_characteristic(AddGatewayCharacteristic(self))
         self.add_characteristic(WifiConnectCharacteristic(self))
-        self.add_characteristic(EthernetOnlineCharacteristic(self))
-        self.add_characteristic(SoftwareVersionCharacteristic(self))
+        self.add_characteristic(EthernetOnlineCharacteristic(self, ethernet_is_online_filepath))
+        self.add_characteristic(SoftwareVersionCharacteristic(self, firmware_version))
         self.add_characteristic(WifiRemoveCharacteristic(self))

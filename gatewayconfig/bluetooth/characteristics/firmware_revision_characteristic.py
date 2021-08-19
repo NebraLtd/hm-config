@@ -1,8 +1,9 @@
-import logging
 import os
-import dbus
 
 from lib.cputemp.service import Characteristic
+
+from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.logger import logger
 import gatewayconfig.constants as constants
 
 class FirmwareRevisionCharacteristic(Characteristic):
@@ -12,12 +13,8 @@ class FirmwareRevisionCharacteristic(Characteristic):
                 ["read"], service)
 
     def ReadValue(self, options):
-        logging.debug('Read Firmware')
-
-        val = os.getenv('FIRMWARE_VERSION')
-        value = []
-
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-
-        return value
+        logger.debug('Read Firmware')
+        # Intentionally reading the env variable each time in case it changes over
+        # the application's lifetime
+        firmware_version = os.getenv('FIRMWARE_VERSION')
+        return string_to_dbus_byte_array(firmware_version)

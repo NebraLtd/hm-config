@@ -1,5 +1,5 @@
-import dbus
 from lib.cputemp.service import Descriptor
+from gatewayconfig.helpers import string_to_dbus_byte_array
 import gatewayconfig.constants as constants
 
 class WifiConfiguredServicesDescriptor(Descriptor):
@@ -12,8 +12,4 @@ class WifiConfiguredServicesDescriptor(Descriptor):
 
     def ReadValue(self, options):
         value = []
-        desc = constants.WIFI_CONFIGURED_SERVICES_VALUE
-
-        for c in desc:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        return string_to_dbus_byte_array(constants.WIFI_CONFIGURED_SERVICES_LABEL)

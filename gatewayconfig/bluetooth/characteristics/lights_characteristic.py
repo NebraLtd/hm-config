@@ -3,9 +3,14 @@ import dbus
 
 from lib.cputemp.service import Characteristic
 
+from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.logger import logger
 from gatewayconfig.bluetooth.descriptors.lights_descriptor import LightsDescriptor
 from gatewayconfig.bluetooth.descriptors.utf8_format_descriptor import UTF8FormatDescriptor
 import gatewayconfig.constants as constants
+
+
+DEFAULT_LIGHTS_VALUE = 'false'
 
 class LightsCharacteristic(Characteristic):
 
@@ -17,10 +22,5 @@ class LightsCharacteristic(Characteristic):
         self.add_descriptor(UTF8FormatDescriptor(self))
 
     def ReadValue(self, options):
-        logging.debug('Read Lights')
-        value = []
-        val = "false"
-
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        logger.debug('Read Lights')
+        return string_to_dbus_byte_array(DEFAULT_LIGHTS_VALUE)

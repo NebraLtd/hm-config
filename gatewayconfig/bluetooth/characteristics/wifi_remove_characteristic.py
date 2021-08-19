@@ -1,13 +1,12 @@
 
-import logging
-import dbus
-
 from lib.cputemp.service import Characteristic
-import gatewayconfig.protos as protos
 
+from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.logger import logger
 from gatewayconfig.bluetooth.descriptors.wifi_remove_descriptor import WifiRemoveDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.nmcli_custom as nmcli_custom
+import gatewayconfig.protos as protos
 import gatewayconfig.constants as constants
 
 class WifiRemoveCharacteristic(Characteristic):
@@ -19,51 +18,39 @@ class WifiRemoveCharacteristic(Characteristic):
                 ["read", "write", "notify"], service)
         self.add_descriptor(WifiRemoveDescriptor(self))
         self.add_descriptor(OpaqueStructureDescriptor(self))
-        self.wifistatus = "False"
+        self.wifi_status = "False"
 
-    def WiFiRemoveCallback(self):
+    def wifi_remove_callback(self):
         if self.notifying:
-            logging.debug('Callback WiFi Remove')
-            value = []
-            val = self.wifistatus
-
-            for c in val:
-                value.append(dbus.Byte(c.encode()))
+            logger.debug('Callback WiFi Remove')
+            value = string_to_dbus_byte_array(self.wifi_status)
             self.PropertiesChanged(constants.GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
 
     def StartNotify(self):
 
-        logging.debug('Notify WiFi Remove')
+        logger.debug('Notify WiFi Remove')
         if self.notifying:
             return
 
         self.notifying = True
 
-        value = []
-
-        for c in self.WiFiStatus:
-            value.append(dbus.Byte(c.encode()))
+        value = string_to_dbus_byte_array(self.wifi_status)
         self.PropertiesChanged(constants.GATT_CHRC_IFACE, {"Value": value}, [])
-        self.add_timeout(30000, self.WiFiRemoveCallback)
+        self.add_timeout(30000, self.wifi_remove_callback)
 
     def StopNotify(self):
         self.notifying = False
 
     def WriteValue(self, value, options):
-        logging.debug('Write WiFi Remove')
-        wifiRemoveSSID = protos.wifi_remove_pb2.wifi_remove_v1()
-        wifiRemoveSSID.ParseFromString(bytes(value))
-        nmcli_custom.connection.delete(wifiRemoveSSID.service)
-        logging.debug('Connection %s should be deleted'
-                      % wifiRemoveSSID.service)
+        logger.debug('Write WiFi Remove')
+        wifi_remove_ssid = protos.wifi_remove_pb2.wifi_remove_v1()
+        wifi_remove_ssid.ParseFromString(bytes(value))
+        nmcli_custom.connection.delete(wifi_remove_ssid.service)
+        logger.debug('Connection %s should be deleted'
+                      % wifi_remove_ssid.service)
 
     def ReadValue(self, options):
-        logging.debug('Read WiFi Renove')
-
-        value = []
-        val = self.wifistatus
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        logger.debug('Read WiFi Renove')
+        return string_to_dbus_byte_array(self.wifistatus)
