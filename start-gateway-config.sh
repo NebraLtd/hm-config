@@ -21,4 +21,4 @@ echo 153 > /sys/kernel/debug/bluetooth/hci0/adv_max_interval
 
 printf "pairable off\nquit" | /usr/bin/bluetoothctl
 
-python3 config_program.py
+python gatewayconfig
