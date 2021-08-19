@@ -8,7 +8,7 @@ from nmcli import SystemCommand
 from nmcli import DeviceControl
 from nmcli import ConnectionControl
 
-from nmcli._exception import (
+from nmcli_custom._exception import (
     ConnectionActivateFailedException,
     ConnectionDeactivateFailedException,
     ConnectionDeleteFailedException,

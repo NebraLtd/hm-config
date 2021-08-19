@@ -20,6 +20,7 @@ SOFTWARE.
 """
 
 import dbus
+import dbus.service
 import dbus.mainloop.glib
 import dbus.exceptions
 
@@ -30,7 +31,7 @@ try:
 except ImportError:
     import gobject as GObject
 
-from bletools import BleTools
+from lib.cputemp.bletools import BleTools
 
 BLUEZ_SERVICE_NAME = "org.bluez"
 GATT_MANAGER_IFACE = "org.bluez.GattManager1"
@@ -51,7 +52,6 @@ class NotSupportedException(dbus.exceptions.DBusException):
 
 class NotPermittedException(dbus.exceptions.DBusException):
     _dbus_error_name = "org.bluez.Error.NotPermitted"
-
 
 class Application(dbus.service.Object):
     def __init__(self):
