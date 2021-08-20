@@ -1,5 +1,5 @@
 from lib.cputemp.service import Descriptor
-from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 import gatewayconfig.constants as constants
 
 class OnboardingKeyDescriptor(Descriptor):
@@ -12,4 +12,4 @@ class OnboardingKeyDescriptor(Descriptor):
         self.onboarding_key_label = constants.ONBOARDING_KEY_LABEL
 
     def ReadValue(self, options):
-        return string_to_dbus_byte_array(self.onboarding_key_label)
+        return string_to_dbus_encoded_byte_array(self.onboarding_key_label)

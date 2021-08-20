@@ -1,6 +1,6 @@
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.logger import logger
 import gatewayconfig.constants as constants
 
@@ -14,4 +14,4 @@ class ManufacturerNameCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logger.debug('Read Manufacturer')
-        return string_to_dbus_byte_array(MANUFACTURER_NAME)
+        return string_to_dbus_encoded_byte_array(MANUFACTURER_NAME)

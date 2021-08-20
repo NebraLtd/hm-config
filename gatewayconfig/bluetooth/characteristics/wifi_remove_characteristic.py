@@ -1,12 +1,12 @@
 
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.logger import logger
 from gatewayconfig.bluetooth.descriptors.wifi_remove_descriptor import WifiRemoveDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.nmcli_custom as nmcli_custom
-import gatewayconfig.protos as protos
+import gatewayconfig.protos.wifi_remove_pb2 as wifi_remove_pb2
 import gatewayconfig.constants as constants
 
 class WifiRemoveCharacteristic(Characteristic):
@@ -23,7 +23,7 @@ class WifiRemoveCharacteristic(Characteristic):
     def wifi_remove_callback(self):
         if self.notifying:
             logger.debug('Callback WiFi Remove')
-            value = string_to_dbus_byte_array(self.wifi_status)
+            value = string_to_dbus_encoded_byte_array(self.wifi_status)
             self.PropertiesChanged(constants.GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
@@ -36,7 +36,7 @@ class WifiRemoveCharacteristic(Characteristic):
 
         self.notifying = True
 
-        value = string_to_dbus_byte_array(self.wifi_status)
+        value = string_to_dbus_encoded_byte_array(self.wifi_status)
         self.PropertiesChanged(constants.GATT_CHRC_IFACE, {"Value": value}, [])
         self.add_timeout(30000, self.wifi_remove_callback)
 
@@ -45,7 +45,7 @@ class WifiRemoveCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logger.debug('Write WiFi Remove')
-        wifi_remove_ssid = protos.wifi_remove_pb2.wifi_remove_v1()
+        wifi_remove_ssid = wifi_remove_pb2.wifi_remove_v1()
         wifi_remove_ssid.ParseFromString(bytes(value))
         nmcli_custom.connection.delete(wifi_remove_ssid.service)
         logger.debug('Connection %s should be deleted'
@@ -53,4 +53,4 @@ class WifiRemoveCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logger.debug('Read WiFi Renove')
-        return string_to_dbus_byte_array(self.wifistatus)
+        return string_to_dbus_encoded_byte_array(self.WIFI_STATUSES)

@@ -2,9 +2,9 @@ import logging
 
 import os
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG")
+LOGLEVEL = os.environ.get("LOGLEVEL", "INFO")
 # create logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('gatewayconfig')
 logger.setLevel(LOGLEVEL)
 
 # create console handler and set level to debug

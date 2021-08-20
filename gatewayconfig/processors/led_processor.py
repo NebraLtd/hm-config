@@ -1,7 +1,7 @@
-import logging
 from time import sleep
 from gpiozero import LED
 
+from gatewayconfig.logger import logger
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 
 LED_REFRESH_SECONDS = 2
@@ -12,7 +12,7 @@ class LEDProcessor:
         self.shared_state = shared_state
 
     def run(self):
-        logging.debug("LED LEDProcessor")
+        logger.debug("LED LEDProcessor")
 
         while True:
             # Blink fast if diagnostics are not OK

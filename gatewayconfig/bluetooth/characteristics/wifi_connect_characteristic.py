@@ -3,10 +3,11 @@ import dbus
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.logger import logger
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.bluetooth.descriptors.wifi_connect_descriptor import WifiConnectDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.nmcli_custom as nmcli_custom
-import gatewayconfig.protos as protos
+import gatewayconfig.protos.wifi_connect_pb2 as wifi_connect_pb2
 import gatewayconfig.constants as constants
 
 class WifiConnectCharacteristic(Characteristic):
@@ -51,35 +52,30 @@ class WifiConnectCharacteristic(Characteristic):
         self.notifying = False
 
     def WriteValue(self, value, options):
-        logger.debug('Write WiFi Connect')
+        logger.debug("Write WiFi Connect %s" % value)
         if(self.check_wifi_status() == "connected"):
             nmcli_custom.device.disconnect('wlan0')
             logger.debug('Disconnected From Wifi')
-        # logger.debug(value)
-        wiFiDetails = protos.wifi_connect_pb2.wifi_connect_v1()
-        # logger.debug('PB2C')
-        wiFiDetails.ParseFromString(bytes(value))
-        # logger.debug('PB2P')
-        self.wifi_status = "already"
-        logger.debug(str(wiFiDetails.service))
 
-        nmcli_custom.device.wifi_connect(str(wiFiDetails.service),
-                                  str(wiFiDetails.password))
+        wifi_details = wifi_connect_pb2.wifi_connect_v1()
+        wifi_details.ParseFromString(bytes(value))
+        self.wifi_status = "already"
+        logger.debug(str(wifi_details.service))
+
+        nmcli_custom.device.wifi_connect(str(wifi_details.service),
+                                  str(wifi_details.password))
         self.wifi_status = self.check_wifi_status()
 
     def check_wifi_status(self):
         # Check the current wi-fi connection status
         logger.debug('Check WiFi Connect')
         state = str(nmcli_custom.device.show('wlan0')['GENERAL.STATE'].split(" ")[0])
-        logger.debug(str(constants.wifiStatus[state]))
-        return constants.wifiStatus[state]
+        wifi_status = constants.WIFI_STATUSES[state]
+        logger.debug("Wifi status is %s" % str(wifi_status))
+        return wifi_status
 
     def ReadValue(self, options):
 
         logger.debug('Read WiFi Connect')
         self.wifi_status = self.check_wifi_status()
-        value = []
-
-        for c in self.wifi_status:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        return string_to_dbus_encoded_byte_array(self.wifi_status)

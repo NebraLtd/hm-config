@@ -4,7 +4,7 @@ import dbus
 
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.logger import logger
 from gatewayconfig.bluetooth.descriptors.public_key_descriptor import PublicKeyDescriptor
 from gatewayconfig.bluetooth.descriptors.utf8_format_descriptor import UTF8FormatDescriptor
@@ -22,4 +22,4 @@ class PublicKeyCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logger.debug("Read Public Key: %s", self.pub_key)
-        return string_to_dbus_byte_array(self.pub_key)
+        return string_to_dbus_encoded_byte_array(self.pub_key)

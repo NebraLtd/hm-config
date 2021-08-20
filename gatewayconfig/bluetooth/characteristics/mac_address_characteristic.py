@@ -3,7 +3,7 @@ import dbus
 
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.logger import logger
 from gatewayconfig.bluetooth.descriptors.mac_address_descriptor import MacAddressDescriptor
 from gatewayconfig.bluetooth.descriptors.utf8_format_descriptor import UTF8FormatDescriptor
@@ -21,4 +21,4 @@ class MacAddressCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logger.debug('Read Mac Address')
-        return string_to_dbus_byte_array(self.eth0_mac_address)
+        return string_to_dbus_encoded_byte_array(self.eth0_mac_address)

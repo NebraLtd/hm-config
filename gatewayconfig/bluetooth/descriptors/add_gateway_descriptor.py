@@ -1,5 +1,5 @@
 from lib.cputemp.service import Descriptor
-from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 import gatewayconfig.constants as constants
 
 class AddGatewayDescriptor(Descriptor):
@@ -11,4 +11,4 @@ class AddGatewayDescriptor(Descriptor):
                 characteristic)
 
     def ReadValue(self, options):
-        return string_to_dbus_byte_array(constants.ADD_GATEWAY_KEY_LABEL)
+        return string_to_dbus_encoded_byte_array(constants.ADD_GATEWAY_KEY_LABEL)

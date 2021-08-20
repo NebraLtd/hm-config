@@ -1,6 +1,6 @@
-import logging
 from time import sleep
 
+from gatewayconfig.logger import logger
 from gatewayconfig import nmcli_custom
 
 BROADCAST_ON_REFRESH_SECONDS = 15
@@ -11,7 +11,7 @@ class WifiProcessor:
         self.shared_state = shared_state
 
     def run(self):
-        logging.debug("Wifi WifiProcessor")
+        logger.debug("Wifi WifiProcessor")
 
         while True:
             if(self.shared_state.should_scan_wifi is True):

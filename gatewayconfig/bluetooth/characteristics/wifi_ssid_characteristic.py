@@ -1,7 +1,7 @@
 
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.helpers import is_valid_ssid, string_to_dbus_byte_array
+from gatewayconfig.helpers import is_valid_ssid, string_to_dbus_encoded_byte_array
 from gatewayconfig.logger import logger
 from gatewayconfig.bluetooth.descriptors.wifi_ssid_descriptor import WifiSSIDDescriptor
 from gatewayconfig.bluetooth.descriptors.utf8_format_descriptor import UTF8FormatDescriptor
@@ -33,4 +33,4 @@ class WifiSSIDCharacteristic(Characteristic):
             else:
                 logger.debug("Ignoring SSID: %s" % ssid_str)
 
-        return string_to_dbus_byte_array(active_connection)
+        return string_to_dbus_encoded_byte_array(active_connection)

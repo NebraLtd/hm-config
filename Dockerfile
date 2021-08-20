@@ -85,7 +85,7 @@ RUN apt-get autoremove -y && \
 # START DEBUGGING
 # Uncomment the lines below to mock parts of the configuration
 # COPY example/ example/
-# ENV ONBOARDING_KEY_FILEPATH=/opt/example/onboarding_key.txt 
+# ENV ONBOARDING_KEY_FILEPATH=/opt/example/device_keys.txt 
 # ENV ETH0_MAC_ADDRESS_PATH=/opt/example/eth0_mac_address.txt
 # END DEBUGGING
 

@@ -35,8 +35,7 @@ WIFI_SERVICES_CHARACTERISTIC_UUID = "d7515033-7e7b-45be-803f-c8737b171a29"
 WIFI_SERVICES_LABEL = "WiFi Services"
 
 # WiFiConfiguredServices
-WIFI_CONFIGURED_SERVICES_CHARACTERISTIC_UUID = \
-    "e125bda4-6fb8-11ea-bc55-0242ac130003"
+WIFI_CONFIGURED_SERVICES_CHARACTERISTIC_UUID = "e125bda4-6fb8-11ea-bc55-0242ac130003"
 WIFI_CONFIGURED_SERVICES_LABEL = "WiFi Configured Services"
 
 # WiFiRemove
@@ -79,7 +78,7 @@ ETHERNET_ONLINE_CHARACTERISTIC_UUID = "e5866bd6-0288-4476-98ca-ef7da6b4d289"
 ETHERNET_ONLINE_LABEL = "Ethernet Online"
 
 # WiFi Codes
-wifiStatus = {
+WIFI_STATUSES = {
     "100": "connected",  # connected
     "50": "already",  # Already Connecting
     "60": "invalid",  # Invalid Key
@@ -87,3 +86,4 @@ wifiStatus = {
 }
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
+ETHERNET_IS_ONLINE_CARRIER_VAL = "1"

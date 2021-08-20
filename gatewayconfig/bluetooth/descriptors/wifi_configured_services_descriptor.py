@@ -1,5 +1,5 @@
 from lib.cputemp.service import Descriptor
-from gatewayconfig.helpers import string_to_dbus_byte_array
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 import gatewayconfig.constants as constants
 
 class WifiConfiguredServicesDescriptor(Descriptor):
@@ -11,5 +11,4 @@ class WifiConfiguredServicesDescriptor(Descriptor):
                 characteristic)
 
     def ReadValue(self, options):
-        value = []
-        return string_to_dbus_byte_array(constants.WIFI_CONFIGURED_SERVICES_LABEL)
+        return string_to_dbus_encoded_byte_array(constants.WIFI_CONFIGURED_SERVICES_LABEL)
