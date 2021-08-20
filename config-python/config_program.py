@@ -51,33 +51,35 @@ GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
 # Public Onboarding Keys
-if os.path.isfile('/var/data/public_keys'):
-    public_keys = {}
-    with open("/var/data/public_keys") as f:
-        for line in f.readlines():
-            # This is insanely ugly, but it gets the
-            # job done until we switch to the API
-            erlang_to_json = line.replace('.', '').\
-                replace(',', ': ').\
-                replace('pubkey', '"pubkey"').\
-                replace('onboarding_key', '"onboarding_key"').\
-                replace('animal_name', '"animal_name"')
+while True:
+    if os.path.isfile('/var/data/public_keys'):
+        public_keys = {}
+        with open("/var/data/public_keys") as f:
+            for line in f.readlines():
+                # This is insanely ugly, but it gets the
+                # job done until we switch to the API
+                erlang_to_json = line.replace('.', '').\
+                    replace(',', ': ').\
+                    replace('pubkey', '"pubkey"').\
+                    replace('onboarding_key', '"onboarding_key"').\
+                    replace('animal_name', '"animal_name"')
 
-            # Let's future proof this just
-            # in case something changes later
-            try:
-                json_line = json.loads(erlang_to_json)
-                for key in json_line.keys():
-                    public_keys[key] = json_line[key]
-            except json.JSONDecodeError:
-                pass
+                # Let's future proof this just
+                # in case something changes later
+                try:
+                    json_line = json.loads(erlang_to_json)
+                    for key in json_line.keys():
+                        public_keys[key] = json_line[key]
+                except json.JSONDecodeError:
+                    pass
 
-    pubKey = public_keys.get('pubkey', False)
-    onboardingKey = public_keys.get('onboarding_key', False)
-    animalName = public_keys.get('animal_name', False)
-else:
-    print('File public key file not found. Going to sleep')
-    sleep(60)
+        pubKey = public_keys.get('pubkey', False)
+        onboardingKey = public_keys.get('onboarding_key', False)
+        animalName = public_keys.get('animal_name', False)
+        break
+    else:
+        print('File public key file not found. Going to sleep')
+        sleep(60)
 
 # Setup Thread Variables
 advertisementLED = False
