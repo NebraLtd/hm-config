@@ -20,10 +20,6 @@ SOFTWARE.
 """
 
 import dbus
-try:
-    from gi.repository import GObject
-except ImportError:
-    import gobject as GObject  # noqa: F401
 
 BLUEZ_SERVICE_NAME = "org.bluez"
 LE_ADVERTISING_MANAGER_IFACE = "org.bluez.LEAdvertisingManager1"
