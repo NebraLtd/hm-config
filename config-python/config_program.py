@@ -56,9 +56,8 @@ while True:
         public_keys = {}
         with open("/var/data/public_keys") as f:
             for line in f.readlines():
-                """
-                This is insanely ugly, but it gets the job done until we switch to the API
-                """
+                # This is insanely ugly, but it gets the
+                # job done until we switch to the API
                 erlang_to_json = line.replace('.', '').\
                     replace(',', ': ').\
                     replace('pubkey', '"pubkey"').\
