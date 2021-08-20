@@ -63,9 +63,15 @@ while True:
                     replace('pubkey', '"pubkey"').\
                     replace('onboarding_key', '"onboarding_key"').\
                     replace('animal_name', '"animal_name"')
-                json_line = json.loads(erlang_to_json)
-                for key in json_line.keys():
-                    public_keys[key] = json_line[key]
+
+                # Let's future proof this just
+                # in case something changes later
+                try:
+                    json_line = json.loads(erlang_to_json)
+                    for key in json_line.keys():
+                        public_keys[key] = json_line[key]
+                except json.JSONDecodeError:
+                    pass
 
         pubKey = public_keys.get('pubkey', False)
         onboardingKey = public_keys.get('onboarding_key', False)
