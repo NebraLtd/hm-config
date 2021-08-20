@@ -25,7 +25,7 @@ RUN \
         apt-get purge python3-pip -y &&\
         apt-get autoremove -y &&\
         apt-get clean && \
-        rm -rf /var/lib/apt/lists/*RUN \
+        rm -rf /var/lib/apt/lists/ \
 
 WORKDIR /opt/
 
