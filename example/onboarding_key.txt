@@ -1,1 +1,3 @@
-other0"onboarding_key1"other2"pub_key3"other4"animal_name5
+{pubkey, "112mPWkGW55kcbQTgbtJvgAKMSTrEhHgavrdF1Cbu8FU85tTL4Nc"}.
+{onboarding_key, "112mPWkGW55kcbQTgbtJvgAKMSTrEhHgavrdF1Cbu8FU85tTL142"}.
+{animal_name, "gigantic-basil-turtle"}.

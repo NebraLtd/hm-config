@@ -10,7 +10,7 @@ from gatewayconfig.processors.diagnostics_processor import DiagnosticsProcessor
 from gatewayconfig.processors.wifi_processor import WifiProcessor
 from gatewayconfig.processors.bluetooth_advertisement_processor import BluetoothAdvertisementProcessor
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
-from gatewayconfig.file_loader import read_eth0_mac_address, read_onboarding_key
+from gatewayconfig.file_loader import read_eth0_mac_address, read_miner_keys
 from gatewayconfig.helpers import is_indoor_variant
 import gatewayconfig.nmcli_custom as nmcli_custom
 
@@ -22,8 +22,8 @@ OTHER_USER_BUTTON_GPIO = 24
 OTHER_STATUS_LED_GPIO = 25
 
 class GatewayconfigApp:
-    def __init__(self, sentry_dsn, balena_app_name, balena_device_uuid, variant, eth0_mac_address_filepath, onboarding_key_filepath, 
-        diagnostics_json_filepath, ethernet_is_online_filepath, firmware_version):
+    def __init__(self, sentry_dsn, balena_app_name, balena_device_uuid, variant, eth0_mac_address_filepath, # wifi_mac_address_filepath,
+        miner_keys_filepath, diagnostics_json_filepath, ethernet_is_online_filepath, firmware_version):
 
         self.variant = variant
         self.init_sentry(sentry_dsn, balena_app_name, balena_device_uuid, variant)
@@ -32,9 +32,8 @@ class GatewayconfigApp:
         self.init_gpio()
 
         eth0_mac_address = read_eth0_mac_address(eth0_mac_address_filepath)
-        onboarding_key, pub_key, animal_name = read_onboarding_key(onboarding_key_filepath)
-        # FIXME don't forget to redact onboarding key from logs
-        logger.debug("Read onboarding key: %s, pub_key: %s, animal_name: %s" % (onboarding_key, pub_key, animal_name))
+        pub_key, onboarding_key, animal_name = read_miner_keys(miner_keys_filepath)
+        logger.debug("Read onboarding pub_key: %s + animal_name: %s" % (pub_key, animal_name))
 
         self.bluetooth_services_processor = BluetoothServicesProcessor(eth0_mac_address, onboarding_key, pub_key, firmware_version, ethernet_is_online_filepath, self.shared_state)
         self.led_processor = LEDProcessor(self.status_led, self.shared_state)

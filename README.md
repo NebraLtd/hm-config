@@ -9,7 +9,7 @@ The base repository for the Python Application is in the subfolder config-python
 Running locally:
 
 ```
-PYTHONPATH=./ ONBOARDING_KEY_FILEPATH=./example/onboarding_key.txt ETH0_MAC_ADDRESS_PATH=./example/eth0_mac_address.txt python minerconfig
+PYTHONPATH=./ MINER_KEYS_FILEPATH=./example/onboarding_key.txt ETH0_MAC_ADDRESS_PATH=./example/eth0_mac_address.txt python minerconfig
 ```
 
 Because the stack is tightly intertwined with Balena, the easiest way to test the code base on your own Raspberry Pi in your own Balena project.
