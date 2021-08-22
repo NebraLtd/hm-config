@@ -1,8 +1,16 @@
 # hm-config: Helium Miner Config Container
 
 This repository contains the Dockerfile, basic scripts  and additional libraries required for the BTLE Application tool.
-Github then builds the docker containers ready to be pushed to the Nebra Hotspots.
-The base repository for the Python Application is in the subfolder config-python.
+[helium/gateway-config](https://github.com/helium/gateway-config) is the upstream repo that this is built against.
+
+Directory layout:
+
+- `.github/`: Github workflows and other settings.
+- `example/`: Files that are examples of what will be loaded on an actual hotspot. These files are especially useful for testing without a full hotspot.
+- `gatewayconfig/`: The main Python application.
+- `lib/`: Python files copied from other reposittories.
+- `protos/`: Protobuf definitions. Generated protos go to `gatewayconfgi/protos/` by default.
+- `tests/`: Test files.
 
 ## Local development environment
 
