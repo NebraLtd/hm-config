@@ -4,10 +4,13 @@ from time import sleep
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.logger import logger
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.bluetooth.descriptors.add_gateway_descriptor import AddGatewayDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.protos.add_gateway_pb2 as add_gateway_pb2
 import gatewayconfig.constants as constants
+
+DBUS_LOAD_SLEEP_SECONDS = 0.1
 
 class AddGatewayCharacteristic(Characteristic):
 
@@ -17,18 +20,11 @@ class AddGatewayCharacteristic(Characteristic):
                 ["read", "write", "notify"], service)
         self.add_descriptor(AddGatewayDescriptor(self))
         self.add_descriptor(OpaqueStructureDescriptor(self))
-        self.notifyValue = []
-        for c in "init":
-            self.notifyValue.append(dbus.Byte(c.encode()))
+        self.notifyValue = string_to_dbus_encoded_byte_array("init")
 
     def AddGatewayCallback(self):
         if self.notifying:
             logger.debug('Callback Add Gateway')
-            # value = []
-            # val = ""
-
-            # for c in val:
-            #    value.append(dbus.Byte(c.encode()))
             self.PropertiesChanged(constants.GATT_CHRC_IFACE,
                                    {"Value": self.notifyValue}, [])
 
@@ -49,29 +45,32 @@ class AddGatewayCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logger.debug('Write Add Gateway')
-        waitVal = []
-        for c in "wait":
-            waitVal.append(dbus.Byte(c.encode()))
-        self.notifyValue = waitVal
+        try:
+            self.notifyValue = string_to_dbus_encoded_byte_array("wait")
 
-        # logger.debug(value)
-        addGatewayDetails = add_gateway_pb2.add_gateway_v1()
-        # logger.debug('PB2C')
-        addGatewayDetails.ParseFromString(bytes(value))
-        # logger.debug('PB2P')
-        # logger.debug(str(addGatewayDetails))
-        miner_bus = dbus.SystemBus()
-        miner_object = miner_bus.get_object('com.helium.Miner', '/')
-        sleep(0.05)
-        miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
-        sleep(0.05)
-        addMinerRequest = \
-            miner_interface. \
-            AddGateway(addGatewayDetails.owner, addGatewayDetails.fee,
-                       addGatewayDetails.amount, addGatewayDetails.payer)
-        # logger.debug(addMinerRequest)
-        logger.debug("Adding Response")
-        self.notifyValue = addMinerRequest
+            addGatewayDetails = add_gateway_pb2.add_gateway_v1()
+            addGatewayDetails.ParseFromString(bytes(value))
+            miner_bus = dbus.SystemBus()
+
+            logger.debug("Loading dbus com.helium.Miner")
+            miner_object = miner_bus.get_object('com.helium.Miner', '/')
+            sleep(DBUS_LOAD_SLEEP_SECONDS)
+            miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
+            sleep(DBUS_LOAD_SLEEP_SECONDS)
+
+            logger.debug("Parsing onboarding values")
+            owner = addGatewayDetails.owner
+            fee = addGatewayDetails.fee
+            amount = addGatewayDetails.amount
+            payer = addGatewayDetails.payer
+
+            logger.debug("Registering owner %s, fee %s, amount %s, payer %s" % (owner, fee, amount, payer))
+            # Calls https://github.com/helium/miner/blob/e55437beac4b46d15cbd079c9c8df045ffc0bf49/src/miner_ebus.erl#L50
+            addMinerRequest = miner_interface.AddGateway(owner, fee, amount, payer)
+            logger.debug("Adding Response")
+            self.notifyValue = addMinerRequest
+        except Exception:
+            logger.exception("Unable to register gateway for unknown reason")
 
     def ReadValue(self, options):
         logger.debug('Read Add Gateway')
@@ -80,4 +79,3 @@ class AddGatewayCharacteristic(Characteristic):
             return cutDownArray
         else:
             return self.notifyValue
-        # logger.debug(self.notifyValue)
