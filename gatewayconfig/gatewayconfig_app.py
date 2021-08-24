@@ -3,6 +3,8 @@ import threading
 from RPi import GPIO
 from gpiozero import Button, LED
 
+from hm_hardware_defs.variant import variant_definitions
+
 from gatewayconfig.logger import logger
 from gatewayconfig.processors.bluetooth_services_processor import BluetoothServicesProcessor
 from gatewayconfig.processors.led_processor import LEDProcessor
@@ -26,6 +28,7 @@ class GatewayconfigApp:
         miner_keys_filepath, diagnostics_json_url, ethernet_is_online_filepath, firmware_version):
 
         self.variant = variant
+        self.variant_details = variant_definitions[variant]
         self.init_sentry(sentry_dsn, balena_app_name, balena_device_uuid, variant)
         self.shared_state = GatewayconfigSharedState()
         self.init_nmcli()
@@ -41,7 +44,7 @@ class GatewayconfigApp:
         self.led_processor = LEDProcessor(self.status_led, self.shared_state)
         self.diagnostics_processor = DiagnosticsProcessor(diagnostics_json_url, self.shared_state)
         self.wifi_processor = WifiProcessor(self.shared_state)
-        self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(eth0_mac_address, self.shared_state)
+        self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(eth0_mac_address, self.shared_state, self.variant_details)
         
     def start(self):
         logger.debug("Starting ConfigApp")

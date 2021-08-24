@@ -1,19 +1,23 @@
 from lib.cputemp.advertisement import Advertisement
 
-ADVERTISEMENT_SERVICE_UUID = "0fda92b2-44a2-4af2-84f5-fa682baa2b8d"
-UNKNOWN_MAC_ADDRESS_VAL = "XXXXXX"
+from gatewayconfig.logger import logger
+import gatewayconfig.constants as constants
 
 # BLE advertisement
 class BluetoothConnectionAdvertisement(Advertisement):
-    def __init__(self, index, eth0_mac_address, advertisement_type):
+    def __init__(self, index, eth0_mac_address, advertisement_type, variant_details):
         Advertisement.__init__(self, index, advertisement_type)
-        try:
-            mac_address_last6 = eth0_mac_address.replace(":", "")[-6:] 
+        logger.debug("Creating advertisement with MAC %s and variant details %s" % (eth0_mac_address, variant_details))
+        # assumes eth0_mac_address already stripped and uppercase
+        friendly_mac_address = eth0_mac_address.replace(":", "")[-6:]
 
-        except FileNotFoundError:
-            mac_address_last6 = UNKNOWN_MAC_ADDRESS_VAL
+        if 'APPNAME' in variant_details:
+            friendly_variant = variant_details['APPNAME']
+            advertisement_name = "Nebra %s Hotspot %s" % (friendly_variant, friendly_mac_address)
+        else:
+            friendly_variant = variant_details['FRIENDLY']
+            advertisement_name = "%s %s" % (friendly_variant, friendly_mac_address)
 
-        advertisement_name = "Nebra %s Hotspot" % mac_address_last6
         self.add_local_name(advertisement_name)
         self.include_tx_power = True
-        self.service_uuids = [ADVERTISEMENT_SERVICE_UUID]
+        self.service_uuids = [constants.HELIUM_SERVICE_UUID]
