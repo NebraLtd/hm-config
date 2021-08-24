@@ -2,7 +2,7 @@ import logging
 
 import os
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "INFO")
+LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG")
 # create logger
 logger = logging.getLogger('gatewayconfig')
 logger.setLevel(LOGLEVEL)
