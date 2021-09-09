@@ -71,8 +71,8 @@ Assuming virtualenv has been activated, execute the following command to run the
 ```
 pip install -r test-requirements.txt
 pytest
-# Or test and run coverage report, with failure under 50%
-PYTHONPATH=./ pytest --cov=minerconfig --cov=lib
+# Or test and run coverage report
+PYTHONPATH=./ pytest --cov=minerconfig --cov=lib 
 ```
 
 ## Generating protobufs

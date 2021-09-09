@@ -21,6 +21,3 @@ def string_to_dbus_byte_array(str):
 
 def is_valid_ssid(ssid_str):
         return ssid_str != "--" and ssid_str != ""
-
-def is_indoor_variant(variant):
-        return (variant == "NEBHNT-IN1") or (variant == "Indoor")

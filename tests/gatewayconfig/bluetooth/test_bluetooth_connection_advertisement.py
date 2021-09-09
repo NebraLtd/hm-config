@@ -1,4 +1,3 @@
-import pytest
 import sys
 import uuid
 from io import StringIO
@@ -6,6 +5,8 @@ from unittest import TestCase
 import dbus
 import dbus.mainloop.glib
 from unittest.mock import patch, mock_open
+
+from hm_hardware_defs.variant import variant_definitions
 
 from gatewayconfig.bluetooth.advertisements.bluetooth_connection_advertisement import BluetoothConnectionAdvertisement
 
@@ -21,7 +22,8 @@ class TestBluetoothConnectionAdvertisement(TestCase):
     maxDiff = None
 
     def test_instantiation(self):
-        advertisement = BluetoothConnectionAdvertisement(100, 'A1:B2:C3:DD:E5:F6_', 'peripheral_')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(100, 'A1:B2:C3:DD:E5:F6', 'peripheral_', variant_details)
         self.assertEqual(
             advertisement.path,
             '/org/bluez/example/advertisement100'
@@ -32,29 +34,39 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         )
         self.assertEqual(
             advertisement.local_name,
-            'Nebra DE5F6_ Hotspot'
+            'Nebra Outdoor Hotspot DDE5F6'
         )
         self.assertEqual(
             advertisement.ad_type,
             'peripheral_'
         )
 
+    def test_name_no_friendly(self):
+        variant_details = { 'FRIENDLY': 'WALRUS' }
+        advertisement = BluetoothConnectionAdvertisement(105, 'A1:B2:C3:DD:E5:F6', 'peripheral_', variant_details)
+        self.assertEqual(
+            advertisement.local_name,
+            'WALRUS DDE5F6'
+        )
+
     @patch("builtins.open", new_callable=mock_open, read_data='a1:B2:c3:Dd:e5:f6')
     def test_get_properties(self, eth0_file_mock):
-        advertisement = BluetoothConnectionAdvertisement(101, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(110, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         properties = advertisement.get_properties()
         expected = {
             'org.bluez.LEAdvertisement1': {
                 'Type': 'peripheral',
                 'IncludeTxPower': dbus.Boolean(True),
-                'LocalName': dbus.String('Nebra %s Hotspot' % 'DDE5F6'),
+                'LocalName': dbus.String('Nebra %s Hotspot %s' % ('Outdoor', 'DDE5F6')),
                 'ServiceUUIDs': dbus.Array([DEFAULT_SERVICE_UUID], signature=dbus.Signature('s'))
             }
         }
         self.assertDictEqual(properties, expected)
 
     def test_get_properties_extended(self):
-        advertisement = BluetoothConnectionAdvertisement(102, 'A1:B2:C3:DD:E5:F6', "peripheral")
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(115, 'A1:B2:C3:DD:E5:F6', "peripheral", variant_details)
 
         service_uuids = [str(uuid.uuid4())]
         advertisement.service_uuids = service_uuids
@@ -88,12 +100,14 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         self.assertDictEqual(properties, expected)
 
     def test_get_path(self):
-        advertisement = BluetoothConnectionAdvertisement(103, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(120, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         path = advertisement.get_path()
         self.assertIsInstance(path, dbus.ObjectPath)
 
     def test_add_service_uuid(self):
-        advertisement = BluetoothConnectionAdvertisement(104, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(125, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         service_uuid = str(uuid.uuid4())
         advertisement.add_service_uuid(service_uuid)
         # FIXME: There is currently test environment pollution and DEFAULT_SERVICE_ID has been
@@ -104,7 +118,8 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         )
 
     def test_add_solicit_uuid(self):
-        advertisement = BluetoothConnectionAdvertisement(105, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(130, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         solicit_uuid = str(uuid.uuid4())
         advertisement.add_solicit_uuid(solicit_uuid)
         self.assertEqual(
@@ -113,7 +128,8 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         )
 
     def test_add_manufacturer_data(self):
-        advertisement = BluetoothConnectionAdvertisement(106, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(135, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         manufacturer_data = {'name': 'Nebra'}
         advertisement.add_manufacturer_data(
             'Nebra',
@@ -133,7 +149,8 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         )
 
     def test_add_service_data(self):
-        advertisement = BluetoothConnectionAdvertisement(107, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(140, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         service_uuid = str(uuid.uuid4())
         service_data = {'key': 'value'}
         advertisement.add_service_data(
@@ -153,7 +170,8 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         )
 
     def test_add_local_name(self):
-        advertisement = BluetoothConnectionAdvertisement(108, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(145, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         local_name = 'LocalHost'
         advertisement.add_local_name(
             local_name
@@ -165,19 +183,21 @@ class TestBluetoothConnectionAdvertisement(TestCase):
 
     @patch("builtins.open", new_callable=mock_open, read_data='a1:B2:c3:Dd:e5:f6')
     def test_getall_valid_iface(self, eth0_file_mock):
-        advertisement = BluetoothConnectionAdvertisement(109, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(150, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         self.assertDictEqual(
             advertisement.GetAll(VALID_LE_ADVERTISEMENT_IFACE),
             {
                 'IncludeTxPower': dbus.Boolean(True),
-                'LocalName': dbus.String('Nebra %s Hotspot' % 'DDE5F6'),
+                'LocalName': dbus.String('Nebra %s Hotspot %s' % ('Outdoor', 'DDE5F6')),
                 'ServiceUUIDs': dbus.Array([DEFAULT_SERVICE_UUID]),
                 'Type': 'peripheral',
             }
         )
 
     def test_getall_invalid_iface(self):
-        advertisement = BluetoothConnectionAdvertisement(110, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(155, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
 
         exception = False
         exception_type = None
@@ -192,7 +212,8 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         self.assertIsInstance(exception_type, Exception)
 
     def test_release(self):
-        advertisement = BluetoothConnectionAdvertisement(111, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(160, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
 
         out = StringIO()
         sys.stdout = out
@@ -200,14 +221,15 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         printed_output = out.getvalue().strip()
         self.assertEqual(
             printed_output,
-            '/org/bluez/example/advertisement111: Released!'
+            '/org/bluez/example/advertisement160: Released!'
         )
 
         # Returns nothing
         self.assertEqual(result, None)
 
     def test_register_callback(self):
-        advertisement = BluetoothConnectionAdvertisement(112, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(165, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
 
         out = StringIO()
         sys.stdout = out
@@ -222,7 +244,8 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         self.assertEqual(result, None)
 
     def test_register_ad_error_callback(self):
-        advertisement = BluetoothConnectionAdvertisement(113, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(170, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
 
         out = StringIO()
         sys.stdout = out
@@ -246,7 +269,8 @@ class TestBluetoothConnectionAdvertisement(TestCase):
             mock_findadapter,
             mock_getbus
     ):
-        advertisement = BluetoothConnectionAdvertisement(114, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        variant_details = variant_definitions['NEBHNT-OUT1']
+        advertisement = BluetoothConnectionAdvertisement(175, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         result = advertisement.register()
 
         mock_dbus_interface.assert_called()
@@ -265,10 +289,11 @@ class TestBluetoothConnectionAdvertisement(TestCase):
             mock_findadapter,
             mock_getbus
     ):
+        variant_details = variant_definitions['NEBHNT-OUT1']
         out = StringIO()
         sys.stdout = out
 
-        advertisement = BluetoothConnectionAdvertisement(115, 'A1:B2:C3:DD:E5:F6', 'peripheral')
+        advertisement = BluetoothConnectionAdvertisement(180, 'A1:B2:C3:DD:E5:F6', 'peripheral', variant_details)
         result = advertisement.unregister()
 
         mock_dbus_interface.assert_called()

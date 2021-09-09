@@ -35,7 +35,10 @@ def read_miner_keys(miner_keys_filepath):
                 for key in json_line.keys():
                     miner_keys[key] = json_line[key]
             except json.JSONDecodeError:
-                miner_keys[key] = False
+                logger.error("Unable to correctly decode miner_keys. The app will continue running but may not behave as expected.")
+                miner_keys['pubkey'] = False
+                miner_keys['onboarding_key'] = False
+                miner_keys['animal_name'] = False
 
     # Keyfile exists, now running.
     pub_key = miner_keys['pubkey']

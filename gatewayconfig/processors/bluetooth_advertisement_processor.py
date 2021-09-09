@@ -11,9 +11,9 @@ ADVERTISEMENT_SECONDS = 300
 ADVERTISEMENT_OFF_SLEEP_SECONDS = 5
 
 class BluetoothAdvertisementProcessor:
-    def __init__(self, eth0_mac_address, shared_state):
+    def __init__(self, eth0_mac_address, shared_state, variant_details):
         self.shared_state = shared_state
-        self.connection_advertisement = BluetoothConnectionAdvertisement(ADVERTISEMENT_INDEX, eth0_mac_address, ADVERTISEMENT_TYPE)
+        self.connection_advertisement = BluetoothConnectionAdvertisement(ADVERTISEMENT_INDEX, eth0_mac_address, ADVERTISEMENT_TYPE, variant_details)
 
     def run(self):
         logger.debug("Running BluetoothAdvertisementProcessor")
