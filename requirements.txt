@@ -10,4 +10,4 @@ pycairo==1.20.1
 PyGObject==3.40.1
 retry==0.9.2
 requests==2.26.0
-hm-hardware-defs==0.1.5
+hm-hardware-defs==0.1.6a2
