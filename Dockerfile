@@ -41,7 +41,7 @@ RUN \
             gir1.2-gtk-3.0=3.24.5-1+rpt2 \
             --no-install-recommends && \
     # Because the PATH is already updated above, this command creates a new venv AND activates it
-    python3 -m venv --system-site-packages /opt/venv && \
+    python3 -m venv /opt/venv && \
     # Given venv is active, this `pip` refers to the python3 variant
     pip install --no-cache-dir -r requirements.txt
 
