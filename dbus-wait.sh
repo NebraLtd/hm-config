@@ -1,3 +1,5 @@
+#!/bin/sh
+
 function wait_for_dbus() {
 	while true; do
 		dbus-send --system \
