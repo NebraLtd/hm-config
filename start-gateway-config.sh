@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 
-# Disable BluetoothD on the host
-dbus-send --system --dest=org.freedesktop.systemd1 --type=method_call --print-reply /org/freedesktop/systemd1   org.freedesktop.systemd1.Manager.StopUnit string:"bluetooth.service" string:"replace"
+source dbus-wait.sh
 
-sleep 1
+./systemd-stop-unit.sh bluetooth.service
 
-# Start BluetoothD in container
-
-bluetoothd --experimental -C &
-
-sleep 1
+rfkill block bluetooth && rfkill unblock bluetooth
+wait_for_dbus \
+	&& /usr/lib/bluetooth/bluetoothd  --nodetach
 
 # Advertise on channels 37, 38 and 39
 echo 7 > /sys/kernel/debug/bluetooth/hci0/adv_channel_map
