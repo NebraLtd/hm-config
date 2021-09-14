@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ./dbus-wait.sh
+source dbus-wait.sh
 
 UNIT_NAME=$1
 
