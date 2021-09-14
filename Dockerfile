@@ -59,7 +59,7 @@ RUN \
     TZ="$SYSTEM_TIMEZONE" \
     apt-get install -y \
         bluez=5.50-1.2~deb10u2+rpt1 \
-        util-linux \
+        rfkill \
         libdbus-1-3=1.12.20-0+deb10u1 \
         network-manager=1.14.6-2+deb10u1 \
         python3-gi=3.30.4-1 \
