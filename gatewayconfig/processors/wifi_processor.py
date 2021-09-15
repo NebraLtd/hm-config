@@ -1,10 +1,12 @@
 from time import sleep
 
-from gatewayconfig.logger import logger
 from gatewayconfig import nmcli_custom
+from gatewayconfig.logger import get_logger
 
+logger = get_logger(__name__)
 BROADCAST_ON_REFRESH_SECONDS = 15
 BROADCAST_OFF_REFRESH_SECONDS = 5
+
 
 class WifiProcessor:
     def __init__(self, shared_state):

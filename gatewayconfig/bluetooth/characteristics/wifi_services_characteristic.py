@@ -3,11 +3,14 @@ import dbus
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import is_valid_ssid
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.bluetooth.descriptors.wifi_services_descriptor import WifiServicesDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.constants as constants
 import gatewayconfig.protos.wifi_services_pb2 as wifi_services_pb2
+
+logger = get_logger(__name__)
+
 
 class WifiServicesCharacteristic(Characteristic):
 

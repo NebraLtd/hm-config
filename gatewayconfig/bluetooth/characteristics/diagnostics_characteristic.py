@@ -3,7 +3,7 @@ import os
 
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.helpers import string_to_dbus_byte_array
 from gatewayconfig.bluetooth.descriptors.diagnostics_descriptor import DiagnosticsDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
@@ -12,6 +12,8 @@ import gatewayconfig.protos.diagnostics_pb2 as diagnostics_pb2
 import gatewayconfig.constants as constants
 
 DBUS_UNAVAILABLE_VALUE = "Loading..."
+logger = get_logger(__name__)
+
 
 class DiagnosticsCharacteristic(Characteristic):
     # Returns proto of eth, wifi, fw, ip, p2pstatus
@@ -98,4 +100,3 @@ class DiagnosticsCharacteristic(Characteristic):
             ip_address = str(wlan_ip)
             logger.debug("Using WLAN IP address %s" % wlan_ip)
         return ip_address
-

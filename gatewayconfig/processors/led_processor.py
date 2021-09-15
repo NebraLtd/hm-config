@@ -1,10 +1,12 @@
 from time import sleep
 from gpiozero import LED
 
-from gatewayconfig.logger import logger
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
+from gatewayconfig.logger import get_logger
 
+logger = get_logger(__name__)
 LED_REFRESH_SECONDS = 2
+
 
 class LEDProcessor:
     def __init__(self, status_led: LED, shared_state: GatewayconfigSharedState):

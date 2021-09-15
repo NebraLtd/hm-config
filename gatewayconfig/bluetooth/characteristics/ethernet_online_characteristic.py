@@ -1,12 +1,15 @@
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.file_loader import read_ethernet_is_online
 from gatewayconfig.bluetooth.descriptors.ethernet_online_descriptor import EthernetOnlineDescriptor
 from gatewayconfig.bluetooth.descriptors.utf8_format_descriptor import UTF8FormatDescriptor
 
 import gatewayconfig.constants as constants
+
+logger = get_logger(__name__)
+
 
 class EthernetOnlineCharacteristic(Characteristic):
 

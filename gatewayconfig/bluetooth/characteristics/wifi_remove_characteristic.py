@@ -2,12 +2,15 @@
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.bluetooth.descriptors.wifi_remove_descriptor import WifiRemoveDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.nmcli_custom as nmcli_custom
 import gatewayconfig.protos.wifi_remove_pb2 as wifi_remove_pb2
 import gatewayconfig.constants as constants
+
+logger = get_logger(__name__)
+
 
 class WifiRemoveCharacteristic(Characteristic):
 
