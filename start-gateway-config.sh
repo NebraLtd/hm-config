@@ -1,15 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-# Disable BluetoothD on the host
-# dbus-send --system --dest=org.freedesktop.systemd1 --type=method_call --print-reply /org/freedesktop/systemd1   org.freedesktop.systemd1.Manager.StopUnit string:"bluetooth.service" string:"replace"
-
-#  sleep 1
-
-# Start BluetoothD in container
-
-# bluetoothd --experimental -C &
-
-# sleep 1
+. ./dbus-wait.sh
 
 # Advertise on channels 37, 38 and 39
 echo 7 > /sys/kernel/debug/bluetooth/hci0/adv_channel_map
@@ -21,4 +12,5 @@ echo 153 > /sys/kernel/debug/bluetooth/hci0/adv_max_interval
 
 printf "pairable off\nquit" | /usr/bin/bluetoothctl
 
-python gatewayconfig
+wait_for_dbus \
+	&& python gatewayconfig

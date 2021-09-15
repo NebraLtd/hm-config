@@ -39,7 +39,7 @@ class DiagnosticsCharacteristic(Characteristic):
     # Returns the p2pstatus or an empty string if there is a dbus failure
     def get_p2pstatus(self):
         logger.debug('Diagnostics miner_bus')
-        miner_bus = dbus.SystemBus()
+        miner_bus = dbus.SessionBus()
         logger.debug('Diagnostics miner_object')
         miner_object = miner_bus.get_object('com.helium.Miner', '/')
         logger.debug('Diagnostics miner_interface')

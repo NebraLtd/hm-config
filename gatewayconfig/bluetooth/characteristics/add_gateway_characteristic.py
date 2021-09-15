@@ -50,7 +50,7 @@ class AddGatewayCharacteristic(Characteristic):
 
             addGatewayDetails = add_gateway_pb2.add_gateway_v1()
             addGatewayDetails.ParseFromString(bytes(value))
-            miner_bus = dbus.SystemBus()
+            miner_bus = dbus.SessionBus()
 
             logger.debug("Loading dbus com.helium.Miner")
             miner_object = miner_bus.get_object('com.helium.Miner', '/')
