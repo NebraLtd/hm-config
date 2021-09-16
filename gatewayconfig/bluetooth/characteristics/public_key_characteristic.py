@@ -5,10 +5,13 @@ import dbus
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.bluetooth.descriptors.public_key_descriptor import PublicKeyDescriptor
 from gatewayconfig.bluetooth.descriptors.utf8_format_descriptor import UTF8FormatDescriptor
 import gatewayconfig.constants as constants
+
+logger = get_logger(__name__)
+
 
 class PublicKeyCharacteristic(Characteristic):
 

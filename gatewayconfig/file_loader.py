@@ -1,7 +1,9 @@
 import json
 from retry import retry
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.constants import ETHERNET_IS_ONLINE_CARRIER_VAL
+
+logger = get_logger(__name__)
 RETRY_SLEEP_SECONDS = 60
 
 """
@@ -9,6 +11,7 @@ Loads the onboarding file and returns
 
 pub_key, onboarding_key, animal_name
 """
+
 
 @retry(FileNotFoundError, delay=RETRY_SLEEP_SECONDS, logger=logger)
 

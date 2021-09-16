@@ -1,7 +1,9 @@
 from lib.cputemp.advertisement import Advertisement
-
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 import gatewayconfig.constants as constants
+
+logger = get_logger(__name__)
+
 
 # BLE advertisement
 class BluetoothConnectionAdvertisement(Advertisement):

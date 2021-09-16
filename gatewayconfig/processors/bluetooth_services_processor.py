@@ -1,7 +1,10 @@
 from lib.cputemp.service import Application
-from gatewayconfig.logger import logger
 from gatewayconfig.bluetooth.services.device_information_service import DeviceInformationService
 from gatewayconfig.bluetooth.services.helium_service import HeliumService
+from gatewayconfig.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 class BluetoothServicesProcessor(Application):
     def __init__(self, eth0_mac_address, wlan0_mac_address, onboarding_key, pub_key, firmware_version, ethernet_is_online_filepath, shared_state):
