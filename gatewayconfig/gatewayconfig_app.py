@@ -8,7 +8,7 @@ except:
     # In case of exception, you are executing your script outside of RPi, so import Mock.GPIO
     import Mock.GPIO as GPIO
 
-from hm_hardware_defs.variant import variant_definitions
+from hm_pyhelper.hardware_definitions import variant_definitions
 
 from gatewayconfig.logger import get_logger
 from gatewayconfig.processors.bluetooth_services_processor import BluetoothServicesProcessor
@@ -46,7 +46,7 @@ class GatewayconfigApp:
         self.diagnostics_processor = DiagnosticsProcessor(diagnostics_json_url, self.shared_state)
         self.wifi_processor = WifiProcessor(self.shared_state)
         self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(eth0_mac_address, self.shared_state, self.variant_details)
-        
+
     def start(self):
         logger.debug("Starting ConfigApp")
         try:
