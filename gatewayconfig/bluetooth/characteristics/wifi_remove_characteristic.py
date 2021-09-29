@@ -55,5 +55,5 @@ class WifiRemoveCharacteristic(Characteristic):
                       % wifi_remove_ssid.service)
 
     def ReadValue(self, options):
-        logger.debug('Read WiFi Renove')
+        logger.debug('Read WiFi Remove')
         return string_to_dbus_encoded_byte_array(self.WIFI_STATUSES)
