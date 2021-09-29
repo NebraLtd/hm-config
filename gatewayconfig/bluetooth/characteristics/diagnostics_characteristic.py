@@ -43,7 +43,7 @@ class DiagnosticsCharacteristic(Characteristic):
         logger.debug('Diagnostics miner_bus')
         miner_bus = dbus.SystemBus()
         logger.debug('Diagnostics miner_object')
-        miner_object = miner_bus.get_object('com.helium.Miner', '/')
+        miner_object = miner_bus.get_object('com.helium.Miner', '/', introspect=False)
         logger.debug('Diagnostics miner_interface')
         miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
         logger.debug('Diagnostics p2pstatus')
