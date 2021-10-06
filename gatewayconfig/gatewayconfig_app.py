@@ -8,9 +8,9 @@ except:
     # In case of exception, you are executing your script outside of RPi, so import Mock.GPIO
     import Mock.GPIO as GPIO
 
-from hm_hardware_defs.variant import variant_definitions
+from hm_pyhelper.hardware_definitions import variant_definitions
 
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.processors.bluetooth_services_processor import BluetoothServicesProcessor
 from gatewayconfig.processors.led_processor import LEDProcessor
 from gatewayconfig.processors.diagnostics_processor import DiagnosticsProcessor
@@ -21,6 +21,8 @@ from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_addr
 import gatewayconfig.nmcli_custom as nmcli_custom
 
 USER_BUTTON_HOLD_SECONDS = 2
+logger = get_logger(__name__)
+
 
 class GatewayconfigApp:
     def __init__(self, sentry_dsn, balena_app_name, balena_device_uuid, variant, eth0_mac_address_filepath, wlan0_mac_address_filepath,
@@ -44,7 +46,7 @@ class GatewayconfigApp:
         self.diagnostics_processor = DiagnosticsProcessor(diagnostics_json_url, self.shared_state)
         self.wifi_processor = WifiProcessor(self.shared_state)
         self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(eth0_mac_address, self.shared_state, self.variant_details)
-        
+
     def start(self):
         logger.debug("Starting ConfigApp")
         try:

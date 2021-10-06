@@ -2,13 +2,15 @@ from time import sleep
 
 from lib.cputemp.bletools import BleTools
 
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.bluetooth.advertisements.bluetooth_connection_advertisement import BluetoothConnectionAdvertisement
 
+logger = get_logger(__name__)
 ADVERTISEMENT_TYPE = 'peripheral'
 ADVERTISEMENT_INDEX = 0
 ADVERTISEMENT_SECONDS = 300
 ADVERTISEMENT_OFF_SLEEP_SECONDS = 5
+
 
 class BluetoothAdvertisementProcessor:
     def __init__(self, eth0_mac_address, shared_state, variant_details):

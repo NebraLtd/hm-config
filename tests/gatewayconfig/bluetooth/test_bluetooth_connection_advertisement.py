@@ -6,7 +6,7 @@ import dbus
 import dbus.mainloop.glib
 from unittest.mock import patch, mock_open
 
-from hm_hardware_defs.variant import variant_definitions
+from hm_pyhelper.hardware_definitions import variant_definitions
 
 from gatewayconfig.bluetooth.advertisements.bluetooth_connection_advertisement import BluetoothConnectionAdvertisement
 
@@ -111,7 +111,7 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         service_uuid = str(uuid.uuid4())
         advertisement.add_service_uuid(service_uuid)
         # FIXME: There is currently test environment pollution and DEFAULT_SERVICE_ID has been
-        # added to the service UUIDs in a previous test. 
+        # added to the service UUIDs in a previous test.
         self.assertIn(
             service_uuid,
             advertisement.service_uuids

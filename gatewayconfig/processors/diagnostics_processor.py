@@ -2,10 +2,12 @@ import json
 import requests
 from retry import retry
 
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 
+logger = get_logger(__name__)
 DIAGNOSTICS_REFRESH_SECONDS = 60
+
 
 class DiagnosticsProcessor:
     def __init__(self, diagnostics_json_url, shared_state: GatewayconfigSharedState):

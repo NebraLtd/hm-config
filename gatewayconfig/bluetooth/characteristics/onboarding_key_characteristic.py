@@ -1,10 +1,13 @@
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.bluetooth.descriptors.onboarding_key_descriptor import OnboardingKeyDescriptor
 from gatewayconfig.bluetooth.descriptors.utf8_format_descriptor import UTF8FormatDescriptor
 import gatewayconfig.constants as constants
+
+logger = get_logger(__name__)
+
 
 class OnboardingKeyCharacteristic(Characteristic):
     def __init__(self, service, onboarding_key):

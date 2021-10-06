@@ -1,8 +1,9 @@
 import os
 
-from gatewayconfig.logger import logger
 from gatewayconfig.gatewayconfig_app import GatewayconfigApp
+from gatewayconfig.logger import get_logger
 
+logger = get_logger(__name__)
 VARIANT = os.getenv('VARIANT')
 # SENTRY_CONFIG currently being used in production
 SENTRY_DSN = os.getenv('SENTRY_CONFIG') # https://docs.sentry.io/product/sentry-basics/dsn-explainer/

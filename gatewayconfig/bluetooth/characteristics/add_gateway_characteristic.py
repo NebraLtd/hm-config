@@ -3,14 +3,16 @@ from time import sleep
 
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.bluetooth.descriptors.add_gateway_descriptor import AddGatewayDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.protos.add_gateway_pb2 as add_gateway_pb2
 import gatewayconfig.constants as constants
 
+logger = get_logger(__name__)
 DBUS_LOAD_SLEEP_SECONDS = 0.1
+
 
 class AddGatewayCharacteristic(Characteristic):
 

@@ -1,8 +1,11 @@
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 import gatewayconfig.constants as constants
+
+logger = get_logger(__name__)
+
 
 class SerialNumberCharacteristic(Characteristic):
 

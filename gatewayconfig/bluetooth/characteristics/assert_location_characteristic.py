@@ -4,14 +4,16 @@ import h3
 
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.logger import logger
+from gatewayconfig.logger import get_logger
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.bluetooth.descriptors.assert_location_descriptor import AssertLocationDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.protos.assert_location_pb2 as assert_location_pb2
 import gatewayconfig.constants as constants
 
+logger = get_logger(__name__)
 DBUS_LOAD_SLEEP_SECONDS = 0.1
+
 
 class AssertLocationCharacteristic(Characteristic):
 
