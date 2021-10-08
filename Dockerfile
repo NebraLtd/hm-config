@@ -70,7 +70,7 @@ WORKDIR /opt/
 # Copy the code and starter script
 COPY lib/ lib/
 COPY gatewayconfig/ gatewayconfig/
-COPY start-gateway-config.sh start-gateway-config.sh
+COPY *.sh ./
 ENV PYTHONPATH="/opt:$PYTHONPATH"
 
 # Copy venv from builder and update PATH to activate it
@@ -90,4 +90,4 @@ RUN apt-get autoremove -y && \
 # END DEBUGGING
 
 # Run start-gateway-config script
-ENTRYPOINT ["sh", "/opt/start-gateway-config.sh"]
+ENTRYPOINT ["/opt/start-gateway-config.sh"]

@@ -1,5 +1,6 @@
 import dbus
 import os
+from time import sleep
 
 from lib.cputemp.service import Characteristic
 
@@ -12,8 +13,8 @@ import gatewayconfig.protos.diagnostics_pb2 as diagnostics_pb2
 import gatewayconfig.constants as constants
 
 DBUS_UNAVAILABLE_VALUE = "Loading..."
+DBUS_LOAD_SLEEP_SECONDS = 0.1
 logger = get_logger(__name__)
-
 
 class DiagnosticsCharacteristic(Characteristic):
     # Returns proto of eth, wifi, fw, ip, p2pstatus
@@ -41,11 +42,13 @@ class DiagnosticsCharacteristic(Characteristic):
     # Returns the p2pstatus or an empty string if there is a dbus failure
     def get_p2pstatus(self):
         logger.debug('Diagnostics miner_bus')
-        miner_bus = dbus.SystemBus()
+        miner_bus = dbus.SessionBus()
         logger.debug('Diagnostics miner_object')
-        miner_object = miner_bus.get_object('com.helium.Miner', '/', introspect=False)
+        miner_object = miner_bus.get_object('com.helium.Miner', '/')
+        sleep(DBUS_LOAD_SLEEP_SECONDS)
         logger.debug('Diagnostics miner_interface')
         miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
+        sleep(DBUS_LOAD_SLEEP_SECONDS)
         logger.debug('Diagnostics p2pstatus')
             
         try:

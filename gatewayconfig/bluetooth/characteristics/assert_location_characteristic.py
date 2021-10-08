@@ -57,7 +57,7 @@ class AssertLocationCharacteristic(Characteristic):
             logger.debug(str(assert_location_details))
 
             logger.debug("Loading dbus com.helium.Miner")
-            miner_bus = dbus.SystemBus()
+            miner_bus = dbus.SessionBus()
             miner_object = miner_bus.get_object('com.helium.Miner', '/')
             sleep(DBUS_LOAD_SLEEP_SECONDS)
             miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
