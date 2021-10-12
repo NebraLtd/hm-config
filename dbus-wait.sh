@@ -8,7 +8,8 @@ wait_for_dbus() {
 			  /org/freedesktop/DBus \
 			  org.freedesktop.DBus.ListNames
 
-		if [ $? ]; then
+                dbus_wait=$?
+		if [ "$dbus_wait" -eq 0 ]; then
 			break;
 		else
 			sleep 0.1
