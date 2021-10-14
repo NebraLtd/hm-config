@@ -13,6 +13,9 @@ FROM balenalib/raspberry-pi-debian:buster-build-20210705 as builder
 # Nebra uses /opt by convention
 WORKDIR /opt/
 
+# Copy build ARG
+ARG SYSTEM_TIMEZONE
+
 # Copy python dependencies for `pip install` later
 COPY requirements.txt requirements.txt
 
@@ -51,6 +54,9 @@ RUN \
 ################################### Stage: runner ##################################################
 
 FROM balenalib/raspberry-pi-debian-python:buster-run-20210705 as runner
+
+# Copy build ARG
+ARG SYSTEM_TIMEZONE
 
 # Install bluez, libdbus, network-manager, python3-gi, and venv
 RUN \
