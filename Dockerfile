@@ -2,7 +2,7 @@
 # (C) Nebra LTD. 2021
 # Licensed under the MIT License.
 
-ARG SYSTEM_TIMEZONE="Europe/London"
+ARG SYSTEM_TIMEZONE=Europe/London
 
 ####################################################################################################
 ################################## Stage: builder ##################################################
