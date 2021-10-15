@@ -3,7 +3,6 @@
 
 # Helium service
 HELIUM_SERVICE_UUID = "0fda92b2-44a2-4af2-84f5-fa682baa2b8d"
-ONBOARDING_KEY_FILEPATH = "/var/data/public_keys"
 
 # Generic UUIDs
 FIRMWARE_VERSION = "2021.01.01.1"
