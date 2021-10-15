@@ -1,6 +1,7 @@
 import sentry_sdk
 import threading
 from gpiozero import Button, LED
+import requests
 try:
     # checks if you have access to RPi.GPIO, which is available inside RPi
     import RPi.GPIO as GPIO
@@ -47,8 +48,8 @@ class GatewayconfigApp:
         self.wifi_processor = WifiProcessor(self.shared_state)
         self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(eth0_mac_address, self.shared_state, self.variant_details)
 
-        diagnostics_response = requests.get(self.diagnostics_json_url)
-        diagnostics_json = response.json()
+        diagnostics_response = requests.get(diagnostics_json_url)
+        diagnostics_json = diagnostics_response.json()
         pub_key = diagnostics_json['PK']
         onboarding_key = diagnostics_json['OK']
         animal_name = diagnostics_json['AN']
