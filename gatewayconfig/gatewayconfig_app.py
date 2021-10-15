@@ -47,9 +47,11 @@ class GatewayconfigApp:
         self.wifi_processor = WifiProcessor(self.shared_state)
         self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(eth0_mac_address, self.shared_state, self.variant_details)
 
-        pub_key = self.diagnostics_processor['PK']
-        onboarding_key = self.diagnostics_processor['OK']
-        animal_name = self.diagnostics_processor['AN']
+        diagnostics_response = requests.get(self.diagnostics_json_url)
+        diagnostics_json = response.json()
+        pub_key = diagnostics_json['PK']
+        onboarding_key = diagnostics_json['OK']
+        animal_name = diagnostics_json['AN']
         logger.debug("Read onboarding pub_key: %s + animal_name: %s" % (pub_key, animal_name))
 
     def start(self):
