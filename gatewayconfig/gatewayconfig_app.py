@@ -1,6 +1,7 @@
 import sentry_sdk
 import threading
 from gpiozero import Button, LED
+import requests
 try:
     # checks if you have access to RPi.GPIO, which is available inside RPi
     import RPi.GPIO as GPIO
@@ -17,8 +18,9 @@ from gatewayconfig.processors.diagnostics_processor import DiagnosticsProcessor
 from gatewayconfig.processors.wifi_processor import WifiProcessor
 from gatewayconfig.processors.bluetooth_advertisement_processor import BluetoothAdvertisementProcessor
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
-from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_address, read_miner_keys
+from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_address
 import gatewayconfig.nmcli_custom as nmcli_custom
+
 
 USER_BUTTON_HOLD_SECONDS = 2
 logger = get_logger(__name__)
@@ -26,7 +28,8 @@ logger = get_logger(__name__)
 
 class GatewayconfigApp:
     def __init__(self, sentry_dsn, balena_app_name, balena_device_uuid, variant, eth0_mac_address_filepath, wlan0_mac_address_filepath,
-        miner_keys_filepath, diagnostics_json_url, ethernet_is_online_filepath, firmware_version):
+        diagnostics_json_url, ethernet_is_online_filepath, firmware_version
+    ):
 
         self.variant = variant
         self.variant_details = variant_definitions[variant]
@@ -38,14 +41,27 @@ class GatewayconfigApp:
         eth0_mac_address = read_eth0_mac_address(eth0_mac_address_filepath)
         wlan0_mac_address = read_wlan0_mac_address(wlan0_mac_address_filepath)
         logger.debug("Read eth0 mac address %s and wlan0 %s" % (eth0_mac_address, wlan0_mac_address))
-        pub_key, onboarding_key, animal_name = read_miner_keys(miner_keys_filepath)
-        logger.debug("Read onboarding pub_key: %s + animal_name: %s" % (pub_key, animal_name))
+
+        diagnostics_response = requests.get(diagnostics_json_url)
+        diagnostics_json = diagnostics_response.json()
+        pub_key = diagnostics_json['PK']
+        onboarding_key = diagnostics_json['OK']
+        animal_name = diagnostics_json['AN']
+        logger.debug(
+                "Read onboarding pub_key: %s + animal_name: %s" % (
+                    pub_key, animal_name
+                    )
+        )
 
         self.bluetooth_services_processor = BluetoothServicesProcessor(eth0_mac_address, wlan0_mac_address, onboarding_key, pub_key, firmware_version, ethernet_is_online_filepath, self.shared_state)
         self.led_processor = LEDProcessor(self.status_led, self.shared_state)
-        self.diagnostics_processor = DiagnosticsProcessor(diagnostics_json_url, self.shared_state)
+        self.diagnostics_processor = DiagnosticsProcessor(
+                diagnostics_json_url,
+                self.shared_state
+        )
         self.wifi_processor = WifiProcessor(self.shared_state)
         self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(eth0_mac_address, self.shared_state, self.variant_details)
+
 
     def start(self):
         logger.debug("Starting ConfigApp")

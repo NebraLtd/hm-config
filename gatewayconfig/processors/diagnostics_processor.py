@@ -27,7 +27,7 @@ class DiagnosticsProcessor:
         logger.debug("Read diagnostics %s" % diagnostics_json)
         are_diagnostics_ok = diagnostics_json['PF']
         return are_diagnostics_ok
-    
+
     def read_diagnostics(self):
         try:
             self.shared_state.are_diagnostics_ok = self.read_diagnostics_and_get_ok()
