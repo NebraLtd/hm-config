@@ -20,7 +20,7 @@ WLAN0_MAC_ADDRESS_FILEPATH = os.getenv(
 )
 DIAGNOSTICS_JSON_URL = os.getenv(
         'DIAGNOSTICS_JSON_URL',
-        'http://localhost:80?json=true'
+        'http://localhost/json'
 )
 ETHERNET_IS_ONLINE_FILEPATH = os.getenv('ETHERNET_IS_ONLINE_FILEPATH', '/sys/class/net/eth0/carrier')
 
