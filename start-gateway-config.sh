@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Wait for the diagnostics app to be loaded
-until wget -q -T 10 -O - http://localhost:80?json=true > /dev/null 2>&1
+until wget -q -T 10 -O - http://localhost/json > /dev/null 2>&1
 do
     echo "Diagnostics container not ready. Going to sleep."
     sleep 10
