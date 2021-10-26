@@ -8,7 +8,7 @@ ARG SYSTEM_TIMEZONE=Europe/London
 ################################## Stage: builder ##################################################
 
 # The balenalib/raspberry-pi-debian-python image was tested but missed many dependencies.
-FROM balenalib/raspberry-pi-debian:buster-build-20210705 as builder
+FROM balenalib/raspberry-pi-debian:buster-build-20211014 as builder
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
@@ -53,7 +53,7 @@ RUN \
 ####################################################################################################
 ################################### Stage: runner ##################################################
 
-FROM balenalib/raspberry-pi-debian-python:buster-run-20210705 as runner
+FROM balenalib/raspberry-pi-debian-python:buster-run-20211014 as runner
 
 # Copy build ARG
 ARG SYSTEM_TIMEZONE
