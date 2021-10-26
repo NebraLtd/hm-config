@@ -69,7 +69,11 @@ RUN \
         libdbus-1-3=1.12.20-0+deb10u1 \
         network-manager=1.14.6-2+deb10u1 \
         python3-gi=3.30.4-1 \
-        python3-venv=3.7.3-1
+        python3-venv=3.7.3-1 && \
+    # Cleanup
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
@@ -83,11 +87,6 @@ ENV PYTHONPATH="/opt:$PYTHONPATH"
 # Copy venv from builder and update PATH to activate it
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-
-# Cleanup
-RUN apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 # START DEBUGGING
 # Uncomment the lines below to mock parts of the configuration
