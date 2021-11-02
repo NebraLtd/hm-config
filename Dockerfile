@@ -2,8 +2,6 @@
 # (C) Nebra LTD. 2021
 # Licensed under the MIT License.
 
-ARG SYSTEM_TIMEZONE=Europe/London
-
 ####################################################################################################
 ################################## Stage: builder ##################################################
 
@@ -12,9 +10,6 @@ FROM balenalib/raspberry-pi-debian:buster-build-20211014 as builder
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
-
-# Copy build ARG
-ARG SYSTEM_TIMEZONE
 
 # Copy python dependencies for `pip install` later
 COPY requirements.txt requirements.txt
@@ -26,10 +21,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Then set venv environment copied from builder.
 # Finally, use pip to install dependencies.
 RUN \
-    apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" \
-    TZ="$SYSTEM_TIMEZONE" \
-        apt-get -y install \
+    install_packages \
             python3-minimal=3.7.3-1 \
             python3-pip=18.1-5+rpt1 \
             wget=1.20.1-1.1 \
@@ -41,8 +33,7 @@ RUN \
             libcairo2-dev=1.16.0-4+rpt1 \
             pkg-config=0.29-6 \
             python3-dev=3.7.3-1 \
-            gir1.2-gtk-3.0=3.24.5-1+rpt2 \
-            --no-install-recommends && \
+            gir1.2-gtk-3.0=3.24.5-1+rpt2 && \
     # Because the PATH is already updated above, this command creates a new venv AND activates it
     python3 -m venv /opt/venv && \
     # Given venv is active, this `pip` refers to the python3 variant
@@ -55,25 +46,15 @@ RUN \
 
 FROM balenalib/raspberry-pi-debian-python:buster-run-20211014 as runner
 
-# Copy build ARG
-ARG SYSTEM_TIMEZONE
-
 # Install bluez, libdbus, network-manager, python3-gi, and venv
 RUN \
-    apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" \
-    TZ="$SYSTEM_TIMEZONE" \
-    apt-get install -y \
+    install_packages \
         bluez=5.50-1.2~deb10u2+rpt1 \
         wget=1.20.1-1.1 \
         libdbus-1-3=1.12.20-0+deb10u1 \
         network-manager=1.14.6-2+deb10u1 \
         python3-gi=3.30.4-1 \
-        python3-venv=3.7.3-1 && \
-    # Cleanup
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+        python3-venv=3.7.3-1
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
