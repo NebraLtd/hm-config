@@ -51,7 +51,7 @@ $ git push balena YourLocalBranch:master
 These are optional instructions to have an Ubuntu environment closely mimic production.
 
 1. Install pyenv: `curl https://pyenv.run | bash`
-2. Install Python 3.7.3 dependency: 
+2. Install Python 3.7.3 dependency:
 
 ```
 sudo apt-get install -y libffi-dev libssl-dev make build-essential libssl-dev zlib1g-dev libbz2-dev \
@@ -62,7 +62,8 @@ sudo apt-get install -y libffi-dev libssl-dev make build-essential libssl-dev zl
 3. Install Python 3.7.3: `pyenv install 3.7.3 && pyenv local 3.7.3`
 4. Check correctly installed: `python -V`
 5. Setup virtualenv: `python3 -m venv venv && source venv/bin/activate`
-6. Install dependencies: `pip install -r requirements.txt`
+6. Install python `wheel` package: `python3 -m pip install wheel`
+7. Install dependencies: `pip install -r requirements.txt`
 
 ## Testing
 
@@ -72,13 +73,13 @@ Assuming virtualenv has been activated, execute the following command to run the
 pip install -r test-requirements.txt
 pytest
 # Or test and run coverage report
-PYTHONPATH=./ pytest --cov=minerconfig --cov=lib 
+PYTHONPATH=./ pytest --cov=minerconfig --cov=lib
 ```
 
 ## Generating protobufs
 
 - Install protobuf
-    - Ubuntu: `sudo snap install protobuf` 
+    - Ubuntu: `sudo snap install protobuf`
     - Mac: `brew install protobuf`
 - Run `generate-protos.sh`
     - `cd protos && sh generate-protos.sh`
