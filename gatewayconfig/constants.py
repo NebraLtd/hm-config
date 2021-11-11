@@ -81,7 +81,7 @@ WIFI_STATUSES = {
     "100": "connected",  # connected
     "50": "already",  # Already Connecting
     "60": "invalid",  # Invalid Key
-    "30": "failed"   # Connection Failed
+    "30": "invalid"   # Incorrect Password
 }
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
