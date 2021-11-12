@@ -24,55 +24,71 @@ class WifiConnectCharacteristic(Characteristic):
                 ["read", "write", "notify"], service)
         self.add_descriptor(WifiConnectDescriptor(self))
         self.add_descriptor(OpaqueStructureDescriptor(self))
+
+        # Credential to connect to a WiFi
         self.wifi_service = ""
         self.wifi_password = ""
 
-    def wifi_connect(self, wifi_service, wifi_password):
-        if self.check_wifi_status() == "connected":
+    def check_wifi_status(self):
+        # Check the current wi-fi connection status
+        logger.debug('Check WiFi Connect')
+        nm_state = str(nmcli_custom.device.show('wlan0')['GENERAL.STATE'].split(" ")[0])
+
+        # Convert the network manager device state into wifi status response
+        if nm_state == constants.NM_DEVICE_STATE_ACTIVATED:
+            wifi_status = constants.WIFI_CONNECTED
+        elif nm_state == constants.NM_DEVICE_STATE_FAILED:
+            wifi_status = constants.WIFI_ERROR
+        else:
+            wifi_status = constants.WIFI_INVALID_PASSWORD
+
+        logger.debug("Wifi status is %s" % wifi_status)
+        return wifi_status
+
+    def connect_to_wifi(self, wifi_service, wifi_password):
+        logger.debug('Connect to WiFi')
+        if self.check_wifi_status() == constants.WIFI_CONNECTED:
             nmcli_custom.device.disconnect('wlan0')
-            logger.debug('Disconnected From Wifi')
+            logger.debug('Disconnected From WiFi')
 
         nmcli_custom.device.wifi_connect(wifi_service, wifi_password)
 
-    def WiFiConnectCallback(self):
+    def connect_to_wifi_timeout(self):
         if self.notifying:
-            logger.debug('Callback WiFi Connect')
-            value = []
-            wifi_status = self.check_wifi_status()
+            logger.debug('Connect to WiFi Timeout')
 
-            for c in wifi_status:
-                value.append(dbus.Byte(c.encode()))
-            self.PropertiesChanged(constants.GATT_CHRC_IFACE, {"Value": value},
-                                   [])
+            # Notify wifi status
+            wifi_status = self.check_wifi_status()
+            value = string_to_dbus_encoded_byte_array(wifi_status)
+            self.PropertiesChanged(constants.GATT_CHRC_IFACE,
+                                   {"Value": value}, [])
 
         return self.notifying
 
     def StartNotify(self):
-
         logger.debug('Notify WiFi Connect')
         if self.notifying:
             return
 
         self.notifying = True
 
-        self.add_timeout(NOTIFY_TIMEOUT, self.WiFiConnectCallback)
+        self.add_timeout(NOTIFY_TIMEOUT, self.connect_to_wifi_timeout)
 
         if self.wifi_service and self.wifi_password:
             try:
-                self.wifi_connect(self.wifi_service, self.wifi_password)
-                wifi_status = self.check_wifi_status()
+                self.connect_to_wifi(self.wifi_service, self.wifi_password)
             except Exception:
-                wifi_status = "invalid"
+                pass
 
-            value = []
-            for c in wifi_status:
-                value.append(dbus.Byte(c.encode()))
-            self.PropertiesChanged(constants.GATT_CHRC_IFACE, {"Value": value},
-                                   [])
+            # Notify wifi status
+            wifi_status = self.check_wifi_status()
+            value = string_to_dbus_encoded_byte_array(wifi_status)
+            self.PropertiesChanged(constants.GATT_CHRC_IFACE,
+                                   {"Value": value}, [])
+
             # wipe out the wifi details
             self.wifi_service = ""
             self.wifi_password = ""
-
 
     def StopNotify(self):
         self.notifying = False
@@ -82,20 +98,14 @@ class WifiConnectCharacteristic(Characteristic):
 
         wifi_details = wifi_connect_pb2.wifi_connect_v1()
         wifi_details.ParseFromString(bytes(value))
+
         logger.debug(str(wifi_details.service))
+
         self.wifi_service = str(wifi_details.service)
         self.wifi_password = str(wifi_details.password)
 
-    def check_wifi_status(self):
-        # Check the current wi-fi connection status
-        logger.debug('Check WiFi Connect')
-        state = str(nmcli_custom.device.show('wlan0')['GENERAL.STATE'].split(" ")[0])
-        wifi_status = constants.WIFI_STATUSES[state]
-        logger.debug("Wifi status is %s" % str(wifi_status))
-        return wifi_status
-
     def ReadValue(self, options):
-
         logger.debug('Read WiFi Connect')
+
         wifi_status = self.check_wifi_status()
         return string_to_dbus_encoded_byte_array(wifi_status)
