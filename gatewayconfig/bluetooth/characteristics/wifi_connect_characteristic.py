@@ -35,14 +35,10 @@ class WifiConnectCharacteristic(Characteristic):
         nm_state = str(nmcli_custom.device.show('wlan0')['GENERAL.STATE'].split(" ")[0])
 
         # Convert the network manager device state into wifi status response
-        if nm_state == constants.NM_DEVICE_STATE_ACTIVATED:
-            wifi_status = constants.WIFI_CONNECTED
-        elif nm_state == constants.NM_DEVICE_STATE_FAILED:
-            wifi_status = constants.WIFI_ERROR
-        else:
-            wifi_status = constants.WIFI_INVALID_PASSWORD
-
+        wifi_status = constants.WIFI_STATUSES.get(nm_state,
+                                                  constants.WIFI_ERROR)
         logger.debug("Wifi status is %s" % wifi_status)
+
         return wifi_status
 
     def connect_to_wifi(self, wifi_service, wifi_password):
