@@ -25,12 +25,4 @@ class TestDiagnosticCharacteristic(TestCase):
     def test_instantiation(self):
         service = Service(200, '1111', True)
         diagnostics_characteristic = DiagnosticsCharacteristic(service, 'A1:B2:C3:DD:E5:F6', 'B1:B2:C3:DD:E5:F6')
-        self.assertEqual(
-            diagnostics_characteristic.eth0_mac_address,
-            'A1:B2:C3:DD:E5:F6'
-        )
-
-        self.assertEqual(
-            diagnostics_characteristic.wlan0_mac_address,
-            'B1:B2:C3:DD:E5:F6'
-        )
+        self.assertIsInstance(diagnostics_characteristic, DiagnosticsCharacteristic)
