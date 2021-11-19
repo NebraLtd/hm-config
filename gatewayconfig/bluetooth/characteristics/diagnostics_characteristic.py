@@ -20,15 +20,15 @@ logger = get_logger(__name__)
 class DiagnosticsCharacteristic(Characteristic):
     # Returns proto of eth, wifi, fw, ip, p2pstatus
 
-    def __init__(self, service, eth0_mac_address, wlan0_mac_address):
+    def __init__(self, service, eth0_mac_address, wlan0_mac_address, firmware_version):
         Characteristic.__init__(
                 self, constants.DIAGNOSTICS_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(DiagnosticsDescriptor(self))
         self.add_descriptor(OpaqueStructureDescriptor(self))
 
-        firmware_version = os.getenv('FIRMWARE_VERSION')
-        self.new_diagnostics_proto(eth0_mac_address, wlan0_mac_address,
+        self.new_diagnostics_proto(eth0_mac_address.replace(":", ""),
+                                   wlan0_mac_address.replace(":", ""),
                                    firmware_version)
 
     def ReadValue(self, options):
@@ -58,8 +58,8 @@ class DiagnosticsCharacteristic(Characteristic):
         self.diagnostics_proto.diagnostics['height'] = DBUS_UNAVAILABLE_VALUE
         self.diagnostics_proto.diagnostics['nat_type'] = DBUS_UNAVAILABLE_VALUE
 
-        self.diagnostics_proto.diagnostics['eth'] = eth0_mac_address.replace(":", "")
-        self.diagnostics_proto.diagnostics['wifi'] = wlan0_mac_address.replace(":", "")
+        self.diagnostics_proto.diagnostics['eth'] = str(eth0_mac_address)
+        self.diagnostics_proto.diagnostics['wifi'] = str(wlan0_mac_address)
         self.diagnostics_proto.diagnostics['fw'] = str(firmware_version)
         self.diagnostics_proto.diagnostics['ip'] = ""
 

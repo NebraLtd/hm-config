@@ -25,7 +25,7 @@ class HeliumService(Service):
         self.add_characteristic(PublicKeyCharacteristic(self, pub_key))
         self.add_characteristic(WifiServicesCharacteristic(self, shared_state))
         self.add_characteristic(WifiConfiguredServicesCharacteristic(self, shared_state))
-        self.add_characteristic(DiagnosticsCharacteristic(self, eth0_mac_address, wlan0_mac_address))
+        self.add_characteristic(DiagnosticsCharacteristic(self, eth0_mac_address, wlan0_mac_address, firmware_version))
         self.add_characteristic(MacAddressCharacteristic(self, eth0_mac_address))
         self.add_characteristic(LightsCharacteristic(self))
         self.add_characteristic(WifiSSIDCharacteristic(self, shared_state))
