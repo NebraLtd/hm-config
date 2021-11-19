@@ -24,5 +24,8 @@ class TestDiagnosticCharacteristic(TestCase):
 
     def test_instantiation(self):
         service = Service(200, '1111', True)
-        diagnostics_characteristic = DiagnosticsCharacteristic(service, 'A1:B2:C3:DD:E5:F6', 'B1:B2:C3:DD:E5:F6')
+        diagnostics_characteristic = DiagnosticsCharacteristic(service,
+                                                               'A1:B2:C3:DD:E5:F6',
+                                                               'B1:B2:C3:DD:E5:F6',
+                                                               '2021.06.26.4')
         self.assertIsInstance(diagnostics_characteristic, DiagnosticsCharacteristic)

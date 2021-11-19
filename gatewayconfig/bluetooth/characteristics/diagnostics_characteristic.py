@@ -61,7 +61,7 @@ class DiagnosticsCharacteristic(Characteristic):
         self.diagnostics_proto.diagnostics['eth'] = str(eth0_mac_address)
         self.diagnostics_proto.diagnostics['wifi'] = str(wlan0_mac_address)
         self.diagnostics_proto.diagnostics['fw'] = str(firmware_version)
-        self.diagnostics_proto.diagnostics['ip'] = ""
+        self.diagnostics_proto.diagnostics['ip'] = "0.0.0.0"
 
     # Update diagnostics_proto member variable
     def update_diagnostics_proto(self, p2pstatus):
