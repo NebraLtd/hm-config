@@ -61,7 +61,7 @@ class DiagnosticsCharacteristic(Characteristic):
         self.diagnostics_proto.diagnostics['eth'] = str(eth0_mac_address)
         self.diagnostics_proto.diagnostics['wifi'] = str(wlan0_mac_address)
         self.diagnostics_proto.diagnostics['fw'] = str(firmware_version)
-        self.diagnostics_proto.diagnostics['ip'] = "0.0.0.0"
+        self.diagnostics_proto.diagnostics['ip'] = ""
 
     # Update diagnostics_proto member variable
     def update_diagnostics_proto(self, p2pstatus):
@@ -115,7 +115,7 @@ class DiagnosticsCharacteristic(Characteristic):
         except KeyError:
             pass
 
-        ip_address = "0.0.0.0"  # nosec
+        ip_address = ""
         if('eth_ip' in locals()):
             logger.debug("Using ETH IP address %s" % eth_ip)
             ip_address = str(eth_ip)
