@@ -1,3 +1,4 @@
+import os
 from unittest import TestCase
 from unittest.mock import patch, mock_open
 
@@ -19,6 +20,7 @@ class TestGatewayconfigSha(TestCase):
     @patch('builtins.open', new_callable=mock_open, read_data=ETHO_FILE_MOCK)
     @patch('requests.get', response=DIAGNOSTICS_RESPONSE_MOCK)
     def test_gpio_pins(self, mock_dbus_interface, mock_findadapter, mock_getbus, mock_file, mock_diagnostics):
+        os.environ['BALENA_DEVICE_TYPE'] = 'TEST'
         app = GatewayconfigApp('https://11111111111111119f8b0c9b118c415a@o111111.ingest.sentry.io/1111111', 'BALENA_APP_NAME', 'BALENA_DEVICE_UUID', 'NEBHNT-IN1',
         'ETH0_MOCK_USED', 'WLAN0_MAC_ADDRESS_FILEPATH', 'DIAGNOSTICS_JSON_URL', 'ETHERNET_IS_ONLINE_FILEPATH', 'FIRMWARE_VERSION')
 
