@@ -9,7 +9,7 @@ except:
     # In case of exception, you are executing your script outside of RPi, so import Mock.GPIO
     import Mock.GPIO as GPIO
 
-from hm_pyhelper.hardware_definitions import variant_definitions
+from hm_pyhelper.hardware_definitions import variant_definitions, is_raspberry_pi
 
 from gatewayconfig.logger import get_logger
 from gatewayconfig.processors.bluetooth_services_processor import BluetoothServicesProcessor
@@ -91,9 +91,14 @@ class GatewayconfigApp:
         nmcli_custom.disable_use_sudo()
 
     def init_gpio(self):
-        self.user_button = Button(self.get_button_pin(), hold_time=USER_BUTTON_HOLD_SECONDS)
-        self.user_button.when_held= self.start_bluetooth_advertisement
-        self.status_led = LED(self.get_status_led_pin())
+        if is_raspberry_pi():
+            self.user_button = Button(self.get_button_pin(), hold_time=USER_BUTTON_HOLD_SECONDS)
+            self.user_button.when_held= self.start_bluetooth_advertisement
+            self.status_led = LED(self.get_status_led_pin())
+        else:
+            logger.warn("LEDs and buttons are disabled. GPIO not yet supported on this device.")
+            self.user_button = None
+            self.status_led = None
 
     # Use daemon threads so that everything exists cleanly when the program stops
     def start_threads(self):
