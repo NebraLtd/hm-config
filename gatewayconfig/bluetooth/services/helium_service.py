@@ -18,11 +18,11 @@ import gatewayconfig.constants as constants
 
 class HeliumService(Service):
 
-    def __init__(self, index, eth0_mac_address, wlan0_mac_address, onboarding_key, pub_key, firmware_version, ethernet_is_online_filepath, shared_state):
+    def __init__(self, index, eth0_mac_address, wlan0_mac_address, firmware_version, ethernet_is_online_filepath, shared_state):
 
         Service.__init__(self, index, constants.HELIUM_SERVICE_UUID, True)
-        self.add_characteristic(OnboardingKeyCharacteristic(self, onboarding_key))
-        self.add_characteristic(PublicKeyCharacteristic(self, pub_key))
+        self.add_characteristic(OnboardingKeyCharacteristic(self, shared_state))
+        self.add_characteristic(PublicKeyCharacteristic(self, shared_state))
         self.add_characteristic(WifiServicesCharacteristic(self, shared_state))
         self.add_characteristic(WifiConfiguredServicesCharacteristic(self, shared_state))
         self.add_characteristic(DiagnosticsCharacteristic(self, eth0_mac_address, wlan0_mac_address))

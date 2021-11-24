@@ -41,19 +41,9 @@ class GatewayconfigApp:
         eth0_mac_address = read_eth0_mac_address(eth0_mac_address_filepath)
         wlan0_mac_address = read_wlan0_mac_address(wlan0_mac_address_filepath)
         logger.debug("Read eth0 mac address %s and wlan0 %s" % (eth0_mac_address, wlan0_mac_address))
+        self.shared_state.load_public_key()
 
-        diagnostics_response = requests.get(diagnostics_json_url)
-        diagnostics_json = diagnostics_response.json()
-        pub_key = diagnostics_json['PK']
-        onboarding_key = diagnostics_json['OK']
-        animal_name = diagnostics_json['AN']
-        logger.debug(
-                "Read onboarding pub_key: %s + animal_name: %s" % (
-                    pub_key, animal_name
-                    )
-        )
-
-        self.bluetooth_services_processor = BluetoothServicesProcessor(eth0_mac_address, wlan0_mac_address, onboarding_key, pub_key, firmware_version, ethernet_is_online_filepath, self.shared_state)
+        self.bluetooth_services_processor = BluetoothServicesProcessor(eth0_mac_address, wlan0_mac_address, firmware_version, ethernet_is_online_filepath, self.shared_state)
         self.led_processor = LEDProcessor(self.status_led, self.shared_state)
         self.diagnostics_processor = DiagnosticsProcessor(
                 diagnostics_json_url,
@@ -132,3 +122,4 @@ class GatewayconfigApp:
 
     def get_status_led_pin(self):
         return self.variant_details['STATUS']
+
