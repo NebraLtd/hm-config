@@ -30,6 +30,6 @@ class GatewayconfigSharedState:
 
         try:
             public_keys = get_public_keys_rust()
-            self.public_key = public_keys['PK']
+            self.public_key = public_keys['key']
         except Exception:
             LOGGER.exception("Unable to read public key.")
