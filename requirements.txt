@@ -11,4 +11,3 @@ pycairo==1.20.1
 requests==2.26.0
 retry==0.9.2
 sentry-sdk==1.1.0
-Mock.GPIO==0.1.8
