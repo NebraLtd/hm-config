@@ -2,13 +2,6 @@ import sentry_sdk
 import threading
 from gpiozero import Button, LED
 
-try:
-    # checks if you have access to RPi.GPIO, which is available inside RPi
-    import RPi.GPIO as GPIO
-except Exception:
-    # In case of exception, you are executing your script outside of RPi, so import Mock.GPIO
-    import Mock.GPIO as GPIO
-
 from hm_pyhelper.hardware_definitions import variant_definitions, is_raspberry_pi
 
 from gatewayconfig.logger import get_logger
@@ -76,7 +69,9 @@ class GatewayconfigApp:
 
     def stop(self):
         logger.debug("Stopping ConfigApp")
-        GPIO.cleanup()
+        if is_raspberry_pi():
+            self.user_button.close()
+            self.status_led.close()  
         # Quits the cputemp application
         self.bluetooth_services_processor.quit()
 
