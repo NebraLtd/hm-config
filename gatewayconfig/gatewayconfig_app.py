@@ -2,7 +2,8 @@ import sentry_sdk
 import threading
 from gpiozero import Button, LED
 
-from hm_pyhelper.hardware_definitions import variant_definitions, is_raspberry_pi
+from hm_pyhelper.hardware_definitions import is_rockpi, is_raspberry_pi, \
+                                             variant_definitions
 
 from gatewayconfig.logger import get_logger
 from gatewayconfig.processors.bluetooth_services_processor import BluetoothServicesProcessor
@@ -12,11 +13,13 @@ from gatewayconfig.processors.wifi_processor import WifiProcessor
 from gatewayconfig.processors.bluetooth_advertisement_processor import BluetoothAdvertisementProcessor
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_address
+from gatewayconfig.gpio.mraa_button import MraaButton
+from gatewayconfig.gpio.mraa_led import MraaLED
 import gatewayconfig.nmcli_custom as nmcli_custom
 
 
 USER_BUTTON_HOLD_SECONDS = 2
-logger = get_logger(__name__)
+LOGGER = get_logger(__name__)
 
 
 class GatewayconfigApp:
@@ -30,11 +33,11 @@ class GatewayconfigApp:
         self.init_sentry(sentry_dsn, balena_app_name, balena_device_uuid, variant)
         self.shared_state = GatewayconfigSharedState()
         self.init_nmcli()
-        self.init_gpio()
+        self.init_gpio(variant)
 
         eth0_mac_address = read_eth0_mac_address(eth0_mac_address_filepath)
         wlan0_mac_address = read_wlan0_mac_address(wlan0_mac_address_filepath)
-        logger.debug("Read eth0 mac address %s and wlan0 %s" % (eth0_mac_address, wlan0_mac_address))
+        LOGGER.debug("Read eth0 mac address %s and wlan0 %s" % (eth0_mac_address, wlan0_mac_address))
         self.shared_state.load_public_key()
 
         self.bluetooth_services_processor = BluetoothServicesProcessor(
@@ -55,23 +58,22 @@ class GatewayconfigApp:
         )
 
     def start(self):
-        logger.debug("Starting ConfigApp")
+        LOGGER.debug("Starting ConfigApp")
         try:
             self.start_threads()
 
         except KeyboardInterrupt:
-            logger.debug("KEYBOAD INTERRUPTION")
+            LOGGER.debug("KEYBOAD INTERRUPTION")
             self.stop()
 
         except Exception:
-            logger.exception('GatewayConfigApp failed for unknown reason')
+            LOGGER.exception('GatewayConfigApp failed for unknown reason')
             self.stop()
 
     def stop(self):
-        logger.debug("Stopping ConfigApp")
-        if is_raspberry_pi():
-            self.user_button.close()
-            self.status_led.close()  
+        LOGGER.debug("Stopping ConfigApp")
+        self.user_button.close()
+        self.status_led.close()
         # Quits the cputemp application
         self.bluetooth_services_processor.quit()
 
@@ -83,15 +85,25 @@ class GatewayconfigApp:
     def init_nmcli(self):
         nmcli_custom.disable_use_sudo()
 
-    def init_gpio(self):
+    def init_gpio(self, variant):
+        """
+        This code was originally written for Raspberry Pi but ROCK Pi does not
+        support gpiozero. Custom GPIO implementations for ROCK Pi are used based
+        on the detected hardware.
+        """
         if is_raspberry_pi():
-            self.user_button = Button(self.get_button_pin(), hold_time=USER_BUTTON_HOLD_SECONDS)
-            self.user_button.when_held = self.start_bluetooth_advertisement
-            self.status_led = LED(self.get_status_led_pin())
+            self.user_button = Button(self.get_button_gpio(), hold_time=USER_BUTTON_HOLD_SECONDS)
+            self.status_led = LED(self.get_status_led_gpio())
+        elif is_rockpi():
+            self.user_button = MraaButton(self.get_button_pin(), hold_seconds=USER_BUTTON_HOLD_SECONDS)
+            self.user_button.start()
+            self.status_led = MraaLED(self.get_status_led_pin())
         else:
-            logger.warn("LEDs and buttons are disabled. GPIO not yet supported on this device.")
-            self.user_button = None
-            self.status_led = None
+            LOGGER.warn("LEDs and buttons are disabled. "
+                        "GPIO not yet supported on this device: %s"
+                        % variant)
+
+        self.user_button.when_held = self.start_bluetooth_advertisement
 
     # Use daemon threads so that everything exists cleanly when the program stops
     def start_threads(self):
@@ -117,11 +129,17 @@ class GatewayconfigApp:
         self.bluetooth_advertisement_thread.start()
 
     def start_bluetooth_advertisement(self):
-        logger.debug("Starting bluetooth advertisement")
+        LOGGER.debug("Starting bluetooth advertisement")
         self.shared_state.should_advertise_bluetooth = True
 
-    def get_button_pin(self):
+    def get_button_gpio(self):
         return self.variant_details['BUTTON']
 
-    def get_status_led_pin(self):
+    def get_status_led_gpio(self):
         return self.variant_details['STATUS']
+
+    def get_button_pin(self):
+        return self.variant_details['GPIO_PIN_BUTTON']
+
+    def get_status_led_pin(self):
+        return self.variant_details['GPIO_PIN_LED']

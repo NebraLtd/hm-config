@@ -19,6 +19,13 @@ echo 153 > /sys/kernel/debug/bluetooth/hci0/adv_max_interval
 # Disable pairing
 printf "pairable off\nquit" | /usr/bin/bluetoothctl
 
-# Check dbus container is ready and then launch config
-wait_for_dbus \
-	&& python gatewayconfig
+
+prevent_start="${PREVENT_START_GATEWAYCONFIG:-0}"
+if [ "$prevent_start" = 1 ]; then
+    echo "gatewayconfig will not be started. PREVENT_START_GATEWAYCONFIG=1"
+    while true; do sleep 1000; done
+else
+	# Check dbus container is ready and then launch config
+    wait_for_dbus \
+        && python gatewayconfig
+fi

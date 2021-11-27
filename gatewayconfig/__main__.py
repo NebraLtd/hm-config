@@ -3,7 +3,7 @@ import os
 from gatewayconfig.gatewayconfig_app import GatewayconfigApp
 from gatewayconfig.logger import get_logger
 
-logger = get_logger(__name__)
+LOGGER = get_logger(__name__)
 VARIANT = os.getenv('VARIANT')
 # SENTRY_CONFIG currently being used in production
 SENTRY_DSN = os.getenv('SENTRY_CONFIG')  # https://docs.sentry.io/product/sentry-basics/dsn-explainer/
@@ -31,7 +31,7 @@ def main():
 
 
 def validate_env():
-    logger.debug("Starting with the following ENV:\n\
+    LOGGER.debug("Starting with the following ENV:\n\
         SENTRY_DSN=%s\n\
         BALENA_APP_NAME=%s\n\
         BALENA_DEVICE_UUID=%s\n\
@@ -69,7 +69,7 @@ def start():
     try:
         config_app.start()
     except Exception:
-        logger.exception('__main__ failed for unknown reason')
+        LOGGER.exception('__main__ failed for unknown reason')
         config_app.stop()
 
 

@@ -69,11 +69,20 @@ ENV PYTHONPATH="/opt:$PYTHONPATH"
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# START DEBUGGING
-# Uncomment the lines below to mock parts of the configuration
-# COPY example/ example/
-# ENV ETH0_MAC_ADDRESS_PATH=/opt/example/eth0_mac_address.txt
-# END DEBUGGING
+# hadolint ignore=DL3008, DL4006
+RUN export DISTRO=buster-testing && \
+    echo "deb http://apt.radxa.com/$DISTRO/ ${DISTRO%-*} main" | tee -a /etc/apt/sources.list.d/apt-radxa-com.list && \
+    wget -nv -O - apt.radxa.com/$DISTRO/public.key | apt-key add - && \
+    apt-get update && \
+    apt-get install --no-install-recommends -y libmraa && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# This is the libmraa install location, because we are using venv
+# it must be added to path explicitly
+ENV PYTHONPATH="$PYTHONPATH:/usr/local/lib/python3.7/dist-packages"
 
 # Run start-gateway-config script
 ENTRYPOINT ["/opt/start-gateway-config.sh"]
+
