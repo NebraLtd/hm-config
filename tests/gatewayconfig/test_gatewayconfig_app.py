@@ -21,22 +21,26 @@ DIAGNOSTICS_RESPONSE_MOCK = (
     '"last_updated":"17:40 UTC 15 Oct 2021"}')
 
 
-class TestGatewayconfigSha(TestCase):
+class TestGatewayconfigApp(TestCase):
 
     @patch('lib.cputemp.bletools.BleTools.get_bus')
     @patch('lib.cputemp.bletools.BleTools.find_adapter')
     @patch('dbus.Interface')
     @patch('builtins.open', new_callable=mock_open, read_data=ETHO_FILE_MOCK)
     @patch('requests.get', response=DIAGNOSTICS_RESPONSE_MOCK)
-    def test_gpio_pins(self, mock_dbus_interface, mock_findadapter, mock_getbus, mock_file, mock_diagnostics):
-        os.environ['BALENA_DEVICE_TYPE'] = 'TEST'
-        app = GatewayconfigApp(
-                'https://11111111111111119f8b0c9b118c415a@o111111.ingest.sentry.io/1111111',
-                'BALENA_APP_NAME', 'BALENA_DEVICE_UUID', 'NEBHNT-IN1', 'ETH0_MOCK_USED', 'WLAN0_MAC_ADDRESS_FILEPATH',
-                'DIAGNOSTICS_JSON_URL', 'ETHERNET_IS_ONLINE_FILEPATH', 'FIRMWARE_VERSION'
-                )
+    @patch('gatewayconfig.gpio.mraa_button.init_mraa_pin')
+    def test_gpio_pins(self, mock_dbus_interface, mock_findadapter, mock_getbus,
+                       mock_file, mock_diagnostics, mock_mraa_pin):
+        os.environ['BALENA_DEVICE_TYPE'] = 'raspberrypi3-64'
+        app = GatewayconfigApp('https://11111111111111119f8b0c9b118c415a@o111111.ingest.sentry.io/1111111',
+                               'BALENA_APP_NAME', 'BALENA_DEVICE_UUID',
+                               'NEBHNT-IN1', 'ETH0_MOCK_USED',
+                               'WLAN0_MAC_ADDRESS_FILEPATH',
+                               'DIAGNOSTICS_JSON_URL',
+                               'ETHERNET_IS_ONLINE_FILEPATH',
+                               'FIRMWARE_VERSION')
 
         self.assertEqual(app.variant, 'NEBHNT-IN1')
-        self.assertEqual(app.get_button_pin(), 26)
-        self.assertEqual(app.get_status_led_pin(), 25)
+        self.assertEqual(app.get_button_gpio(), 26)
+        self.assertEqual(app.get_status_led_gpio(), 25)
         app.stop()
