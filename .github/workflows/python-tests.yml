@@ -19,4 +19,4 @@ jobs:
         pip install -r test-requirements.txt
         pip install -r requirements.txt
         export PYTHONPATH=`pwd`
-        pytest --cov=minerconfig --cov=lib --cov-fail-under=1
+        pytest --cov=gatewayconfig --cov=lib --cov-fail-under=70

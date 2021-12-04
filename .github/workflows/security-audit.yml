@@ -16,4 +16,4 @@ jobs:
     - name: Run bandit against code base 
       run: |
         pip install bandit
-        bandit -r config-python        
+        bandit -r .

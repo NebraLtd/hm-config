@@ -53,6 +53,7 @@ class NotSupportedException(dbus.exceptions.DBusException):
 class NotPermittedException(dbus.exceptions.DBusException):
     _dbus_error_name = "org.bluez.Error.NotPermitted"
 
+
 class Application(dbus.service.Object):
     def __init__(self):
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)

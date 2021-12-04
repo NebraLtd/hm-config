@@ -6,7 +6,7 @@ from gatewayconfig.logger import get_logger
 logger = get_logger(__name__)
 VARIANT = os.getenv('VARIANT')
 # SENTRY_CONFIG currently being used in production
-SENTRY_DSN = os.getenv('SENTRY_CONFIG') # https://docs.sentry.io/product/sentry-basics/dsn-explainer/
+SENTRY_DSN = os.getenv('SENTRY_CONFIG')  # https://docs.sentry.io/product/sentry-basics/dsn-explainer/
 BALENA_DEVICE_UUID = os.getenv('BALENA_DEVICE_UUID')
 BALENA_APP_NAME = os.getenv('BALENA_APP_NAME')
 FIRMWARE_VERSION = os.getenv('FIRMWARE_VERSION')
@@ -24,9 +24,11 @@ DIAGNOSTICS_JSON_URL = os.getenv(
 )
 ETHERNET_IS_ONLINE_FILEPATH = os.getenv('ETHERNET_IS_ONLINE_FILEPATH', '/sys/class/net/eth0/carrier')
 
+
 def main():
     validate_env()
     start()
+
 
 def validate_env():
     logger.debug("Starting with the following ENV:\n\
@@ -49,6 +51,7 @@ def validate_env():
             ETHERNET_IS_ONLINE_FILEPATH,
             FIRMWARE_VERSION
         ))
+
 
 def start():
     config_app = GatewayconfigApp(

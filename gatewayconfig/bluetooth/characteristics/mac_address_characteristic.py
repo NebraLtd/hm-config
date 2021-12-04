@@ -1,6 +1,3 @@
-import logging
-import dbus
-
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array

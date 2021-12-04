@@ -1,11 +1,11 @@
 import sentry_sdk
 import threading
 from gpiozero import Button, LED
-import requests
+
 try:
     # checks if you have access to RPi.GPIO, which is available inside RPi
     import RPi.GPIO as GPIO
-except:
+except Exception:
     # In case of exception, you are executing your script outside of RPi, so import Mock.GPIO
     import Mock.GPIO as GPIO
 
@@ -27,9 +27,10 @@ logger = get_logger(__name__)
 
 
 class GatewayconfigApp:
-    def __init__(self, sentry_dsn, balena_app_name, balena_device_uuid, variant, eth0_mac_address_filepath, wlan0_mac_address_filepath,
-        diagnostics_json_url, ethernet_is_online_filepath, firmware_version
-    ):
+    def __init__(self, sentry_dsn, balena_app_name, balena_device_uuid, variant, eth0_mac_address_filepath,
+                 wlan0_mac_address_filepath, diagnostics_json_url, ethernet_is_online_filepath,
+                 firmware_version
+                 ):
 
         self.variant = variant
         self.variant_details = variant_definitions[variant]
@@ -43,15 +44,22 @@ class GatewayconfigApp:
         logger.debug("Read eth0 mac address %s and wlan0 %s" % (eth0_mac_address, wlan0_mac_address))
         self.shared_state.load_public_key()
 
-        self.bluetooth_services_processor = BluetoothServicesProcessor(eth0_mac_address, wlan0_mac_address, firmware_version, ethernet_is_online_filepath, self.shared_state)
+        self.bluetooth_services_processor = BluetoothServicesProcessor(
+                eth0_mac_address, wlan0_mac_address,
+                firmware_version, ethernet_is_online_filepath,
+                self.shared_state
+        )
         self.led_processor = LEDProcessor(self.status_led, self.shared_state)
         self.diagnostics_processor = DiagnosticsProcessor(
                 diagnostics_json_url,
                 self.shared_state
         )
         self.wifi_processor = WifiProcessor(self.shared_state)
-        self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(eth0_mac_address, self.shared_state, self.variant_details)
-
+        self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(
+                eth0_mac_address,
+                self.shared_state,
+                self.variant_details
+        )
 
     def start(self):
         logger.debug("Starting ConfigApp")
@@ -74,8 +82,8 @@ class GatewayconfigApp:
 
     def init_sentry(self, sentry_dsn, balena_app_name, balena_device_uuid, variant):
         sentry_sdk.init(sentry_dsn, environment=balena_app_name)
-        sentry_sdk.set_user({ "id": balena_device_uuid })
-        sentry_sdk.set_context("variant", { variant })
+        sentry_sdk.set_user({"id": balena_device_uuid})
+        sentry_sdk.set_context("variant", {variant})
 
     def init_nmcli(self):
         nmcli_custom.disable_use_sudo()
@@ -83,7 +91,7 @@ class GatewayconfigApp:
     def init_gpio(self):
         if is_raspberry_pi():
             self.user_button = Button(self.get_button_pin(), hold_time=USER_BUTTON_HOLD_SECONDS)
-            self.user_button.when_held= self.start_bluetooth_advertisement
+            self.user_button.when_held = self.start_bluetooth_advertisement
             self.status_led = LED(self.get_status_led_pin())
         else:
             logger.warn("LEDs and buttons are disabled. GPIO not yet supported on this device.")
@@ -122,4 +130,3 @@ class GatewayconfigApp:
 
     def get_status_led_pin(self):
         return self.variant_details['STATUS']
-

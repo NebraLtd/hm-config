@@ -93,7 +93,7 @@ NM_DEVICE_STATE_FAILED = "120"
 # https://github.com/helium/hotspot-app/blob/75df9970088606b0cc919929edc86764cf814668/src/features/hotspots/settings/WifiSetup.tsx#L26
 WIFI_CONNECTED = "connected"
 WIFI_ERROR = "error"
-WIFI_INVALID_PASSWORD = "invalid"
+WIFI_INVALID_PASSWORD = "invalid"  # nosec B105:hardcoded_password_string false positive
 
 # WiFi Status Mapping
 WIFI_STATUSES = {

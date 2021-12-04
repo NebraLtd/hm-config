@@ -16,6 +16,7 @@ DEFAULT_SERVICE_UUID = '0fda92b2-44a2-4af2-84f5-fa682baa2b8d'
 VALID_LE_ADVERTISEMENT_IFACE = 'org.bluez.LEAdvertisement1'
 INVALID_LE_ADVERTISEMENT_IFACE = 'org.fake.iface'
 
+
 class TestBluetoothConnectionAdvertisement(TestCase):
 
     # Prevent error log diff from being trimmed
@@ -42,7 +43,7 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         )
 
     def test_name_no_friendly(self):
-        variant_details = { 'FRIENDLY': 'WALRUS' }
+        variant_details = {'FRIENDLY': 'WALRUS'}
         advertisement = BluetoothConnectionAdvertisement(105, 'A1:B2:C3:DD:E5:F6', 'peripheral_', variant_details)
         self.assertEqual(
             advertisement.local_name,

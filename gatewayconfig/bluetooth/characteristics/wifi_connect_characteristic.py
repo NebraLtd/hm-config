@@ -1,5 +1,3 @@
-import dbus
-
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.logger import get_logger
@@ -74,7 +72,7 @@ class WifiConnectCharacteristic(Characteristic):
             try:
                 self.connect_to_wifi(self.wifi_service, self.wifi_password)
             except Exception:
-                pass
+                logger.exception("Wifi connect failed for unknown reason")
 
             # Notify wifi status
             wifi_status = self.check_wifi_status()

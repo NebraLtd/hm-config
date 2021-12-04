@@ -15,11 +15,12 @@ ADVERTISEMENT_OFF_SLEEP_SECONDS = 5
 class BluetoothAdvertisementProcessor:
     def __init__(self, eth0_mac_address, shared_state, variant_details):
         self.shared_state = shared_state
-        self.connection_advertisement = BluetoothConnectionAdvertisement(ADVERTISEMENT_INDEX, eth0_mac_address, ADVERTISEMENT_TYPE, variant_details)
+        self.connection_advertisement = BluetoothConnectionAdvertisement(ADVERTISEMENT_INDEX, eth0_mac_address,
+                                                                         ADVERTISEMENT_TYPE, variant_details)
 
     def run(self):
         logger.debug("Running BluetoothAdvertisementProcessor")
-        
+
         while True:
             if(self.shared_state.should_advertise_bluetooth is True):
                 # Prepare to advertise by first scanning wifi and stopping any existing connections
