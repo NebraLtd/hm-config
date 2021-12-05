@@ -7,6 +7,7 @@ from gatewayconfig.logger import get_logger
 logger = get_logger(__name__)
 MANUFACTURER_NAME = "Nebra LTD."
 
+
 class ManufacturerNameCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(

@@ -2,7 +2,8 @@ import os
 import logging
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG")
-_log_format = f"%(asctime)s - [%(levelname)s] - %(name)s - (%(filename)s).%(funcName)s -- %(pathname)s:(%(lineno)d) - %(message)s"
+_log_format = ("%(asctime)s - [%(levelname)s] - %(name)s - (%(filename)s).%(funcName)s "
+               "-- %(pathname)s:(%(lineno)d) - %(message)s")
 
 
 def get_stream_handler():

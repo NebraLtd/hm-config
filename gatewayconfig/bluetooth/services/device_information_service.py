@@ -4,6 +4,7 @@ from gatewayconfig.bluetooth.characteristics.firmware_revision_characteristic im
 from gatewayconfig.bluetooth.characteristics.serial_number_characteristic import SerialNumberCharacteristic
 import gatewayconfig.constants as constants
 
+
 class DeviceInformationService(Service):
     # Service that provides basic information
     def __init__(self, index, eth0_mac_address):

@@ -35,7 +35,7 @@ class WifiServicesCharacteristic(Characteristic):
                 if(is_valid_ssid(ssid_str)):
                     logger.debug("%s is a valid ssid" % ssid_str)
                     ssid_unknown = ssid_str not in known_wifi_services.services
-                    
+
                     if(ssid_unknown):
                         logger.debug("%s ssid is unknown" % ssid_str)
                         known_wifi_services.services.append(ssid_str)
@@ -54,4 +54,3 @@ class WifiServicesCharacteristic(Characteristic):
 
         except Exception:
             logger.exception('WifiServicesCharacteristic failed for unknown reason')
-

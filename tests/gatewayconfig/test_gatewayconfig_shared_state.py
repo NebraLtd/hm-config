@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 
+
 class TestGatewayconfigSha(TestCase):
 
     def test_init(self):
@@ -16,9 +17,11 @@ class TestGatewayconfigSha(TestCase):
 
     def test_to_s(self):
         shared_state = GatewayconfigSharedState()
-        self.assertEqual(shared_state.to_s(), 
-            '{"wifi_list_cache": [], "should_scan_wifi": false, "should_advertise_bluetooth": true, "is_advertising_bluetooth": false, "are_diagnostics_ok": false, "public_key": "Unavailable"}') 
-    
+        self.assertEqual(shared_state.to_s(),
+                         '{"wifi_list_cache": [], "should_scan_wifi": false, "should_advertise_bluetooth": true, '
+                         '"is_advertising_bluetooth": false, "are_diagnostics_ok": false, "public_key": "Unavailable"}'
+                         )
+
     @patch('gatewayconfig.gatewayconfig_shared_state.get_public_keys_rust', return_value={'key': 'foo'})
     def test_load_public_key(self, _):
         shared_state = GatewayconfigSharedState()

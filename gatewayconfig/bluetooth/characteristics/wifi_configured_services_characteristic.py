@@ -22,7 +22,6 @@ class WifiConfiguredServicesCharacteristic(Characteristic):
         self.shared_state = shared_state
         # logger.debug("Constructed WifiConfiguredServicesCharacteristic %s" % self.shared_state.to_s())
 
-
     def ReadValue(self, options):
         logger.debug("Read Wifi CONFIGURED Services")
         try:

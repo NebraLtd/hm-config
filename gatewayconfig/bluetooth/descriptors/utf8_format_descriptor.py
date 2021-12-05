@@ -2,6 +2,7 @@ import dbus
 from lib.cputemp.service import Descriptor
 import gatewayconfig.constants as constants
 
+
 class UTF8FormatDescriptor(Descriptor):
 
     def __init__(self, characteristic):

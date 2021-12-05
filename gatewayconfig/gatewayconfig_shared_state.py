@@ -5,6 +5,7 @@ from hm_pyhelper.logger import get_logger
 LOGGER = get_logger(__name__)
 PUBLIC_KEY_UNAVAILABLE = 'Unavailable'
 
+
 # Context is shared between multiple threads/processes.
 # This class simplifies and centralizes read/write of the state:
 class GatewayconfigSharedState:

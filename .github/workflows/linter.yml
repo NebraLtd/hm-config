@@ -45,10 +45,10 @@ jobs:
       # Run Linter against code base #
       ################################
       - name: Lint Code Base
-        uses: github/super-linter@v3
+        uses: github/super-linter/slim@v4
         env:
           VALIDATE_ALL_CODEBASE: true
-          # VALIDATE_PYTHON_FLAKE8: true
+          VALIDATE_PYTHON_FLAKE8: true
           VALIDATE_BASH: true
           VALIDATE_JSON: true
           VALIDATE_DOCKERFILE_HADOLINT: true

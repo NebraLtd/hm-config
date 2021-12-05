@@ -1,5 +1,4 @@
 import dbus
-import os
 from time import sleep
 
 from lib.cputemp.service import Characteristic

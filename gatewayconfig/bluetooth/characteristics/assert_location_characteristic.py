@@ -71,8 +71,9 @@ class AssertLocationCharacteristic(Characteristic):
             fee = assert_location_details.fee
             payer = assert_location_details.payer
 
-            logger.debug("Going to assert location for h3 %s, owner %s, nonce %s, amount %s, fee %s, payer %s" % 
-                (h3_string, owner, nonce, amount, fee, payer))
+            logger.debug("Going to assert location for h3 %s, owner %s, nonce %s, amount %s, fee %s, payer %s" %
+                         (h3_string, owner, nonce, amount, fee, payer))
+
             miner_assert_request = miner_interface.AssertLocation(h3_string, owner, nonce, amount, fee, payer)
 
             logger.debug("Asserted location")

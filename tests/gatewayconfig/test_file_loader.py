@@ -3,6 +3,7 @@ from unittest.mock import patch, mock_open
 
 from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_address, read_ethernet_is_online
 
+
 class TestFileLoader(TestCase):
 
     @patch(
