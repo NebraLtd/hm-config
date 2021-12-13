@@ -22,8 +22,10 @@ SOFTWARE.
 
 import dbus
 import dbus.service
-
+from hm_pyhelper.logger import get_logger
 from lib.cputemp.bletools import BleTools
+
+logger = get_logger(__name__)
 
 BLUEZ_SERVICE_NAME = "org.bluez"
 LE_ADVERTISING_MANAGER_IFACE = "org.bluez.LEAdvertisingManager1"
@@ -134,12 +136,21 @@ class Advertisement(dbus.service.Object):
     def register(self):
         bus = BleTools.get_bus()
         adapter = BleTools.find_adapter(bus)
+        if not adapter:
+            logger.error(
+                "Unable to start Advertisement: No Bluetooth adapter.")
+            return
 
         ad_manager = dbus.Interface(
             bus.get_object(
                 BLUEZ_SERVICE_NAME,
                 adapter),
             LE_ADVERTISING_MANAGER_IFACE)
+        if not ad_manager:
+            logger.error("Unable to start Advertisement: "
+                         "No Bluetooth Advertising Manager.")
+            return
+
         ad_manager.RegisterAdvertisement(
             self.get_path(),
             {},
