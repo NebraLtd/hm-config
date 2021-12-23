@@ -23,15 +23,17 @@ import dbus
 import dbus.service
 import dbus.mainloop.glib
 import dbus.exceptions
-
 import array
+from hm_pyhelper.logger import get_logger
+from lib.cputemp.bletools import BleTools
+
+logger = get_logger(__name__)
 
 try:
     from gi.repository import GObject
 except ImportError:
     import gobject as GObject
 
-from lib.cputemp.bletools import BleTools
 
 BLUEZ_SERVICE_NAME = "org.bluez"
 GATT_MANAGER_IFACE = "org.bluez.GattManager1"
@@ -93,10 +95,17 @@ class Application(dbus.service.Object):
 
     def register(self):
         adapter = BleTools.find_adapter(self.bus)
+        if not adapter:
+            logger.error(
+                "Unable to start Bluetooth application: No Bluetooth Adapter")
+            return
 
         service_manager = dbus.Interface(
                 self.bus.get_object(BLUEZ_SERVICE_NAME, adapter),
                 GATT_MANAGER_IFACE)
+        if not service_manager:
+            logger.error("No Bluetooth Service Manager")
+            return
 
         service_manager.RegisterApplication(
             self.get_path(),
