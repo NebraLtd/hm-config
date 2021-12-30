@@ -6,10 +6,13 @@ RETRY_SLEEP_SECONDS = 60
 
 
 def read_eth0_mac_address(eth0_mac_address_filepath):
-    return open(eth0_mac_address_filepath) \
-            .readline() \
-            .strip() \
-            .upper()
+    try:
+        return open(eth0_mac_address_filepath) \
+                .readline() \
+                .strip() \
+                .upper()
+    except FileNotFoundError:
+        return "FF:FF:FF:FF:FF:FF"
 
 
 def read_wlan0_mac_address(wlan0_mac_address_filepath):

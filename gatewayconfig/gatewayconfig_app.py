@@ -30,7 +30,7 @@ class GatewayconfigApp:
 
         self.variant = variant
         self.variant_details = variant_definitions[variant]
-        self.init_sentry(sentry_dsn, balena_app_name, balena_device_uuid, variant)
+        self.init_sentry(sentry_dsn, balena_app_name, balena_device_uuid, variant, firmware_version)
         self.shared_state = GatewayconfigSharedState()
         self.init_nmcli()
         self.init_gpio(variant)
@@ -77,8 +77,12 @@ class GatewayconfigApp:
         # Quits the cputemp application
         self.bluetooth_services_processor.quit()
 
-    def init_sentry(self, sentry_dsn, balena_app_name, balena_device_uuid, variant):
-        sentry_sdk.init(sentry_dsn, environment=balena_app_name)
+    def init_sentry(self, sentry_dsn, balena_app_name, balena_device_uuid, variant, firmware_version):
+        sentry_sdk.init(
+            sentry_dsn,
+            environment=balena_app_name,
+            release=f"hm-config@{firmware_version}"
+        )
         sentry_sdk.set_user({"id": balena_device_uuid})
         sentry_sdk.set_context("variant", {variant})
 
