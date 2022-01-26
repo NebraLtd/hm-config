@@ -27,6 +27,6 @@ if [ "$prevent_start" = 1 ]; then
 else
 	# Check dbus container is ready and then launch config
     wait_for_dbus \
-        && python gatewayconfig \
-        && upnpc -e "Nebra Helium" -r 44158 TCP
+        && upnpc -e "Nebra Helium" -r 44158 TCP \
+        && python gatewayconfig
 fi
