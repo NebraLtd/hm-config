@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+upnpc -e "Nebra Helium" -r 44158 TCP
+
 # Wait for the diagnostics app to be loaded
 until wget -q -T 10 -O - http://localhost/json > /dev/null 2>&1
 do
@@ -27,6 +29,5 @@ if [ "$prevent_start" = 1 ]; then
 else
 	# Check dbus container is ready and then launch config
     wait_for_dbus \
-        && upnpc -e "Nebra Helium" -r 44158 TCP \
         && python gatewayconfig
 fi
