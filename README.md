@@ -9,7 +9,7 @@ Directory layout:
 - `example/`: Files that are examples of what will be loaded on an actual hotspot. These files are especially useful for testing without a full hotspot.
 - `gatewayconfig/`: The main Python application.
 - `lib/`: Python files copied from other reposittories.
-- `protos/`: Protobuf definitions. Generated protos go to `gatewayconfgi/protos/` by default.
+- `protos/`: Protobuf definitions. Generated protos go to `gatewayconfig/protos/` by default.
 - `tests/`: Test files.
 
 ## Local development environment
