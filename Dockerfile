@@ -72,7 +72,7 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # hadolint ignore=DL3008, DL4006
-RUN export DISTRO=buster-testing && \
+RUN export DISTRO=buster-stable && \
     echo "deb http://apt.radxa.com/$DISTRO/ ${DISTRO%-*} main" | tee -a /etc/apt/sources.list.d/apt-radxa-com.list && \
     wget -nv -O - apt.radxa.com/$DISTRO/public.key | apt-key add - && \
     apt-get update && \
