@@ -1,6 +1,9 @@
 import json
+import threading
+
 from hm_pyhelper.miner_param import get_public_keys_rust
 from hm_pyhelper.logger import get_logger
+
 
 LOGGER = get_logger(__name__)
 PUBLIC_KEY_UNAVAILABLE = 'Unavailable'
@@ -13,13 +16,17 @@ class GatewayconfigSharedState:
     def __init__(self):
         self.wifi_list_cache = []
         self.should_scan_wifi = False
-        self.should_advertise_bluetooth = True
         self.is_advertising_bluetooth = False
         self.are_diagnostics_ok = False
         self.public_key = PUBLIC_KEY_UNAVAILABLE
+        self.should_advertise_bluetooth_condition_event = threading.Event()
+        self.should_advertise_bluetooth_condition_event.set()
 
     def to_s(self):
-        return json.dumps(vars(self))
+        serial_dict = self.__dict__.copy()
+        cv_event = self.should_advertise_bluetooth_condition_event.is_set()
+        serial_dict['should_advertise_bluetooth_condition_event'] = cv_event
+        return json.dumps(serial_dict)
 
     def load_public_key(self):
         """
