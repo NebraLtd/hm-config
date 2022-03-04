@@ -25,7 +25,7 @@ class WifiConnectCharacteristic(Characteristic):
 
         # Credential to connect to a WiFi
         self.wifi_service = ""
-        self.wifi_password = ""
+        self.wifi_password = ""  # nosec B105
 
     def check_wifi_status(self):
         # Check the current wi-fi connection status
@@ -82,7 +82,7 @@ class WifiConnectCharacteristic(Characteristic):
 
             # wipe out the wifi details
             self.wifi_service = ""
-            self.wifi_password = ""
+            self.wifi_password = ""  # nosec B105
 
     def StopNotify(self):
         self.notifying = False

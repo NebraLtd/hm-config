@@ -4,7 +4,7 @@ colorzero==2.0
 dbus-python==1.2.16
 gpiozero==1.6.2
 h3==3.7.2
-hm-pyhelper==0.13.12
+hm-pyhelper==0.13.13
 nmcli==0.5.0
 protobuf==3.19.3
 pycairo==1.20.1
