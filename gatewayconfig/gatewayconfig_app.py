@@ -134,7 +134,7 @@ class GatewayconfigApp:
 
     def start_bluetooth_advertisement(self):
         LOGGER.debug("Starting bluetooth advertisement")
-        self.shared_state.should_advertise_bluetooth = True
+        self.shared_state.should_advertise_bluetooth_condition_event.set()
 
     def get_button_gpio(self):
         return self.variant_details['BUTTON']
