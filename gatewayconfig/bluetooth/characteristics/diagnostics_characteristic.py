@@ -1,6 +1,3 @@
-import dbus
-from time import sleep
-
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.logger import get_logger
@@ -11,8 +8,6 @@ import gatewayconfig.nmcli_custom as nmcli_custom
 import gatewayconfig.protos.diagnostics_pb2 as diagnostics_pb2
 import gatewayconfig.constants as constants
 
-DBUS_UNAVAILABLE_VALUE = "Loading..."
-DBUS_LOAD_SLEEP_SECONDS = 0.1
 logger = get_logger(__name__)
 
 
@@ -33,10 +28,8 @@ class DiagnosticsCharacteristic(Characteristic):
     def ReadValue(self, options):
         logger.debug('Read diagnostics')
         try:
-            p2pstatus = self.get_p2pstatus()
-
             # Update self.diagnostics_proto
-            self.update_diagnostics_proto(p2pstatus)
+            self.update_diagnostics_proto()
         except Exception as ex:
             logger.exception("Unexpected exception while trying to read diagnostics: %s" % str(ex))
 
@@ -52,10 +45,8 @@ class DiagnosticsCharacteristic(Characteristic):
         logger.debug('New Diagnostics Proto')
 
         self.diagnostics_proto = diagnostics_pb2.diagnostics_v1()
-        self.diagnostics_proto.diagnostics['connected'] = DBUS_UNAVAILABLE_VALUE
-        self.diagnostics_proto.diagnostics['dialable'] = DBUS_UNAVAILABLE_VALUE
-        self.diagnostics_proto.diagnostics['height'] = DBUS_UNAVAILABLE_VALUE
-        self.diagnostics_proto.diagnostics['nat_type'] = DBUS_UNAVAILABLE_VALUE
+
+        self.diagnostics_proto.diagnostics['height'] = "unavailable"
 
         self.diagnostics_proto.diagnostics['eth'] = str(eth0_mac_address)
         self.diagnostics_proto.diagnostics['wifi'] = str(wlan0_mac_address)
@@ -63,44 +54,17 @@ class DiagnosticsCharacteristic(Characteristic):
         self.diagnostics_proto.diagnostics['ip'] = ""
 
     # Update diagnostics_proto member variable
-    def update_diagnostics_proto(self, p2pstatus):
+    def update_diagnostics_proto(self):
         logger.debug('Update Diagnostics Proto')
 
-        if p2pstatus:
-            try:
-                self.diagnostics_proto.diagnostics['connected'] = str(p2pstatus[0][1])
-                self.diagnostics_proto.diagnostics['dialable'] = str(p2pstatus[1][1])
-                self.diagnostics_proto.diagnostics['height'] = str(p2pstatus[3][1])
-                self.diagnostics_proto.diagnostics['nat_type'] = str(p2pstatus[2][1])
-            except Exception as ex:
-                logger.exception("Unexpected exception while trying to read p2pstatus")
-                raise ex
+        # TODO:: update these two from grpc client
+        # height is available and connected might still have some diag value
+        # if they gateway-rs reports a valid validator uri, it can be assumed
+        # to be connected to blockchain I think
+        # self.diagnostics_proto.diagnostics['connected'] = str(p2pstatus[0][1])
+        # self.diagnostics_proto.diagnostics['height'] = str(p2pstatus[3][1])
 
         self.diagnostics_proto.diagnostics['ip'] = self.get_ip()
-
-    # Returns the p2pstatus or an empty string if there is a dbus failure
-    def get_p2pstatus(self):
-        logger.debug('Diagnostics miner_bus')
-        miner_bus = dbus.SessionBus()
-        logger.debug('Diagnostics miner_object')
-        miner_object = miner_bus.get_object('com.helium.Miner', '/')
-        sleep(DBUS_LOAD_SLEEP_SECONDS)
-        logger.debug('Diagnostics miner_interface')
-        miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
-        sleep(DBUS_LOAD_SLEEP_SECONDS)
-        logger.debug('Diagnostics p2pstatus')
-
-        try:
-            p2pstatus = miner_interface.P2PStatus()
-            logger.debug('DBUS P2P SUCCEED')
-            logger.debug(p2pstatus)
-        except dbus.exceptions.DBusException as ex:
-            p2pstatus = False
-            logger.warn('DBUS P2P FAIL')
-            raise ex
-
-        logger.debug("p2pstatus: %s" % p2pstatus)
-        return p2pstatus
 
     # Return the ETH IP address, or WLAN if it does not exist
     # 0.0.0.0 is the default value if neither ETH or WLAN IP available

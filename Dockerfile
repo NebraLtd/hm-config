@@ -26,7 +26,6 @@ RUN \
             python3-pip=18.1-5+rpt1 \
             wget=1.20.1-1.1 \
             python3-venv=3.7.3-1 \
-            miniupnpc \
             # The remaining dependencies are for PyGObject
             # https://pygobject.readthedocs.io/en/latest/getting_started.html#ubuntu-logo-ubuntu-debian-logo-debian
             libgirepository1.0-dev=1.58.3-2 \
@@ -55,8 +54,7 @@ RUN \
         libdbus-1-3=1.12.20-0+deb10u1 \
         network-manager=1.14.6-2+deb10u1 \
         python3-gi=3.30.4-1 \
-        python3-venv=3.7.3-1 \
-        miniupnpc
+        python3-venv=3.7.3-1
 
 # Nebra uses /opt by convention
 WORKDIR /opt/

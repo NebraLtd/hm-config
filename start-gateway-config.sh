@@ -1,16 +1,11 @@
 #!/usr/bin/env sh
 
-upnpc -e "Nebra Helium" -r 44158 TCP
-
 # Wait for the diagnostics app to be loaded
 until wget -q -T 10 -O - http://localhost/json > /dev/null 2>&1
 do
     echo "Diagnostics container not ready. Going to sleep."
     sleep 10
 done
-
-# Load dbus-wait script
-. ./dbus-wait.sh
 
 # Advertise on channels 37, 38 and 39
 echo 7 > /sys/kernel/debug/bluetooth/hci0/adv_channel_map
@@ -27,7 +22,5 @@ if [ "$prevent_start" = 1 ]; then
     echo "gatewayconfig will not be started. PREVENT_START_GATEWAYCONFIG=1"
     while true; do sleep 1000; done
 else
-	# Check dbus container is ready and then launch config
-    wait_for_dbus \
-        && python gatewayconfig
+    python gatewayconfig
 fi
