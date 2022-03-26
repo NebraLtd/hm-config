@@ -1,5 +1,5 @@
 PyGObject==3.40.1
-RPi.gpio==0.7.0
+RPi.gpio==0.7.1
 colorzero==2.0
 dbus-python==1.2.16
 gpiozero==1.6.2
