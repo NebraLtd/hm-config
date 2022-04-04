@@ -5,8 +5,6 @@ from unittest.mock import patch, mock_open
 from gpiozero import Device
 from gpiozero.pins.mock import MockFactory
 
-from gatewayconfig.gatewayconfig_app import GatewayconfigApp
-
 Device.pin_factory = MockFactory()
 
 ETHO_FILE_MOCK = 'A1:B2:C3:DD:E5:F6'
@@ -31,7 +29,10 @@ class TestGatewayconfigApp(TestCase):
     @patch('gatewayconfig.gpio.mraa_button.init_mraa_pin')
     def test_gpio_pins(self, mock_dbus_interface, mock_findadapter, mock_getbus,
                        mock_file, mock_diagnostics, mock_mraa_pin):
+        # importing GatewayConfigApp leads to calling is_rockpi()
+        # but environment is not patched at top of the file
         os.environ['BALENA_DEVICE_TYPE'] = 'raspberrypi3-64'
+        from gatewayconfig.gatewayconfig_app import GatewayconfigApp
         app = GatewayconfigApp('https://11111111111111119f8b0c9b118c415a@o111111.ingest.sentry.io/1111111',
                                'BALENA_APP_NAME', 'BALENA_DEVICE_UUID',
                                'NEBHNT-IN1', 'ETH0_MOCK_USED',
