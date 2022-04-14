@@ -1,3 +1,5 @@
+import threading
+
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.logger import get_logger
@@ -11,6 +13,30 @@ import gatewayconfig.constants as constants
 logger = get_logger(__name__)
 
 NOTIFY_TIMEOUT = 3000   # 3 seconds
+
+
+class CommandThread(threading.Thread):
+    def __init__(self, chrc):
+        super().__init__()
+        self.daemon = True
+        self.chrc = chrc
+
+    def run(self):
+        if self.chrc.wifi_service and self.chrc.wifi_password:
+            try:
+                self.chrc.connect_to_wifi(self.chrc.wifi_service, self.chrc.wifi_password)
+            except Exception as e:
+                logger.exception("Wifi connect failed: %s" % str(e))
+
+            # wipe out the wifi details
+            self.chrc.wifi_service = ""
+            self.chrc.wifi_password = ""  # nosec B105
+
+            # Notify wifi status
+            wifi_status = self.chrc.check_wifi_status()
+            value = string_to_dbus_encoded_byte_array(wifi_status)
+            self.chrc.PropertiesChanged(constants.GATT_CHRC_IFACE,
+                                        {"Value": value}, [])
 
 
 class WifiConnectCharacteristic(Characteristic):
@@ -68,22 +94,6 @@ class WifiConnectCharacteristic(Characteristic):
 
         self.add_timeout(NOTIFY_TIMEOUT, self.connect_to_wifi_timeout)
 
-        if self.wifi_service and self.wifi_password:
-            try:
-                self.connect_to_wifi(self.wifi_service, self.wifi_password)
-            except Exception:
-                logger.exception("Wifi connect failed for unknown reason")
-
-            # Notify wifi status
-            wifi_status = self.check_wifi_status()
-            value = string_to_dbus_encoded_byte_array(wifi_status)
-            self.PropertiesChanged(constants.GATT_CHRC_IFACE,
-                                   {"Value": value}, [])
-
-            # wipe out the wifi details
-            self.wifi_service = ""
-            self.wifi_password = ""  # nosec B105
-
     def StopNotify(self):
         self.notifying = False
 
@@ -97,6 +107,13 @@ class WifiConnectCharacteristic(Characteristic):
 
         self.wifi_service = str(wifi_details.service)
         self.wifi_password = str(wifi_details.password)
+
+        if self.wifi_service and self.wifi_password:
+            try:
+                cmd_thread = CommandThread(self)
+                cmd_thread.start()
+            except Exception as ex:
+                print(str(ex))
 
     def ReadValue(self, options):
         logger.debug('Read WiFi Connect')
