@@ -9,7 +9,6 @@ from gatewayconfig.logger import get_logger
 from gatewayconfig.processors.bluetooth_services_processor import BluetoothServicesProcessor
 from gatewayconfig.processors.led_processor import LEDProcessor
 from gatewayconfig.processors.diagnostics_processor import DiagnosticsProcessor
-from gatewayconfig.processors.wifi_processor import WifiProcessor
 from gatewayconfig.processors.bluetooth_advertisement_processor import BluetoothAdvertisementProcessor
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_address
@@ -50,7 +49,6 @@ class GatewayconfigApp:
                 diagnostics_json_url,
                 self.shared_state
         )
-        self.wifi_processor = WifiProcessor(self.shared_state)
         self.bluetooth_advertisement_processor = BluetoothAdvertisementProcessor(
                 eth0_mac_address,
                 self.shared_state,
@@ -114,7 +112,6 @@ class GatewayconfigApp:
         self.bluetooth_services_thread = threading.Thread(target=self.bluetooth_services_processor.run)
         self.led_thread = threading.Thread(target=self.led_processor.run)
         self.diagnostics_thread = threading.Thread(target=self.diagnostics_processor.run)
-        self.wifi_thread = threading.Thread(target=self.wifi_processor.run)
         self.bluetooth_advertisement_thread = threading.Thread(target=self.bluetooth_advertisement_processor.run)
 
         self.led_thread.daemon = True
@@ -125,9 +122,6 @@ class GatewayconfigApp:
 
         # self.diagnostics_thread.daemon = True
         self.diagnostics_thread.start()
-
-        # self.wifi_thread.daemon = True
-        self.wifi_thread.start()
 
         # self.bluetooth_advertisement_thread.daemon = True
         self.bluetooth_advertisement_thread.start()
