@@ -10,7 +10,7 @@ import gatewayconfig.constants as constants
 
 logger = get_logger(__name__)
 
-NOTIFY_TIMEOUT = 60
+NOTIFY_TIMEOUT = 3000   # 3 seconds
 
 
 class WifiConnectCharacteristic(Characteristic):
