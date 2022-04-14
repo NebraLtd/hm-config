@@ -1,4 +1,4 @@
-
+from gatewayconfig import nmcli_custom
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import is_valid_ssid, string_to_dbus_byte_array
@@ -28,9 +28,9 @@ class WifiConfiguredServicesCharacteristic(Characteristic):
             configured_wifi_services = wifi_services_pb2.wifi_services_v1()
 
             # logger.debug("Read configured_wifi_services %s" % self.shared_state.to_s())
-            wifi_list_cache = self.shared_state.wifi_list_cache
+            nmcli_custom.device.wifi_rescan()
+            wifi_list_cache = nmcli_custom.device.wifi()
 
-            logger.debug("Looping through wifi cache of %s objects" % len(wifi_list_cache))
             for network in wifi_list_cache:
                 ssid_str = str(network.ssid)
                 logger.debug("Considering network %s" % ssid_str)
