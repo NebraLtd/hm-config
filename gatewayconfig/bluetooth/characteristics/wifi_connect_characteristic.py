@@ -6,7 +6,7 @@ from gatewayconfig.logger import get_logger
 from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
 from gatewayconfig.bluetooth.descriptors.wifi_connect_descriptor import WifiConnectDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
-import gatewayconfig.nmcli_custom as nmcli_custom
+import lib.nmcli_custom as nmcli_custom
 import gatewayconfig.protos.wifi_connect_pb2 as wifi_connect_pb2
 import gatewayconfig.constants as constants
 
