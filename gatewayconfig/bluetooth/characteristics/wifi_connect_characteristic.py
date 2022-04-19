@@ -67,10 +67,6 @@ class WifiConnectCharacteristic(Characteristic):
 
     def connect_to_wifi(self, wifi_service, wifi_password):
         logger.debug('Connect to WiFi')
-        if self.check_wifi_status() == constants.WIFI_CONNECTED:
-            nmcli_custom.device.disconnect('wlan0')
-            logger.debug('Disconnected From WiFi')
-
         nmcli_custom.device.wifi_connect(wifi_service, wifi_password)
 
     def connect_to_wifi_timeout(self):
