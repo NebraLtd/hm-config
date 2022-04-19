@@ -11,6 +11,7 @@ import gatewayconfig.constants as constants
 
 logger = get_logger(__name__)
 
+NOTIFY_TIMEOUT = 1000   # 1 second
 
 class WifiRemoveCharacteristic(Characteristic):
 
@@ -41,7 +42,7 @@ class WifiRemoveCharacteristic(Characteristic):
 
         value = string_to_dbus_encoded_byte_array(self.wifi_status)
         self.PropertiesChanged(constants.GATT_CHRC_IFACE, {"Value": value}, [])
-        self.add_timeout(30000, self.wifi_remove_callback)
+        self.add_timeout(NOTIFY_TIMEOUT, self.wifi_remove_callback)
 
     def StopNotify(self):
         self.notifying = False
