@@ -1,4 +1,5 @@
 import threading
+from time import sleep
 
 from lib.cputemp.service import Characteristic
 
@@ -12,7 +13,7 @@ import gatewayconfig.constants as constants
 
 logger = get_logger(__name__)
 
-NOTIFY_TIMEOUT = 3000   # 3 seconds
+NOTIFY_TIMEOUT = 1000   # 1 second
 
 
 class CommandThread(threading.Thread):
