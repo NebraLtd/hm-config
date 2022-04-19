@@ -13,6 +13,7 @@ logger = get_logger(__name__)
 
 NOTIFY_TIMEOUT = 1000   # 1 second
 
+
 class WifiRemoveCharacteristic(Characteristic):
 
     def __init__(self, service):
