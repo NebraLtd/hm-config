@@ -25,6 +25,7 @@ class WifiSSIDCharacteristic(Characteristic):
         logger.debug('Read WiFi SSID')
         active_connection = ""
 
+        nmcli_custom.device.wifi_rescan()
         wifi_list_cache = nmcli_custom.device.wifi()
 
         for network in wifi_list_cache:

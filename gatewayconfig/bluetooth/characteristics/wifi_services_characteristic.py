@@ -28,6 +28,7 @@ class WifiServicesCharacteristic(Characteristic):
         try:
             known_wifi_services = wifi_services_pb2.wifi_services_v1()
 
+            nmcli_custom.device.wifi_rescan()
             wifi_list_cache = nmcli_custom.device.wifi()
 
             for network in wifi_list_cache:
