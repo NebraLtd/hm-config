@@ -1,6 +1,6 @@
 from typing import List, Union
 from nmcli import SystemCommand
-from subprocess import CalledProcessError
+from subprocess import CalledProcessError   # nosec
 from nmcli._exception import (
     ConnectionActivateFailedException,
     ConnectionDeactivateFailedException,
