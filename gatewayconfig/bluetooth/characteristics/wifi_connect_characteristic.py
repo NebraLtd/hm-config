@@ -25,6 +25,7 @@ class CommandThread(threading.Thread):
     def run(self):
         if self.chrc.wifi_service and self.chrc.wifi_password:
             try:
+                sleep(3)
                 self.chrc.connect_to_wifi(self.chrc.wifi_service, self.chrc.wifi_password)
             except Exception as e:
                 logger.exception("Wifi connect failed: %s" % str(e))
