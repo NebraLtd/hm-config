@@ -20,28 +20,21 @@ class WifiConfiguredServicesCharacteristic(Characteristic):
         self.add_descriptor(WifiConfiguredServicesDescriptor(self))
         self.add_descriptor(OpaqueStructureDescriptor(self))
         self.shared_state = shared_state
-        # logger.debug("Constructed WifiConfiguredServicesCharacteristic %s" % self.shared_state.to_s())
 
     def ReadValue(self, options):
         logger.debug("Read Wifi CONFIGURED Services")
         try:
             configured_wifi_services = wifi_services_pb2.wifi_services_v1()
 
-            # logger.debug("Read configured_wifi_services %s" % self.shared_state.to_s())
-            nmcli_custom.device.wifi_rescan()
-            wifi_list_cache = nmcli_custom.device.wifi()
+            connections = nmcli_custom.connection()
+            for connection in connections:
+                logger.debug("Considering connection %s" % connection.name)
 
-            for network in wifi_list_cache:
-                ssid_str = str(network.ssid)
-                logger.debug("Considering network %s" % ssid_str)
-
-                if(is_valid_ssid(ssid_str)):
-                    logger.debug("%s is a valid SSID" % ssid_str)
-                    if(network.in_use):
-                        logger.debug("Adding network %s to configured wifi services")
-                        configured_wifi_services.services.append(ssid_str)
+                if connection.conn_type == 'wifi':
+                    logger.debug("Adding connection %s to configured wifi services")
+                    configured_wifi_services.services.append(connection.name)
 
             return string_to_dbus_byte_array(configured_wifi_services.SerializeToString())
 
-        except Exception:
-            logger.exception("Wifi configured characteristic failed for unknown reason")
+        except Exception as e:
+            logger.exception("Wifi configured characteristic failed for unknown reason: %s" % str(e))
