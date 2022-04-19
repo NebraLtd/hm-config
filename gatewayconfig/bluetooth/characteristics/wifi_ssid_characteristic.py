@@ -1,4 +1,4 @@
-from gatewayconfig import nmcli_custom
+from lib import nmcli_custom
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import is_valid_ssid, string_to_dbus_encoded_byte_array

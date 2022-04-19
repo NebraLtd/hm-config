@@ -7,7 +7,7 @@ from gatewayconfig.logger import get_logger
 from gatewayconfig.helpers import string_to_dbus_byte_array
 from gatewayconfig.bluetooth.descriptors.diagnostics_descriptor import DiagnosticsDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
-import gatewayconfig.nmcli_custom as nmcli_custom
+import lib.nmcli_custom as nmcli_custom
 import gatewayconfig.protos.diagnostics_pb2 as diagnostics_pb2
 import gatewayconfig.constants as constants
 

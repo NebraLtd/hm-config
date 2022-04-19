@@ -14,7 +14,7 @@ from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_address
 from gatewayconfig.gpio.mraa_button import MraaButton
 from gatewayconfig.gpio.mraa_led import MraaLED
-import gatewayconfig.nmcli_custom as nmcli_custom
+import lib.nmcli_custom as nmcli_custom
 
 
 USER_BUTTON_HOLD_SECONDS = 2
