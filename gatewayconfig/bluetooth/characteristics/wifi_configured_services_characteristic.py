@@ -1,7 +1,7 @@
 from lib import nmcli_custom
 from lib.cputemp.service import Characteristic
 
-from gatewayconfig.helpers import is_valid_ssid, string_to_dbus_byte_array
+from gatewayconfig.helpers import string_to_dbus_byte_array
 from gatewayconfig.logger import get_logger
 from gatewayconfig.bluetooth.descriptors.wifi_configured_services_descriptor import WifiConfiguredServicesDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
