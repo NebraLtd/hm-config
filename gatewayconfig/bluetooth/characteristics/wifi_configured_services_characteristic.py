@@ -34,6 +34,9 @@ class WifiConfiguredServicesCharacteristic(Characteristic):
                     logger.debug("Adding connection %s to configured wifi services")
                     configured_wifi_services.services.append(connection.name)
 
+                    # Return only the first Wifi connection
+                    break
+
             return string_to_dbus_byte_array(configured_wifi_services.SerializeToString())
 
         except Exception as e:
