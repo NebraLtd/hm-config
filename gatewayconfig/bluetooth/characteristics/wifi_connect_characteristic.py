@@ -63,13 +63,19 @@ class WifiConnectCharacteristic(Characteristic):
         if self.connecting:
             wifi_status = constants.WIFI_CONNECTING
         else:
-            nm_state = str(nmcli_custom.device.show('wlan0')['GENERAL.STATE'].split(" ")[0])
+            # Convert nmcli device state into bluetooth response
+            try:
+                nmcli_devices = nmcli_custom.device.status()
+                wifi_device = next(filter(lambda x: x.device_type == 'wifi', nmcli_devices))
+                if wifi_device.state == 'connected':
+                    wifi_status = constants.WIFI_CONNECTED
+                else:
+                    wifi_status = constants.WIFI_INVALID_PASSWORD
+            except Exception as e:
+                logger.exception("Getting wifi connection status failed for unknown reason: %s" % str(e))
+                wifi_status = constants.WIFI_ERROR
 
-            # Convert the network manager device state into wifi status response
-            wifi_status = constants.WIFI_STATUSES.get(nm_state,
-                                                      constants.WIFI_ERROR)
         logger.debug("Wifi status is %s" % wifi_status)
-
         return wifi_status
 
     def connect_to_wifi(self, wifi_service, wifi_password):
