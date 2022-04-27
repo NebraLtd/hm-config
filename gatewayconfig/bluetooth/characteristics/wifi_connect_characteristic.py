@@ -110,12 +110,10 @@ class WifiConnectCharacteristic(Characteristic):
         self.notifying = False
 
     def WriteValue(self, value, options):
-        logger.debug("Write WiFi Connect %s" % value)
+        logger.debug("Write WiFi Connect")
 
         wifi_details = wifi_connect_pb2.wifi_connect_v1()
         wifi_details.ParseFromString(bytes(value))
-
-        logger.debug(str(wifi_details.service))
 
         self.wifi_service = str(wifi_details.service)
         self.wifi_password = str(wifi_details.password)
@@ -127,8 +125,9 @@ class WifiConnectCharacteristic(Characteristic):
             try:
                 cmd_thread = CommandThread(self)
                 cmd_thread.start()
-            except Exception as ex:
-                print(str(ex))
+                logger.debug("Connecting to %s is started" % str(wifi_details.service))
+            except Exception as e:
+                logger.debug("Connecting to %s is failed" % str(e))
 
     def ReadValue(self, options):
         logger.debug('Read WiFi Connect')
