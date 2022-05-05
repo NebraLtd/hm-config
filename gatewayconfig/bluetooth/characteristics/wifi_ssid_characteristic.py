@@ -1,4 +1,4 @@
-
+from lib import nmcli_custom
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.helpers import is_valid_ssid, string_to_dbus_encoded_byte_array
@@ -24,7 +24,11 @@ class WifiSSIDCharacteristic(Characteristic):
 
         logger.debug('Read WiFi SSID')
         active_connection = ""
-        for network in self.shared_state.wifi_list_cache:
+
+        nmcli_custom.device.wifi_rescan()
+        wifi_list_cache = nmcli_custom.device.wifi()
+
+        for network in wifi_list_cache:
             ssid_str = str(network.ssid)
 
             if(is_valid_ssid(ssid_str)):

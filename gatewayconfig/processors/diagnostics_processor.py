@@ -1,6 +1,6 @@
 import json
 import requests
-from retry import retry
+from time import sleep
 
 from gatewayconfig.logger import get_logger
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
@@ -14,11 +14,12 @@ class DiagnosticsProcessor:
         self.shared_state = shared_state
         self.diagnostics_json_url = diagnostics_json_url
 
-    @retry(delay=DIAGNOSTICS_REFRESH_SECONDS)
     def run(self):
-        logger.debug("Running DiagnosticsProcessor")
-        logger.debug(self.shared_state)
-        self.read_diagnostics()
+        while True:
+            logger.debug("Running DiagnosticsProcessor")
+            self.read_diagnostics()
+            logger.debug(self.shared_state)
+            sleep(DIAGNOSTICS_REFRESH_SECONDS)
 
     def read_diagnostics_and_get_ok(self):
         logger.debug("Reading diagnostics from %s" % self.diagnostics_json_url)

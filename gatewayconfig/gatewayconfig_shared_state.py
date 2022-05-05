@@ -14,7 +14,6 @@ PUBLIC_KEY_UNAVAILABLE = 'Unavailable'
 class GatewayconfigSharedState:
 
     def __init__(self):
-        self.wifi_list_cache = []
         self.should_scan_wifi = False
         self.is_advertising_bluetooth = False
         self.are_diagnostics_ok = False

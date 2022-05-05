@@ -1,13 +1,6 @@
-from subprocess import CalledProcessError  # nosec
 from typing import List, Union
-
-from nmcli import GeneralControl
-from nmcli import NetworkingControl
-from nmcli import RadioControl
 from nmcli import SystemCommand
-from nmcli import DeviceControl
-from nmcli import ConnectionControl
-
+from subprocess import CalledProcessError   # nosec
 from nmcli._exception import (
     ConnectionActivateFailedException,
     ConnectionDeactivateFailedException,
@@ -72,22 +65,3 @@ class CustomSystemCommand(SystemCommand):
             return r.stdout.decode('utf-8')
         except CalledProcessError as e:
             self._handle_error(e)
-
-
-_syscmd = CustomSystemCommand()
-connection = ConnectionControl(_syscmd)
-device = DeviceControl(_syscmd)
-general = GeneralControl(_syscmd)
-networking = NetworkingControl(_syscmd)
-radio = RadioControl(_syscmd)
-
-
-def disable_use_sudo():
-    _syscmd.disable_use_sudo()
-
-
-def enable_use_sudo():
-    _syscmd._use_sudo = True
-
-
-disable_use_sudo()

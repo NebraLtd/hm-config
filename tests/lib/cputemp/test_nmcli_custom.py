@@ -3,9 +3,9 @@ from unittest.mock import MagicMock
 
 # Test Cases
 from subprocess import CalledProcessError  # nosec
-from gatewayconfig.nmcli_custom import CustomSystemCommand, enable_use_sudo
-from gatewayconfig.nmcli_custom import _syscmd
-from gatewayconfig.nmcli_custom import disable_use_sudo
+from lib.nmcli_custom import CustomSystemCommand, enable_use_sudo
+from lib.nmcli_custom import _syscmd
+from lib.nmcli_custom import disable_use_sudo
 
 from nmcli._exception import (
     ConnectionActivateFailedException,
