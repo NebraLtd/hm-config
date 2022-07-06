@@ -35,7 +35,7 @@ class TestBluetoothConnectionAdvertisement(TestCase):
         )
         self.assertEqual(
             advertisement.local_name,
-            'Nebra Outdoor Hotspot DDE5F6'
+            'Nebra Outdoor Hotspot Gen 1 DDE5F6'
         )
         self.assertEqual(
             advertisement.ad_type,
@@ -59,7 +59,7 @@ class TestBluetoothConnectionAdvertisement(TestCase):
             'org.bluez.LEAdvertisement1': {
                 'Type': 'peripheral',
                 'IncludeTxPower': dbus.Boolean(True),
-                'LocalName': dbus.String('Nebra %s Hotspot %s' % ('Outdoor', 'DDE5F6')),
+                'LocalName': dbus.String('Nebra %s Hotspot %s' % ('Outdoor', 'Gen 1 DDE5F6')),
                 'ServiceUUIDs': dbus.Array([DEFAULT_SERVICE_UUID], signature=dbus.Signature('s'))
             }
         }
@@ -190,7 +190,7 @@ class TestBluetoothConnectionAdvertisement(TestCase):
             advertisement.GetAll(VALID_LE_ADVERTISEMENT_IFACE),
             {
                 'IncludeTxPower': dbus.Boolean(True),
-                'LocalName': dbus.String('Nebra %s Hotspot %s' % ('Outdoor', 'DDE5F6')),
+                'LocalName': dbus.String('Nebra %s Hotspot %s' % ('Outdoor', 'Gen 1 DDE5F6')),
                 'ServiceUUIDs': dbus.Array([DEFAULT_SERVICE_UUID]),
                 'Type': 'peripheral',
             }
