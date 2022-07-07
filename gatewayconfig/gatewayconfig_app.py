@@ -29,7 +29,11 @@ class GatewayconfigApp:
 
         self.variant = variant
         self.variant_details = variant_definitions[variant]
-        self.init_sentry(sentry_dsn, balena_app_name, balena_device_uuid, variant, firmware_version)
+        self.init_sentry(
+            sentry_dsn=sentry_dsn,
+            release=firmware_version,
+            balena_id=balena_device_uuid,
+            balena_app=balena_app_name)
         self.shared_state = GatewayconfigSharedState()
         self.init_nmcli()
         self.init_gpio(variant)
@@ -75,14 +79,22 @@ class GatewayconfigApp:
         # Quits the cputemp application
         self.bluetooth_services_processor.quit()
 
-    def init_sentry(self, sentry_dsn, balena_app_name, balena_device_uuid, variant, firmware_version):
+    def init_sentry(self, sentry_dsn, release, balena_id, balena_app):
+        """
+        Initialize sentry with balena_id and balena_app as tag.
+        If sentry_dsn is not set, do nothing.
+        """
+
+        if not sentry_dsn:
+            return
+
         sentry_sdk.init(
             sentry_dsn,
-            environment=balena_app_name,
-            release=f"hm-config@{firmware_version}"
+            release=f"hm-config@{release}"
         )
-        sentry_sdk.set_user({"id": balena_device_uuid})
-        sentry_sdk.set_context("variant", {variant})
+
+        sentry_sdk.set_tag("balena_id", balena_id)
+        sentry_sdk.set_tag("balena_app", balena_app)
 
     def init_nmcli(self):
         nmcli_custom.disable_use_sudo()
