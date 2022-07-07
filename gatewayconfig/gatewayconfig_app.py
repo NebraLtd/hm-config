@@ -33,7 +33,8 @@ class GatewayconfigApp:
             sentry_dsn=sentry_dsn,
             release=firmware_version,
             balena_id=balena_device_uuid,
-            balena_app=balena_app_name)
+            balena_app=balena_app_name,
+            variant=variant)
         self.shared_state = GatewayconfigSharedState()
         self.init_nmcli()
         self.init_gpio(variant)
@@ -79,7 +80,7 @@ class GatewayconfigApp:
         # Quits the cputemp application
         self.bluetooth_services_processor.quit()
 
-    def init_sentry(self, sentry_dsn, release, balena_id, balena_app):
+    def init_sentry(self, sentry_dsn, release, balena_id, balena_app, variant):
         """
         Initialize sentry with balena_id and balena_app as tag.
         If sentry_dsn is not set, do nothing.
@@ -92,6 +93,8 @@ class GatewayconfigApp:
             sentry_dsn,
             release=f"hm-config@{release}"
         )
+
+        sentry_sdk.set_context("variant", {variant})
 
         sentry_sdk.set_tag("balena_id", balena_id)
         sentry_sdk.set_tag("balena_app", balena_app)
