@@ -41,7 +41,7 @@ class GatewayconfigApp:
 
         eth0_mac_address = read_eth0_mac_address(eth0_mac_address_filepath)
         wlan0_mac_address = read_wlan0_mac_address(wlan0_mac_address_filepath)
-        LOGGER.debug("Read eth0 mac address %s and wlan0 %s" % (eth0_mac_address, wlan0_mac_address))
+        LOGGER.debug("Read eth0 mac address {} and wlan0 {}".format(eth0_mac_address, wlan0_mac_address))
         self.shared_state.load_public_key()
 
         self.bluetooth_services_processor = BluetoothServicesProcessor(
@@ -144,6 +144,7 @@ class GatewayconfigApp:
     def start_bluetooth_advertisement(self):
         LOGGER.debug("Starting bluetooth advertisement")
         self.shared_state.should_advertise_bluetooth_condition_event.set()
+        self.shared_state.run_fast_diagnostic_condition_event.set()
 
     def get_button_gpio(self):
         return self.variant_details['BUTTON']
