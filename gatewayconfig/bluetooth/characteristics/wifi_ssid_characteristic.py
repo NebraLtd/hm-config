@@ -31,8 +31,8 @@ class WifiSSIDCharacteristic(Characteristic):
         for network in wifi_list_cache:
             ssid_str = str(network.ssid)
 
-            if(is_valid_ssid(ssid_str)):
-                if(network.in_use):
+            if is_valid_ssid(ssid_str):
+                if network.in_use:
                     logger.debug("SSID in use: %s" % ssid_str)
                     active_connection = ssid_str
                 else:

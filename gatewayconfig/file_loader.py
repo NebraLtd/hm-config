@@ -29,7 +29,7 @@ def read_ethernet_is_online(ethernet_is_online_filepath):
     is_ethernet_online = "false"
 
     ethernet_is_online_carrier_val = open(ethernet_is_online_filepath).readline().strip()
-    if(ethernet_is_online_carrier_val == ETHERNET_IS_ONLINE_CARRIER_VAL):
+    if (ethernet_is_online_carrier_val == ETHERNET_IS_ONLINE_CARRIER_VAL):
         is_ethernet_online = "true"
 
     return is_ethernet_online
