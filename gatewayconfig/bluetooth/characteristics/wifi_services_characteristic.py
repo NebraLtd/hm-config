@@ -35,11 +35,11 @@ class WifiServicesCharacteristic(Characteristic):
                 ssid_str = str(network.ssid)
                 logger.debug("Inspecting SSID %s" % ssid_str)
 
-                if(is_valid_ssid(ssid_str)):
+                if is_valid_ssid(ssid_str):
                     logger.debug("%s is a valid ssid" % ssid_str)
                     ssid_unknown = ssid_str not in known_wifi_services.services
 
-                    if(ssid_unknown):
+                    if ssid_unknown:
                         logger.debug("%s ssid is unknown" % ssid_str)
                         known_wifi_services.services.append(ssid_str)
 
@@ -49,7 +49,7 @@ class WifiServicesCharacteristic(Characteristic):
             logger.debug("Going to write %s" % val)
             for c in val:
                 value.append(dbus.Byte(c))
-            if("offset" in options):
+            if ("offset" in options):
                 cutDownArray = value[int(options["offset"]):]
                 return cutDownArray
             else:

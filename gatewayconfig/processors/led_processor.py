@@ -19,10 +19,10 @@ class LEDProcessor:
         if is_raspberry_pi() or is_rockpi():
             while True:
                 # Blink slow if advertising bluetooth
-                if(self.shared_state.is_advertising_bluetooth):
+                if self.shared_state.is_advertising_bluetooth:
                     self.status_led.blink(1, 1, 1, False)
                 # Blink fast if diagnostics are not OK
-                elif(not self.shared_state.are_diagnostics_ok):
+                elif not self.shared_state.are_diagnostics_ok:
                     self.status_led.blink(0.1, 0.1, 10, False)
                 # Solid if diagnostics are OK and not advertising
                 else:
