@@ -15,6 +15,7 @@ class DiagnosticsProcessor:
     def __init__(self, diagnostics_json_url, shared_state: GatewayconfigSharedState):
         self.shared_state = shared_state
         self.diagnostics_json_url = diagnostics_json_url
+        self.fast_diagnostics_timer = None
         self.fast_diagnostics = False
 
     def get_refresh_interval(self) -> int:
@@ -27,7 +28,7 @@ class DiagnosticsProcessor:
             logger.debug("cancelling existing stop fast diagnostic timer")
             self.fast_diagnostics_timer.cancel()
 
-        # trigger the time to stop advertisement
+        # trigger the timer to stop advertisement
         self.fast_diagnostics_timer = threading.Timer(timer_seconds,
                                                       self.stop_fast_diagnostics)
         self.fast_diagnostics_timer.start()
