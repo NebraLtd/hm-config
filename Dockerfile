@@ -50,9 +50,9 @@ FROM balenalib/raspberry-pi-debian-python:buster-run-20211014 as runner
 # Install bluez, libdbus, network-manager, python3-gi, and venv
 RUN \
     install_packages \
-        bluez=5.50-1.2~deb10u2+rpt1 \
+        bluez=5.50-1.2~deb10u3+rpt1 \
         wget=1.20.1-1.1 \
-        libdbus-1-3=1.12.20-0+deb10u1 \
+        libdbus-1-3=1.12.24-0+deb10u1 \
         network-manager=1.14.6-2+deb10u1 \
         python3-gi=3.30.4-1 \
         python3-venv=3.7.3-1 \
