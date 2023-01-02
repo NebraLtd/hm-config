@@ -6,7 +6,7 @@
 ################################## Stage: builder ##################################################
 
 # The balenalib/raspberry-pi-debian-python image was tested but missed many dependencies.
-FROM balenalib/raspberry-pi-debian:buster-build-20211014 as builder
+FROM balenalib/raspberry-pi-debian:bookworm-build-20221215 as builder
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
@@ -45,7 +45,7 @@ RUN \
 ####################################################################################################
 ################################### Stage: runner ##################################################
 
-FROM balenalib/raspberry-pi-debian-python:buster-run-20211014 as runner
+FROM balenalib/raspberry-pi-debian-python:bookworm-run-20221215 as runner
 
 # Install bluez, libdbus, network-manager, python3-gi, and venv
 RUN \
