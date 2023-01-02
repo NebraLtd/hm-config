@@ -1,7 +1,7 @@
 PyGObject==3.42.2
 RPi.gpio==0.7.1
 colorzero==2.0
-dbus-python==1.3.2
+dbus-python==1.2.16
 gpiozero==1.6.2
 h3==3.7.6
 hm-pyhelper==0.13.44
