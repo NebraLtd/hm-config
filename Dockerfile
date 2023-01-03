@@ -30,6 +30,7 @@ RUN \
             # https://pygobject.readthedocs.io/en/latest/getting_started.html#ubuntu-logo-ubuntu-debian-logo-debian
             libgirepository1.0-dev \
             gcc \
+            cmake \
             libcairo2-dev \
             pkg-config \
             python3-dev \
