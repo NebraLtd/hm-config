@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+upnpc -e "Nebra Helium" -r 44158 TCP
+
 # Wait for the diagnostics app to be loaded
 until wget -q -T 10 -O - http://localhost/json > /dev/null 2>&1
 do
