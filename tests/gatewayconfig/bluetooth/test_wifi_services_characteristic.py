@@ -17,10 +17,10 @@ class TestWifiServicesCharacteristic(TestCase):
     @patch('lib.nmcli_custom.device.wifi_rescan')
     @patch('lib.nmcli_custom.device.wifi',
            return_value=[
-               DeviceWifi(in_use=False, ssid='TP-LINK', mode='Infra', chan=5, rate=54, signal=100,
-                          security='WPA1'),
-               DeviceWifi(in_use=True, ssid='PHICOMM', mode='Infra', chan=1, rate=44, signal=96,
-                          security='WPA2')
+               DeviceWifi(in_use=False, ssid='TP-LINK', bssid='001122334455', mode='Infra',
+                          chan=5, freq=2432, rate=54, signal=100, security='WPA1'),
+               DeviceWifi(in_use=True, ssid='PHICOMM', bssid='001122334456', mode='Infra',
+                          chan=1, freq=2412, rate=44, signal=96, security='WPA2')
            ])
     def test_ReadValue(self, mock1, mock2):
         characteristic = WifiServicesCharacteristic(self.service, GatewayconfigSharedState())
