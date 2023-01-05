@@ -22,18 +22,18 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Finally, use pip to install dependencies.
 RUN \
     install_packages \
-            python3-minimal=3.7.3-1 \
-            python3-pip=18.1-5+rpt1 \
-            wget=1.20.1-1.1 \
-            python3-venv=3.7.3-1 \
+            python3-minimal \
+            python3-pip \
+            wget \
+            python3-venv \
             # The remaining dependencies are for PyGObject
             # https://pygobject.readthedocs.io/en/latest/getting_started.html#ubuntu-logo-ubuntu-debian-logo-debian
-            libgirepository1.0-dev=1.58.3-2 \
-            gcc=4:8.3.0-1+rpi2 \
-            libcairo2-dev=1.16.0-4+rpt1 \
-            pkg-config=0.29-6 \
-            python3-dev=3.7.3-1 \
-            gir1.2-gtk-3.0=3.24.5-1+rpt2 && \
+            libgirepository1.0-dev\
+            gcc \
+            libcairo2-dev \
+            pkg-config \
+            python3-dev \
+            gir1.2-gtk-3.0 && \
     # Because the PATH is already updated above, this command creates a new venv AND activates it
     python3 -m venv /opt/venv && \
     # Given venv is active, this `pip` refers to the python3 variant
@@ -49,12 +49,12 @@ FROM balenalib/raspberry-pi-debian-python:buster-run-20211014 as runner
 # Install bluez, libdbus, network-manager, python3-gi, and venv
 RUN \
     install_packages \
-        bluez=5.50-1.2~deb10u3+rpt1 \
-        wget=1.20.1-1.1 \
-        libdbus-1-3=1.12.24-0+deb10u1 \
-        network-manager=1.14.6-2+deb10u1 \
-        python3-gi=3.30.4-1 \
-        python3-venv=3.7.3-1
+        bluez \
+        wget \
+        libdbus-1-3 \
+        network-manager \
+        python3-gi \
+        python3-venv
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
