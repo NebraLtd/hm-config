@@ -23,7 +23,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN \
     install_packages \
             python3-minimal \
-            python3-pip \
+            python3-pip=18.1-5+rpt1 \
             wget \
             python3-venv \
             # The remaining dependencies are for PyGObject
