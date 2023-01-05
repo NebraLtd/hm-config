@@ -6,7 +6,7 @@ gpiozero==1.6.2
 h3==3.7.6
 hm-pyhelper==0.13.46
 nmcli==1.1.2
-protobuf==3.20.3
+protobuf==4.21.12
 pycairo==1.23.0
 requests==2.28.1
 retry==0.9.2
