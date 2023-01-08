@@ -1,5 +1,6 @@
 import sentry_sdk
 import threading
+import requests
 from gpiozero import Button, LED
 
 from hm_pyhelper.hardware_definitions import is_rockpi, is_raspberry_pi, \
@@ -102,6 +103,21 @@ class GatewayconfigApp:
     def init_nmcli(self):
         nmcli_custom.disable_use_sudo()
 
+    def check_password_reset(self):
+        try:
+            resp = requests.post(
+                'http://diagnostics/password_reset',
+                timeout=5
+            )
+            password_reset_data = resp.json()
+            return password_reset_data.get('password_updated')
+        except Exception:
+            return False
+
+    def button_held(self):
+        if not self.check_password_reset():
+            self.start_bluetooth_advertisement()
+
     def init_gpio(self, variant):
         """
         This code was originally written for Raspberry Pi but ROCK Pi does not
@@ -120,7 +136,7 @@ class GatewayconfigApp:
                         "GPIO not yet supported on this device: %s"
                         % variant)
 
-        self.user_button.when_held = self.start_bluetooth_advertisement
+        self.user_button.when_held = self.button_held
 
     # Use daemon threads so that everything exists cleanly when the program stops
     def start_threads(self):
