@@ -11,6 +11,7 @@ class TestGatewayconfigSha(TestCase):
 
         self.assertEqual(shared_state.should_scan_wifi, False)
         self.assertEqual(shared_state.should_advertise_bluetooth_condition_event.is_set(), True)
+        self.assertEqual(shared_state.run_fast_diagnostic_condition_event.is_set(), True)
         self.assertEqual(shared_state.is_advertising_bluetooth, False)
         self.assertEqual(shared_state.are_diagnostics_ok, False)
 
@@ -20,7 +21,8 @@ class TestGatewayconfigSha(TestCase):
                          '{"should_scan_wifi": false, '
                          '"is_advertising_bluetooth": false, '
                          '"are_diagnostics_ok": false, "public_key": "Unavailable", '
-                         '"should_advertise_bluetooth_condition_event": true}'
+                         '"should_advertise_bluetooth_condition_event": true, '
+                         '"run_fast_diagnostic_condition_event": true}'
                          )
 
     @patch('gatewayconfig.gatewayconfig_shared_state.get_public_keys_rust',

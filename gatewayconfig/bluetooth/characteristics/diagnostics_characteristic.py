@@ -79,10 +79,10 @@ class DiagnosticsCharacteristic(Characteristic):
             pass
 
         ip_address = ""
-        if('eth_ip' in locals()):
+        if 'eth_ip' in locals():
             logger.debug("Using ETH IP address %s" % eth_ip)
             ip_address = str(eth_ip)
-        elif('wlan_ip' in locals()):
+        elif 'wlan_ip' in locals():
             ip_address = str(wlan_ip)
             logger.debug("Using WLAN IP address %s" % wlan_ip)
         return ip_address

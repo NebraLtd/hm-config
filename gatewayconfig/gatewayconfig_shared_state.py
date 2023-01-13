@@ -20,11 +20,17 @@ class GatewayconfigSharedState:
         self.public_key = PUBLIC_KEY_UNAVAILABLE
         self.should_advertise_bluetooth_condition_event = threading.Event()
         self.should_advertise_bluetooth_condition_event.set()
+        # this is used when user is interacting with bluetooth. he might be trying to fix a
+        # diag error. When bluetooth is triggered, fast diagnostics should also be triggered.
+        self.run_fast_diagnostic_condition_event = threading.Event()
+        self.run_fast_diagnostic_condition_event.set()
 
     def to_s(self):
         serial_dict = self.__dict__.copy()
         cv_event = self.should_advertise_bluetooth_condition_event.is_set()
         serial_dict['should_advertise_bluetooth_condition_event'] = cv_event
+        diag_cv_event = self.run_fast_diagnostic_condition_event.is_set()
+        serial_dict['run_fast_diagnostic_condition_event'] = diag_cv_event
         return json.dumps(serial_dict)
 
     def load_public_key(self):
