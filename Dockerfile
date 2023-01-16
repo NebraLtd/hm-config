@@ -6,7 +6,7 @@
 ################################## Stage: builder ##################################################
 
 # The balenalib/raspberry-pi-debian-python image was tested but missed many dependencies.
-FROM balenalib/raspberry-pi-debian:buster-build-20211014 as builder
+FROM balenalib/raspberry-pi-debian:bullseye-build-20221215 as builder
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
@@ -44,7 +44,7 @@ RUN \
 ####################################################################################################
 ################################### Stage: runner ##################################################
 
-FROM balenalib/raspberry-pi-debian-python:buster-run-20211014 as runner
+FROM balenalib/raspberry-pi-debian-python:bullseye-run-20221215 as runner
 
 # Install bluez, libdbus, network-manager, python3-gi, and venv
 RUN \
@@ -70,7 +70,7 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # hadolint ignore=DL3008, DL4006
-RUN export DISTRO=buster-stable && \
+RUN export DISTRO=bullseye-stable && \
     echo "deb http://apt.radxa.com/$DISTRO/ ${DISTRO%-*} main" | tee -a /etc/apt/sources.list.d/apt-radxa-com.list && \
     wget -nv -O - apt.radxa.com/$DISTRO/public.key | apt-key add - && \
     apt-get update && \
