@@ -81,7 +81,7 @@ RUN export DISTRO=bullseye-stable && \
 
 # This is the libmraa install location, because we are using venv
 # it must be added to path explicitly
-ENV PYTHONPATH="$PYTHONPATH:/usr/local/lib/python3.7/dist-packages"
+ENV PYTHONPATH="$PYTHONPATH:/usr/local/lib/python3.9/dist-packages"
 
 # Run start-gateway-config script
 ENTRYPOINT ["/opt/start-gateway-config.sh"]
