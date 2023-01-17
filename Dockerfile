@@ -22,17 +22,17 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Finally, use pip to install dependencies.
 RUN \
     install_packages \
-            python3-minimal \
-            python3-pip \
+            python3.9-minimal \
+            python3.9-pip \
             wget \
-            python3-venv \
+            python3.9-venv \
             # The remaining dependencies are for PyGObject
             # https://pygobject.readthedocs.io/en/latest/getting_started.html#ubuntu-logo-ubuntu-debian-logo-debian
             libgirepository1.0-dev\
             gcc \
             libcairo2-dev \
             pkg-config \
-            python3-dev \
+            python3.9-dev \
             gir1.2-gtk-3.0 && \
     # Because the PATH is already updated above, this command creates a new venv AND activates it
     python3 -m venv /opt/venv && \
@@ -53,8 +53,8 @@ RUN \
         wget \
         libdbus-1-3 \
         network-manager \
-        python3-gi \
-        python3-venv
+        python3.9-gi \
+        python3.9-venv
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
