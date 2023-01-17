@@ -53,7 +53,7 @@ RUN \
         wget \
         libdbus-1-3 \
         network-manager \
-        python3.9-gi \
+        python3-gi \
         python3.9-venv
 
 # Nebra uses /opt by convention
