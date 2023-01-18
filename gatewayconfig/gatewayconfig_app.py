@@ -38,6 +38,8 @@ class GatewayconfigApp:
             variant=variant)
         self.shared_state = GatewayconfigSharedState()
         self.init_nmcli()
+        self.user_button = None
+        self.status_led = None
         self.init_gpio(variant)
 
         eth0_mac_address = read_eth0_mac_address(eth0_mac_address_filepath)
@@ -50,7 +52,9 @@ class GatewayconfigApp:
                 firmware_version, ethernet_is_online_filepath,
                 self.shared_state
         )
-        self.led_processor = LEDProcessor(self.status_led, self.shared_state)
+
+        if self.status_led is not None:
+            self.led_processor = LEDProcessor(self.status_led, self.shared_state)
         self.diagnostics_processor = DiagnosticsProcessor(
                 diagnostics_json_url,
                 self.shared_state
@@ -76,8 +80,10 @@ class GatewayconfigApp:
 
     def stop(self):
         LOGGER.debug("Stopping ConfigApp")
-        self.user_button.close()
-        self.status_led.close()
+        if self.user_button is not None:
+            self.user_button.close()
+        if self.status_led is not None:
+            self.status_led.close()
         # Quits the cputemp application
         self.bluetooth_services_processor.quit()
 
@@ -125,28 +131,39 @@ class GatewayconfigApp:
         on the detected hardware.
         """
         if is_raspberry_pi():
-            self.user_button = Button(self.get_button_gpio(), hold_time=USER_BUTTON_HOLD_SECONDS)
-            self.status_led = LED(self.get_status_led_gpio())
+            btn = self.get_button_gpio()
+            if btn is not None:
+                self.user_button = Button(btn, hold_time=USER_BUTTON_HOLD_SECONDS)
+            led = self.get_status_led_gpio()
+            if led is not None:
+                self.status_led = LED(led)
         elif is_rockpi():
-            self.user_button = MraaButton(self.get_button_pin(), hold_seconds=USER_BUTTON_HOLD_SECONDS)
-            self.user_button.start()
-            self.status_led = MraaLED(self.get_status_led_pin())
+            btn = self.get_button_pin()
+            if btn is not None:
+                self.user_button = MraaButton(btn, hold_seconds=USER_BUTTON_HOLD_SECONDS)
+                self.user_button.start()
+            led = self.get_status_led_pin()
+            if led is not None:
+                self.status_led = MraaLED(led)
         else:
             LOGGER.warn("LEDs and buttons are disabled. "
                         "GPIO not yet supported on this device: %s"
                         % variant)
 
-        self.user_button.when_held = self.button_held
+        if self.user_button is not None:
+            self.user_button.when_held = self.button_held
 
     # Use daemon threads so that everything exists cleanly when the program stops
     def start_threads(self):
         self.bluetooth_services_thread = threading.Thread(target=self.bluetooth_services_processor.run)
-        self.led_thread = threading.Thread(target=self.led_processor.run)
+        if self.status_led is not None:
+            self.led_thread = threading.Thread(target=self.led_processor.run)
         self.diagnostics_thread = threading.Thread(target=self.diagnostics_processor.run)
         self.bluetooth_advertisement_thread = threading.Thread(target=self.bluetooth_advertisement_processor.run)
 
-        self.led_thread.daemon = True
-        self.led_thread.start()
+        if self.status_led is not None:
+            self.led_thread.daemon = True
+            self.led_thread.start()
 
         # self.bluetooth_services_thread.daemon = True
         self.bluetooth_services_thread.start()
@@ -163,13 +180,13 @@ class GatewayconfigApp:
         self.shared_state.run_fast_diagnostic_condition_event.set()
 
     def get_button_gpio(self):
-        return self.variant_details['BUTTON']
+        return self.variant_details.get('BUTTON')
 
     def get_status_led_gpio(self):
-        return self.variant_details['STATUS']
+        return self.variant_details.get('STATUS')
 
     def get_button_pin(self):
-        return self.variant_details['GPIO_PIN_BUTTON']
+        return self.variant_details.get('GPIO_PIN_BUTTON')
 
     def get_status_led_pin(self):
-        return self.variant_details['GPIO_PIN_LED']
+        return self.variant_details.get('GPIO_PIN_LED')
