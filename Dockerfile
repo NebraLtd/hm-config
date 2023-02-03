@@ -6,7 +6,7 @@
 ################################## Stage: builder ##################################################
 
 # The balenalib/raspberry-pi-debian-python image was tested but missed many dependencies.
-FROM balenalib/raspberry-pi-debian:bullseye-build-20221215 as builder
+FROM balenalib/raspberry-pi-debian:bullseye-build-20221215 AS builder
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
@@ -44,7 +44,7 @@ RUN \
 ####################################################################################################
 ################################### Stage: runner ##################################################
 
-FROM balenalib/raspberry-pi-debian-python:bullseye-run-20221215 as runner
+FROM balenalib/raspberry-pi-debian-python:bullseye-run-20221215 AS runner
 
 # Install bluez, libdbus, network-manager, python3-gi, and venv
 RUN \
@@ -71,7 +71,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # hadolint ignore=DL3008, DL4006
 RUN export DISTRO=bullseye-stable && \
-    echo "deb http://apt.radxa.com/$DISTRO/ ${DISTRO%-*} main" | tee -a /etc/apt/sources.list.d/apt-radxa-com.list && \
+    echo "deb https://apt.radxa.com/$DISTRO/ ${DISTRO%-*} main" | tee -a /etc/apt/sources.list.d/apt-radxa-com.list && \
     wget -nv -O - apt.radxa.com/$DISTRO/public.key | apt-key add - && \
     apt-get update && \
     apt-get install --no-install-recommends -y libmraa && \
@@ -81,7 +81,7 @@ RUN export DISTRO=bullseye-stable && \
 
 # This is the libmraa install location, because we are using venv
 # it must be added to path explicitly
-ENV PYTHONPATH="$PYTHONPATH:/usr/local/lib/python3.11/dist-packages"
+ENV PYTHONPATH="$PYTHONPATH:/usr/local/lib/python3.9/dist-packages"
 
 # Run start-gateway-config script
 ENTRYPOINT ["/opt/start-gateway-config.sh"]
