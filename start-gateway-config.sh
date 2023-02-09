@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#! /bin/bash
 
 # Wait for the diagnostics app to be loaded
 until wget -q -T 10 -O - http://localhost/json > /dev/null 2>&1
@@ -8,7 +8,7 @@ do
 done
 
 # Load dbus-wait script
-. ./dbus-wait.sh
+source /opt/nebra/dbus-wait.sh
 
 # Advertise on channels 37, 38 and 39
 echo 7 > /sys/kernel/debug/bluetooth/hci0/adv_channel_map
@@ -20,7 +20,7 @@ echo 153 > /sys/kernel/debug/bluetooth/hci0/adv_max_interval
 printf "pairable off\nquit" | /usr/bin/bluetoothctl
 
 # Load setenv script
-. ./opt/nebra/setenv.sh
+source /opt/nebra/setenv.sh
 
 prevent_start="${PREVENT_START_GATEWAYCONFIG:-0}"
 if [ "$prevent_start" = 1 ]; then
