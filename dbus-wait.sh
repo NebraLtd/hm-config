@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#! /bin/bash
 
 wait_for_dbus() {
     while true; do
