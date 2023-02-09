@@ -9,7 +9,7 @@ done
 
 # Load dbus-wait script
 # shellcheck source=/dev/null
-source /opt/nebra/dbus-wait.sh
+source /opt/dbus-wait.sh
 
 # Advertise on channels 37, 38 and 39
 echo 7 > /sys/kernel/debug/bluetooth/hci0/adv_channel_map
@@ -22,7 +22,7 @@ printf "pairable off\nquit" | /usr/bin/bluetoothctl
 
 # Load setenv script
 # shellcheck source=/dev/null
-source /opt/nebra/setenv.sh
+source /opt/setenv.sh
 
 prevent_start="${PREVENT_START_GATEWAYCONFIG:-0}"
 if [ "$prevent_start" = 1 ]; then
