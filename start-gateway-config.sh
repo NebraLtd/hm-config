@@ -19,6 +19,8 @@ echo 153 > /sys/kernel/debug/bluetooth/hci0/adv_max_interval
 # Disable pairing
 printf "pairable off\nquit" | /usr/bin/bluetoothctl
 
+# Load setenv script
+. ./opt/nebra/setenv.sh
 
 prevent_start="${PREVENT_START_GATEWAYCONFIG:-0}"
 if [ "$prevent_start" = 1 ]; then
