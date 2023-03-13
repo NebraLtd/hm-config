@@ -58,7 +58,7 @@ class DiagnosticsProcessor:
 
     def read_diagnostics_and_get_ok(self):
         logger.debug("Reading diagnostics from %s" % self.diagnostics_json_url)
-        response = requests.get(self.diagnostics_json_url, timeout=10)
+        response = requests.get(self.diagnostics_json_url, timeout=30)
         diagnostics_json = response.json()
         logger.debug("Read diagnostics %s" % diagnostics_json)
         are_diagnostics_ok = diagnostics_json['PF']
