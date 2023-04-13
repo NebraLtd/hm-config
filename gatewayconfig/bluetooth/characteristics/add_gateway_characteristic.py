@@ -1,14 +1,13 @@
-import dbus
-from time import sleep
-
 from lib.cputemp.service import Characteristic
 
 from gatewayconfig.logger import get_logger
-from gatewayconfig.helpers import string_to_dbus_encoded_byte_array
+from gatewayconfig.helpers import string_to_dbus_encoded_byte_array, string_to_dbus_byte_array
 from gatewayconfig.bluetooth.descriptors.add_gateway_descriptor import AddGatewayDescriptor
 from gatewayconfig.bluetooth.descriptors.opaque_structure_descriptor import OpaqueStructureDescriptor
 import gatewayconfig.protos.add_gateway_pb2 as add_gateway_pb2
 import gatewayconfig.constants as constants
+from hm_pyhelper.gateway_grpc.client import GatewayClient
+import grpc
 
 logger = get_logger(__name__)
 DBUS_LOAD_SLEEP_SECONDS = 0.1
@@ -23,15 +22,37 @@ class AddGatewayCharacteristic(Characteristic):
         self.add_descriptor(AddGatewayDescriptor(self))
         self.add_descriptor(OpaqueStructureDescriptor(self))
         self.notifyValue = string_to_dbus_encoded_byte_array("init")
+        self.add_gateway_details = None
 
-    def AddGatewayCallback(self):
-        if self.notifying:
-            logger.debug('Callback Add Gateway')
-            self.PropertiesChanged(constants.GATT_CHRC_IFACE,
-                                   {"Value": self.notifyValue}, [])
+    def create_add_gateway_txn(self) -> object:
+        """
+        returns grpc return value if successful, None otherwise
+        """
+        if not self.add_gateway_details:
+            return None
+
+        try:
+            with GatewayClient() as client:
+                transaction = client.create_add_gateway_txn(
+                            owner_address=self.add_gateway_details.owner,
+                            payer_address=self.add_gateway_details.payer
+                        )
+                return transaction
+        except grpc.RpcError as err:
+            logger.error(f"rpc error: {err}")
+            return b"grpc error: {err}"
+        except Exception as err:
+            logger.error(err)
+            return b"unknown error: {err}"
+        return None
+
+    # def AddGatewayCallback(self):
+    #     if self.notifying:
+    #         logger.debug('Callback Add Gateway')
+    #         self.PropertiesChanged(constants.GATT_CHRC_IFACE,
+    #                                {"Value": self.notifyValue}, [])
 
     def StartNotify(self):
-
         logger.debug('Notify Add Gateway')
         if self.notifying:
             return
@@ -40,7 +61,7 @@ class AddGatewayCharacteristic(Characteristic):
 
         self.PropertiesChanged(constants.GATT_CHRC_IFACE, {"Value": self.notifyValue},
                                [])
-        self.add_timeout(30000, self.AddGatewayCallback)
+        # self.add_timeout(30000, self.AddGatewayCallback)
 
     def StopNotify(self):
         self.notifying = False
@@ -52,31 +73,22 @@ class AddGatewayCharacteristic(Characteristic):
 
             addGatewayDetails = add_gateway_pb2.add_gateway_v1()
             addGatewayDetails.ParseFromString(bytes(value))
-            miner_bus = dbus.SessionBus()
 
-            logger.debug("Loading dbus com.helium.Miner")
-            miner_object = miner_bus.get_object('com.helium.Miner', '/')
-            sleep(DBUS_LOAD_SLEEP_SECONDS)
-            miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
-            sleep(DBUS_LOAD_SLEEP_SECONDS)
-
-            logger.debug("Parsing onboarding values")
-            owner = addGatewayDetails.owner
-            fee = addGatewayDetails.fee
-            amount = addGatewayDetails.amount
-            payer = addGatewayDetails.payer
-
-            logger.debug("Registering owner %s, fee %s, amount %s, payer %s" % (owner, fee, amount, payer))
-            # Calls https://github.com/helium/miner/blob/e55437beac4b46d15cbd079c9c8df045ffc0bf49/src/miner_ebus.erl#L50
-            addMinerRequest = miner_interface.AddGateway(owner, fee, amount, payer)
-            logger.debug("Adding Response")
-            self.notifyValue = addMinerRequest
+            logger.debug(f"Registering owner {addGatewayDetails.owner}, fee {addGatewayDetails.fee} "
+                         f"amount {addGatewayDetails.amount}, payer {addGatewayDetails.payer}")
+            self.add_gateway_details = addGatewayDetails
+            # some thought was given to whether to start the grpc call straight away in a thread/process
+            # and read value from it in readValue. But write and read will come over bluetooth almost back
+            # back. Don't see much value in extra complexity.
         except Exception:
             logger.exception("Unable to register gateway for unknown reason")
 
     def ReadValue(self, options):
         logger.debug('Read Add Gateway')
+        value = add_gateway_pb2()
+        self.notifyValue = string_to_dbus_byte_array(value)
         if "offset" in options:
+            logger.debug("fishy: offset demanded from add gateway transaction array")
             cutDownArray = self.notifyValue[int(options["offset"]):]
             return cutDownArray
         else:
