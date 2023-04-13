@@ -13,6 +13,7 @@ def string_to_dbus_encoded_byte_array(str):
     return byte_array
 
 
+# TODO:: this name should begin with bytes_to instead of string_to
 def string_to_dbus_byte_array(str):
     byte_array = []
 
