@@ -7,13 +7,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - board: "raspberry-pi"
-            arch: "arm"
-            version: "v6"
           - board: "raspberrypi3-64"
             arch: "arm64"
             version: "v8"
-            
+          # - board: "generic-amd64"      # TODO NEBD-106 Enable it after fixing build issues
+          #   arch: "amd64"
+
     runs-on: ubuntu-20.04
     permissions:
       packages: write
@@ -102,13 +101,13 @@ jobs:
           tags: |
             type=sha,prefix=
             type=sha,format=long,prefix=
-            
+
       - name: Create multi-arch images
         run: |
           tags=(${{ steps.meta.outputs.tags }})
-          docker buildx imagetools create -t ${tags[0]} -t ${tags[1]} -t ${tags[2]} nebraltd/hm-config:arm64-${{ github.sha }} nebraltd/hm-config:arm-${{ github.sha }}
-          docker buildx imagetools create -t ${tags[3]} -t ${tags[4]} -t ${tags[5]} ghcr.io/nebraltd/hm-config:arm64-${{ github.sha }} ghcr.io/nebraltd/hm-config:arm-${{ github.sha }}
-          
+          docker buildx imagetools create -t ${tags[0]} -t ${tags[1]} -t ${tags[2]} nebraltd/hm-config:arm64-${{ github.sha }}
+          docker buildx imagetools create -t ${tags[3]} -t ${tags[4]} -t ${tags[5]} ghcr.io/nebraltd/hm-config:arm64-${{ github.sha }}
+
       - name: Update repo description
         uses: peter-evans/dockerhub-description@v3
         with:
