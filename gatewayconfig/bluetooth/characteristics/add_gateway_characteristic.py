@@ -40,11 +40,10 @@ class AddGatewayCharacteristic(Characteristic):
                 return transaction
         except grpc.RpcError as err:
             logger.error(f"rpc error: {err}")
-            return b"grpc error: {err}"
+            return f"grpc error: {err}".encode()
         except Exception as err:
             logger.error(err)
-            return b"unknown error: {err}"
-        return None
+            return f"unknown error: {err}".encode()
 
     # def AddGatewayCallback(self):
     #     if self.notifying:
@@ -74,7 +73,7 @@ class AddGatewayCharacteristic(Characteristic):
             addGatewayDetails = add_gateway_pb2.add_gateway_v1()
             addGatewayDetails.ParseFromString(bytes(value))
 
-            logger.debug(f"Registering owner {addGatewayDetails.owner}, fee {addGatewayDetails.fee} "
+            logger.debug(f"add gateway owner {addGatewayDetails.owner}, fee {addGatewayDetails.fee} "
                          f"amount {addGatewayDetails.amount}, payer {addGatewayDetails.payer}")
             self.add_gateway_details = addGatewayDetails
             # some thought was given to whether to start the grpc call straight away in a thread/process
