@@ -85,7 +85,7 @@ class AddGatewayCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logger.debug('Read Add Gateway')
-        value = add_gateway_pb2()
+        value = self.create_add_gateway_txn()
         self.notifyValue = string_to_dbus_byte_array(value)
         if "offset" in options:
             logger.debug("fishy: offset demanded from add gateway transaction array")
