@@ -45,10 +45,10 @@ class AddGatewayCharacteristic(Characteristic):
                 return transaction
         except grpc.RpcError as err:
             logger.error(f"rpc error: {err}")
-            return self._limit_error_chars(f"g-error: {err}")
+            return self._limit_error_chars(err.details())
         except Exception as err:
             logger.error(err)
-            return self._limit_error_chars(f"g-error: {err}")
+            return self._limit_error_chars(f"{err}")
 
     # def AddGatewayCallback(self):
     #     if self.notifying:
