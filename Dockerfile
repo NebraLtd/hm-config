@@ -86,6 +86,7 @@ RUN export DISTRO=bullseye-stable && \
 # it must be added to path explicitly
 ENV PYTHONPATH="$PYTHONPATH:/usr/local/lib/python3.9/dist-packages"
 
+COPY idle.sh /opt/
 # Run start-gateway-config script
-ENTRYPOINT ["/opt/start-gateway-config.sh"]
-
+# ENTRYPOINT ["/opt/start-gateway-config.sh"]
+ENTRYPOINT ["/opt/idle.sh"]
