@@ -24,6 +24,11 @@ class AddGatewayCharacteristic(Characteristic):
         self.notifyValue = string_to_dbus_encoded_byte_array("init")
         self.add_gateway_details = None
 
+    # helium's ble response parsing for create gateway txn
+    # counts anything more than 20 chars as a valid transaction
+    def _limit_error_chars(self, error_string: str) -> bytes:
+        return error_string[:18].encode()
+
     def create_add_gateway_txn(self) -> object:
         """
         returns grpc return value if successful, None otherwise
@@ -40,10 +45,10 @@ class AddGatewayCharacteristic(Characteristic):
                 return transaction
         except grpc.RpcError as err:
             logger.error(f"rpc error: {err}")
-            return f"grpc error: {err}".encode()
+            return self._limit_error_chars(f"g-error: {err}")
         except Exception as err:
             logger.error(err)
-            return f"unknown error: {err}".encode()
+            return self._limit_error_chars(f"g-error: {err}")
 
     # def AddGatewayCallback(self):
     #     if self.notifying:
