@@ -15,6 +15,7 @@ from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_address
 from gatewayconfig.gpio.mraa_button import MraaButton
 from gatewayconfig.gpio.mraa_led import MraaLED
+from gatewayconfig.gpio.neopixel_led import NeopixelLED
 import lib.nmcli_custom as nmcli_custom
 
 
@@ -137,6 +138,16 @@ class GatewayconfigApp:
             led = self.get_status_led_gpio()
             if led is not None:
                 self.status_led = LED(led)
+            else:
+                neopixel_params = self.get_status_neopixel()
+                if neopixel_params is not None:
+                    self.status_led = NeopixelLED(
+                        led_count=neopixel_params['LED_COUNT'],
+                        pin_number=neopixel_params['PIN'],
+                        dma=neopixel_params['DMA'],
+                        channel=neopixel_params['CHANNEL'],
+                        active_high=neopixel_params['ACTIVE_HIGH'],
+                    )
         elif is_rockpi():
             btn = self.get_button_pin()
             if btn is not None:
@@ -190,3 +201,6 @@ class GatewayconfigApp:
 
     def get_status_led_pin(self):
         return self.variant_details.get('GPIO_PIN_LED')
+
+    def get_status_neopixel(self):
+        return self.variant_details.get('STATUS_NEOPIXEL')
