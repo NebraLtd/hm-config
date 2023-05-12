@@ -31,5 +31,5 @@ if [ "$prevent_start" = 1 ]; then
 else
 	# Check dbus container is ready and then launch config
     wait_for_dbus \
-        && python gatewayconfig
+        && python -m gatewayconfig
 fi

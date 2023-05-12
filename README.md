@@ -59,21 +59,20 @@ sudo apt-get install -y libffi-dev libssl-dev make build-essential libssl-dev zl
     xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
      libdbus-glib-1-dev libgirepository1.0-dev python3-gi bluez
 ```
-3. Install Python 3.7.3: `pyenv install 3.7.3 && pyenv local 3.7.3`
+3. Install Python 3.9.16: `pyenv install 3.9.16 && pyenv local 3.9.16`
 4. Check correctly installed: `python -V`
 5. Setup virtualenv: `python3 -m venv venv && source venv/bin/activate`
 6. Install python `wheel` package: `python3 -m pip install wheel`
-7. Install dependencies: `pip install -r requirements.txt`
+7. Install `poetry` package: `python3 -m pip install poetry`
+7. Install dependencies: `poetry install --with dev`
 
 ## Testing
 
 Assuming virtualenv has been activated, execute the following command to run the tests:
 
 ```
-pip install -r test-requirements.txt
-pytest
-# Or test and run coverage report
-PYTHONPATH=./ pytest --cov=minerconfig --cov=lib
+poetry install --with dev
+poetry run pytest --cov=gatewayconfig --cov=lib --cov-fail-under=70
 ```
 
 ## Generating protobufs
