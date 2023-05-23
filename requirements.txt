@@ -9,7 +9,7 @@ grpcio==1.53.0
 nmcli==1.1.2
 protobuf==4.21.12
 pycairo==1.23.0
-requests==2.28.1
+requests==2.31.0
 retry==0.9.2
 sentry-sdk==1.17.0
 rpi-ws281x==4.3.4
