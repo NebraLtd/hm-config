@@ -13,8 +13,14 @@ FROM balenalib/"$BUILD_BOARD"-debian:bullseye-build-20221215 AS builder
 # Nebra uses /opt by convention
 WORKDIR /opt/
 
-# Copy python dependencies for `pip install` later
-COPY requirements.txt requirements.txt
+# Copy python dependencies for `poetry install` later
+COPY pyproject.toml ./pyproject.toml
+COPY poetry.lock ./poetry.lock
+COPY README.md ./README.md
+COPY lib/ lib/
+COPY gatewayconfig/ gatewayconfig/
+COPY *.sh ./
+
 
 # This will be the path that venv uses for installation below
 ENV PATH="/opt/venv/bin:$PATH"
@@ -22,6 +28,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Install python3-minimal, pip3, wget, venv.
 # Then set venv environment copied from builder.
 # Finally, use pip to install dependencies.
+# hadolint ignore=DL3013
 RUN \
     install_packages \
             python3-minimal \
@@ -40,7 +47,10 @@ RUN \
     # Because the PATH is already updated above, this command creates a new venv AND activates it
     python3 -m venv /opt/venv && \
     # Given venv is active, this `pip` refers to the python3 variant
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir poetry==1.4.2 && \
+    poetry install --no-cache --no-root && \
+    poetry build && \
+    pip install --no-cache-dir dist/hm_config-1.0.tar.gz
 
 # No need to cleanup the builder
 
@@ -62,9 +72,6 @@ RUN \
 # Nebra uses /opt by convention
 WORKDIR /opt/
 
-# Copy the code and starter script
-COPY lib/ lib/
-COPY gatewayconfig/ gatewayconfig/
 COPY *.sh ./
 ENV PYTHONPATH="/opt:$PYTHONPATH"
 

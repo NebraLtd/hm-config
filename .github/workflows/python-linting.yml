@@ -1,4 +1,4 @@
-name: Code Security Audit
+name: Python Linting
 
 on: [push, pull_request]
 
@@ -29,7 +29,7 @@ jobs:
       run: |
         poetry install --with dev
 
-    - name: Run bandit against code base
+    - name: Lint with ruff
       run: |
-        poetry run bandit -r gatewayconfig -c pyproject.toml
-        poetry run bandit -r lib -c pyproject.toml
+        poetry run ruff check gatewayconfig
+        poetry run ruff check lib
