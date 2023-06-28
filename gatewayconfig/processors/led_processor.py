@@ -1,6 +1,6 @@
 from time import sleep
 from gpiozero import LED
-from hm_pyhelper.hardware_definitions import is_rockpi, is_raspberry_pi
+from hm_pyhelper.hardware_definitions import is_rockpi, is_raspberry_pi, is_bobcat_px30
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 from gatewayconfig.logger import get_logger
 
@@ -16,7 +16,7 @@ class LEDProcessor:
     def run(self):
         LOGGER.debug("LED LEDProcessor")
 
-        if is_raspberry_pi() or is_rockpi():
+        if is_raspberry_pi() or is_rockpi() or is_bobcat_px30():
             while True:
                 # Blink slow if advertising bluetooth
                 if self.shared_state.is_advertising_bluetooth:

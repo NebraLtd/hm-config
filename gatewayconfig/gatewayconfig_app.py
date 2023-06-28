@@ -3,7 +3,7 @@ import threading
 import requests
 from gpiozero import Button, LED
 
-from hm_pyhelper.hardware_definitions import is_rockpi, is_raspberry_pi, \
+from hm_pyhelper.hardware_definitions import is_rockpi, is_raspberry_pi, is_bobcat_px30, \
                                              variant_definitions
 
 from gatewayconfig.logger import get_logger
@@ -13,6 +13,8 @@ from gatewayconfig.processors.diagnostics_processor import DiagnosticsProcessor
 from gatewayconfig.processors.bluetooth_advertisement_processor import BluetoothAdvertisementProcessor
 from gatewayconfig.gatewayconfig_shared_state import GatewayconfigSharedState
 from gatewayconfig.file_loader import read_eth0_mac_address, read_wlan0_mac_address
+from gatewayconfig.gpio.gpio_button import GpioButton
+from gatewayconfig.gpio.gpio_led import GpioLED
 from gatewayconfig.gpio.mraa_button import MraaButton
 from gatewayconfig.gpio.mraa_led import MraaLED
 from gatewayconfig.gpio.neopixel_led import NeopixelLED
@@ -156,6 +158,14 @@ class GatewayconfigApp:
             led = self.get_status_led_pin()
             if led is not None:
                 self.status_led = MraaLED(led)
+        elif is_bobcat_px30():
+            btn = self.get_button_gpio()
+            if btn is not None:
+                self.user_button = GpioButton(btn, hold_seconds=USER_BUTTON_HOLD_SECONDS)
+                self.user_button.start()
+            led = self.get_status_led_gpio()
+            if led is not None:
+                self.status_led = GpioLED(led)
         else:
             LOGGER.warn("LEDs and buttons are disabled. "
                         "GPIO not yet supported on this device: %s"
