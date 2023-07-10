@@ -8,7 +8,7 @@ ARG BUILD_BOARD
 ################################## Stage: builder ##################################################
 
 # The balenalib/raspberry-pi-debian-python image was tested but missed many dependencies.
-FROM balenalib/"$BUILD_BOARD"-debian:bullseye-build-20221215 AS builder
+FROM balenalib/"$BUILD_BOARD"-debian:bullseye-build-20230530 AS builder
 
 # Nebra uses /opt by convention
 WORKDIR /opt/
@@ -57,7 +57,7 @@ RUN \
 ####################################################################################################
 ################################### Stage: runner ##################################################
 
-FROM balenalib/"$BUILD_BOARD"-debian-python:bullseye-run-20221215 AS runner
+FROM balenalib/"$BUILD_BOARD"-debian-python:bullseye-run-20230530 AS runner
 
 # Install bluez, libdbus, network-manager, python3-gi, and venv
 RUN \
