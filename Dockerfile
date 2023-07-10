@@ -47,7 +47,7 @@ RUN \
     # Because the PATH is already updated above, this command creates a new venv AND activates it
     python3 -m venv /opt/venv && \
     # Given venv is active, this `pip` refers to the python3 variant
-    pip install --no-cache-dir poetry==1.4.2 && \
+    pip install --no-cache-dir poetry==1.5.1 && \
     poetry install --no-cache --no-root && \
     poetry build && \
     pip install --no-cache-dir dist/hm_config-1.0.tar.gz
