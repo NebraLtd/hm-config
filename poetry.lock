@@ -444,13 +444,13 @@ test = ["flake8", "pylint", "pytest", "pytest-cov"]
 
 [[package]]
 name = "hm-pyhelper"
-version = "0.14.25"
+version = "0.14.31"
 description = "Helium Python Helper"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "hm_pyhelper-0.14.25-py3-none-any.whl", hash = "sha256:155eb48312bd8da263692bc274504755101a31e7e3531df7675b3fc2979c0882"},
-    {file = "hm_pyhelper-0.14.25.tar.gz", hash = "sha256:7937c2d603a15214c585019a61c0888db0b248aa9f9725e1c04f7030d28a06e2"},
+    {file = "hm_pyhelper-0.14.31-py3-none-any.whl", hash = "sha256:42bf25950bb1ab3d19b694430cb5e545cad1be34fdc73a2ed7f92db512a72f30"},
+    {file = "hm_pyhelper-0.14.31.tar.gz", hash = "sha256:df3cb29329847d71985e8faa748dfe5b43aa510d48268fab4f74446edcbce529"},
 ]
 
 [package.dependencies]
@@ -985,4 +985,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "edfb11726275b661ee63bae75d592d1bef907129036552c53dccd9558aae3e51"
+content-hash = "507de54f30ba696ddb04b5a47965f4f6aa8070f727518e6a8d0c8d705d0ec68f"
