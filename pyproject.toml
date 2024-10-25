@@ -30,7 +30,7 @@ retry = "~0.9.2"
 RPi-gpio = "~0.7.1"
 rpi-ws281x = "~5.0.0"
 sentry-sdk = "~1.27.1"
-urllib3 = "~2.0.3"
+urllib3 = "~2.2.2"
 gpio4 = "^0.1.6"
 
 [tool.poetry.group.dev.dependencies]
